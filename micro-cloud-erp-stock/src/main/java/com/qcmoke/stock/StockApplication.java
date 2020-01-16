@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(value = {"com.qcmoke.security", "com.qcmoke.stock"})
-public class SecurityApplication {
+public class StockApplication {
     public static void main(String[] args) {
-        SpringApplication.run(SecurityApplication.class, args);
+        SpringApplication.run(StockApplication.class, args);
     }
 }
