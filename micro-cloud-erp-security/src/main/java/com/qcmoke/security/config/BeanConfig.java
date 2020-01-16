@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * 以下这些bean都可以被覆盖
  */
 @Configuration
-public class SecurityBeanConfig {
+public class BeanConfig {
 
     /**
      * @ConditionalOnMissingBean 注解：
