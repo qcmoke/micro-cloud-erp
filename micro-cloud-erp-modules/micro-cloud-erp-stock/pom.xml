@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>micro-cloud-erp</artifactId>
+        <artifactId>micro-cloud-erp-modules</artifactId>
         <groupId>com.qcmoke</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>

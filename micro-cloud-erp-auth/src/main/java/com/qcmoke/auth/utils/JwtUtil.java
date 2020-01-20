@@ -51,16 +51,16 @@ public class JwtUtil {
         }
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        StringBuffer as = new StringBuffer();
+        StringBuffer roles = new StringBuffer();
         for (GrantedAuthority authority : authorities) {
-            as.append(authority.getAuthority()).append(",");
+            roles.append(authority.getAuthority()).append(",");
         }
 
         return Jwts.builder()
                 /*1.设置发行者*/
                 .setSubject(authentication.getName())
                 /*2.设置自定义的属性*/
-                .claim(AUTHORITIES_NAME, as)//配置用户角色
+                .claim(AUTHORITIES_NAME, roles)//配置用户角色
                 /*3.设置发行时间*/
                 .setIssuedAt(new Date())
                 /*4.设置过期时间*/
@@ -70,6 +70,18 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, APPSECRET).compact();
     }
 
+
+    /**
+     * @param oldToken
+     * @return
+     */
+    public static String refreshToken(String oldToken) {
+        Authentication authentication = getAuthentication(oldToken);
+        if (validateToken(oldToken)) {
+            return geneJsonWebToken(authentication);
+        }
+        return null;
+    }
 
     /**
      * 获取Claims
@@ -133,6 +145,9 @@ public class JwtUtil {
      */
     public static boolean isTokenExpired(String token) {
         Date expiration = getExpirationDateFromToken(token);
+        if (expiration == null) {
+            return false;
+        }
         return expiration.before(new Date());
     }
 
@@ -140,7 +155,13 @@ public class JwtUtil {
      * 获取token的过期时间
      */
     public static Date getExpirationDateFromToken(String token) {
-        return getClaims(token).getExpiration();
+        Claims claims = null;
+        try {
+            claims = getClaims(token);
+            return claims.getExpiration();
+        } catch (Exception e) {
+            log.info("getExpirationDateFromToken e={}", e.getMessage());
+        }
+        return null;
     }
-
 }
