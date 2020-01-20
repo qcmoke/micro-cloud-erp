@@ -1,12 +1,11 @@
-package com.qcmoke.finance;
+package com.qcmoke.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class FinanceApplication {
+public class AuthApplication {
     public static void main(String[] args) {
-        SpringApplication.run(FinanceApplication.class, args);
+        SpringApplication.run(AuthApplication.class, args);
     }
 }

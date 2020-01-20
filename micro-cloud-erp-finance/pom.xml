@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>com.qcmoke</groupId>
-            <artifactId>micro-cloud-erp-security</artifactId>
+            <artifactId>micro-cloud-erp-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>

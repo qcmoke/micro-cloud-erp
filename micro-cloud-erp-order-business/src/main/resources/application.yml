@@ -1,0 +1,15 @@
+server:
+  port: 81
+
+spring:
+  application:
+    name: micro-cloud-erp-order-business                            #对外暴露的微服务的名称（重点）
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  #个性化定制
+  instance:
+    instance-id: micro-cloud-erp-order-business-81
+    prefer-ip-address: true     #显示前缀ip

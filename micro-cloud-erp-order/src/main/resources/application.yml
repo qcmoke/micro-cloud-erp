@@ -1,7 +1,15 @@
+server:
+  port: 8081
+
 spring:
-  #qcmoke-security-core的spring-boot-starter-jdbc依赖需要配置数据库连接
-  datasource:
-    username: root
-    password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/qcmoke_security?useUnicode=true&characterEncoding=utf8&useSSL=false
-    driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: micro-cloud-erp-order                            #对外暴露的微服务的名称（重点）
+
+eureka:
+  client: #客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  #个性化定制
+  instance:
+    instance-id: micro-cloud-erp-order-8081
+    prefer-ip-address: true     #显示前缀ip

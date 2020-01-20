@@ -17,6 +17,11 @@
         <module>micro-cloud-erp-purchase</module>
         <module>micro-cloud-erp-core</module>
         <module>micro-cloud-erp-finance</module>
+        <module>micro-cloud-erp-registry</module>
+        <module>micro-cloud-erp-auth</module>
+        <module>micro-cloud-erp-gateway</module>
+        <module>micro-cloud-erp-common</module>
+        <module>micro-cloud-erp-order-business</module>
     </modules>
 
 
