@@ -94,8 +94,9 @@ public class JwtUtil {
         if (token == null) {
             return null;
         }
+        String realToken = token.replace(TOKEN_PREFIX, "");//String realToken = StringUtils.substringAfter(token, TOKEN_PREFIX);
         //通过秘钥解密token
-        return Jwts.parser().setSigningKey(APPSECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")) //移除token字符串前缀
+        return Jwts.parser().setSigningKey(APPSECRET).parseClaimsJws(realToken) //移除token字符串前缀
                 .getBody();
     }
 

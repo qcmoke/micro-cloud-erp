@@ -13,10 +13,9 @@
     <modules>
         <module>micro-cloud-erp-core</module>
         <module>micro-cloud-erp-registry</module>
-        <module>micro-cloud-erp-auth</module>
         <module>micro-cloud-erp-gateway</module>
-        <module>micro-cloud-erp-security</module>
         <module>micro-cloud-erp-modules</module>
+        <module>micro-cloud-erp-auth</module>
     </modules>
 
 

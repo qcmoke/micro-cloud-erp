@@ -8,5 +8,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient("MICRO-CLOUD-ERP-ORDER")
 public interface OrderService {
     @RequestMapping(value = "/order/get/{id}")
-    RespBean get(@PathVariable("id") Integer id);
+    RespBean getOrder(@PathVariable("id") Integer id);
 }

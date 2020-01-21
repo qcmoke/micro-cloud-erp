@@ -16,7 +16,7 @@ public class OrderController {
 
     @RequestMapping(value = "/getOrder/{id}", method = RequestMethod.GET)
     RespBean get(@PathVariable("id") Integer id) {
-        RespBean respBean = orderService.get(id);
+        RespBean respBean = orderService.getOrder(id);
         return RespBean.ok(respBean);
     }
 }

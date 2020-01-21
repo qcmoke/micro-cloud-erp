@@ -1,2 +1,11 @@
+spring:
+  application:
+    name: auth-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/micro-cloud-erp-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
 server:
-  port: 4333
+  port: 9090
