@@ -1,14 +1,17 @@
 server:
-  port: 9527
+  port: 9070
 
 spring:
   application:
     name: micro-cloud-erp-gateway
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:7001/eureka
-  instance:
-    instance-id: micro-cloud-erp-gateway-9527
-    prefer-ip-address: true
+#网关配置
+zuul:
+  #路由转发配置
+  routes:
+    token:
+      url: http://localhost:9090
+    order:
+      url: http://localhost:8081
+  #敏感头过滤配置（默认敏感头信息Authorization、Cookie、Set-Cookie会被过滤，以至于不转发的，那么网关后的服务也就获取不到。如果要获取则设置zuul.sensitiveHeaders为空即可转发所有敏感头。）
+  sensitive-headers:

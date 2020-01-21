@@ -21,11 +21,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!--eureka-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
         <!-- zuul路由网关 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
