@@ -2,10 +2,11 @@ package com.qcmoke.core.entity;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class TokenInfo {
+public class TokenInfo implements Serializable {
 
     /**
      * 令牌是否可用

@@ -98,11 +98,15 @@ public class OAuth2Filter extends ZuulFilter {
         }
         String token = StringUtils.substringAfter(authHeader, "bearer ");
         String oauthServiceUrl = "http://localhost:9090/oauth/check_token";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set("Authorization", this.getAuthorizationHeader("gateway", "123456"));
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("token", token);
+
+        HttpHeaders headers = new HttpHeaders(){{
+            setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            set("Authorization", getAuthorizationHeader("gateway", "123456"));
+        }};
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>(){{
+            add("token", token);
+        }};
+
         HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
         ResponseEntity<TokenInfo> response = restTemplate.exchange(
                 oauthServiceUrl,
