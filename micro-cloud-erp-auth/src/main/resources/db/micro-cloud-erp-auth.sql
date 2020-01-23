@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 21/01/2020 17:23:50
+ Date: 23/01/2020 17:47:31
 */
 
 SET NAMES utf8mb4;
@@ -73,6 +73,7 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 -- Records of oauth_client_details
 -- ----------------------------
+INSERT INTO `oauth_client_details` VALUES ('gateway', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderApp', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 
