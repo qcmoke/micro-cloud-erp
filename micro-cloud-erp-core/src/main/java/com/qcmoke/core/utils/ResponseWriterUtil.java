@@ -1,7 +1,6 @@
 package com.qcmoke.core.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@Slf4j
 public class ResponseWriterUtil {
     private static final Log logger = LogFactory.getLog(ResponseWriterUtil.class);
 

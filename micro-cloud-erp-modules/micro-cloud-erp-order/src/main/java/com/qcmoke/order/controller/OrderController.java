@@ -13,7 +13,7 @@ public class OrderController {
 
 
     @GetMapping(value = "/get/{id}")
-    public RespBean getOrder(@PathVariable("id") Integer id, @RequestHeader String username, TokenInfo tokenInfo) {
+    public RespBean getOrder(@PathVariable("id") Integer id, @RequestHeader(required = false) String username, TokenInfo tokenInfo) {
         log.info("username={}", username);
         log.info("tokenInfo={}", tokenInfo);
         return RespBean.ok(username + "查询了订单：order" + id);
