@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 24/01/2020 04:10:42
+ Date: 25/01/2020 02:16:33
 */
 
 SET NAMES utf8mb4;
@@ -59,7 +59,7 @@ CREATE TABLE `oauth_approvals`  (
 DROP TABLE IF EXISTS `oauth_client_details`;
 CREATE TABLE `oauth_client_details`  (
   `client_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `resource_ids` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `resource_ids` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表示client_id申请得到的token能访问的资源服务器id集合，多个用逗号隔开，如果可以访问所有则设置为空即可',
   `client_secret` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `scope` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `authorized_grant_types` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 INSERT INTO `oauth_client_details` VALUES ('admin', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password,authorization_code', 'http://127.0.0.1:8083/admin/callback', NULL, 3600, NULL, NULL, 'true');
 INSERT INTO `oauth_client_details` VALUES ('gateway', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('orderApp', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('orderApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 
 -- ----------------------------
