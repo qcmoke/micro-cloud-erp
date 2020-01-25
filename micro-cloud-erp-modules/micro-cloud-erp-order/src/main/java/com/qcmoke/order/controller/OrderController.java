@@ -16,7 +16,7 @@ import org.springframework.web.client.RestClientException;
 public class OrderController {
 
     /**
-     * 从当前api的请求头里拿到令牌并设置到请求头放到执行的请求头里。
+     * 从当前api的请求头里拿到token并设置到oAuth2RestTemplate执行时的请求头里，使得token可以在微服务间传递
      */
     @Autowired
     private OAuth2RestTemplate oAuth2RestTemplate;
