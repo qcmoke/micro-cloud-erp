@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 25/01/2020 02:16:33
+ Date: 25/01/2020 12:13:17
 */
 
 SET NAMES utf8mb4;
@@ -79,6 +79,7 @@ INSERT INTO `oauth_client_details` VALUES ('admin', 'order-server', '$2a$10$Jh7d
 INSERT INTO `oauth_client_details` VALUES ('gateway', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('stockServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for oauth_client_token
