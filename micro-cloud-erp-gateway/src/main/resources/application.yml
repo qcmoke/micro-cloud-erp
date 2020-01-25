@@ -20,6 +20,8 @@ zuul:
       url: http://localhost:9090
     order:
       url: http://localhost:8081
+    stock:
+      url: http://localhost:8082
   #敏感头过滤配置（默认敏感头信息Authorization、Cookie、Set-Cookie会被过滤，以至于不转发的，那么网关后的服务也就获取不到。如果要获取则设置zuul.sensitiveHeaders为空即可转发所有敏感头。）
   sensitive-headers:
   #限流配置
