@@ -19,6 +19,11 @@
             <artifactId>micro-cloud-erp-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--oauth2-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-oauth2</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
