@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 25/01/2020 17:16:12
+ Date: 27/01/2020 03:34:20
 */
 
 SET NAMES utf8mb4;
@@ -61,7 +61,7 @@ CREATE TABLE `oauth_client_details`  (
   `client_id` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '认证客户端id',
   `resource_ids` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证客户端能访问的资源服务器列表。表示client_id申请得到的token能访问的资源服务器id集合，多个用逗号隔开，如果可以访问所有则设置为空即可',
   `client_secret` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '认证客户端秘钥',
-  `scope` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '针对认证客户端应用的权限范围而非用户权限，即client_id对resource_ids拥有的权限',
+  `scope` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '针对认证客户端应用的权限范围而非用户权限，即client_id对resource_ids拥有的权限。如果范围未定义或为空，即默认，客户端将不受范围限制。',
   `authorized_grant_types` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权模式类型',
   `web_server_redirect_uri` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '授权码模式中回调地址',
   `authorities` varchar(256) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 INSERT INTO `oauth_client_details` VALUES ('admin', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password,authorization_code', 'http://127.0.0.1:8083/admin/callback', NULL, 3600, NULL, NULL, 'true');
 INSERT INTO `oauth_client_details` VALUES ('gateway', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('orderApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('orderApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password,refresh_token', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('orderServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('stockServer', 'order-server', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'read,write', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 
