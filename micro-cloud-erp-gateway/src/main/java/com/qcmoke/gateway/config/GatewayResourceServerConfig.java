@@ -4,13 +4,24 @@ import com.qcmoke.gateway.filter.GatewayAuditLogFilter;
 import com.qcmoke.gateway.handler.GatewayAccessDeniedHandler;
 import com.qcmoke.gateway.handler.GatewayAuthenticationEntryPointHandler;
 import com.qcmoke.gateway.handler.GatewayWebSecurityExpressionHandler;
+import com.qcmoke.gateway.utils.GatewayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
+
+import java.io.IOException;
 
 @Configuration
 @EnableResourceServer
@@ -29,7 +40,7 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
         http.addFilterBefore(new GatewayAuditLogFilter(), ExceptionTranslationFilter.class);
 
         http.authorizeRequests()
-                .antMatchers("/token/**").permitAll()
+                .antMatchers("/auth/**").permitAll()
                 .anyRequest().access("#permissionService.hasPermission(request,authentication)");//通过当前的请求和当前的用户得到请求是否授权,使用GatewayWebSecurityExpressionHandler表达式处理器去解析这个表达式
         //.anyRequest().authenticated();//所有请求都需要认证
     }
@@ -37,9 +48,39 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
+        resources.tokenServices(tokenServices());
         resources
                 .authenticationEntryPoint(gatewayAuthenticationEntryPointHandler)
                 .accessDeniedHandler(gatewayAccessDeniedHandler)
                 .expressionHandler(gatewayWebSecurityExpressionHandler);
+    }
+
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JwtTokenStore(accessTokenConverter());
+    }
+
+    @Bean
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+        Resource resource = new ClassPathResource("key/public.key");
+        String publicKey = null;
+        try {
+            publicKey = GatewayUtil.inputStream2String(resource.getInputStream());
+        } catch (final IOException e) {
+            throw new RuntimeException("读取公钥文件异常");
+        }
+        converter.setVerifierKey(publicKey);
+        //converter.setAccessTokenConverter(new CustomerAccessTokenConverter());
+        return converter;
+    }
+
+    @Bean
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        final DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        return defaultTokenServices;
     }
 }

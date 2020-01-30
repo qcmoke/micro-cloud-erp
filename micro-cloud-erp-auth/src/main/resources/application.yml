@@ -1,11 +1,26 @@
-spring:
-  application:
-    name: auth-server
-  datasource:
-    url: jdbc:mysql://localhost:3306/micro-cloud-erp-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
-
 server:
   port: 9090
+
+spring:
+  application:
+    name: micro-cloud-erp-auth
+  datasource:
+    auth:
+      #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
+      jdbc-url: jdbc:mysql://localhost:3306/micro-cloud-erp-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+    system:
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+
+#非对称加密秘钥库配置
+encrypt:
+  key-store:
+    location: classpath:key/qcmoke.keystore
+    alias: qcmoke
+    password: 123456password
+    secret: 123456secret

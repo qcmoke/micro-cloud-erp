@@ -22,7 +22,6 @@ import java.util.Date;
 public class GatewayAuthenticationEntryPointHandler extends OAuth2AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
-        //super.commence(request, response, e);
         if (e instanceof AccessTokenRequiredException) {
             excuteSql(String.format("update log set status = '%s', log_auth_fail_msg = '%s',update_date='%s' where username = '%s'", "fail", "无token", "anonymousUser", new Date().toLocaleString()));
         } else {

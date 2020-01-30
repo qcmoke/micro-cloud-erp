@@ -23,6 +23,7 @@
         <module>micro-cloud-erp-purchase</module>
         <module>micro-cloud-erp-stock</module>
         <module>micro-cloud-erp-admin</module>
+        <module>micro-cloud-erp-system</module>
     </modules>
 
 

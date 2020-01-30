@@ -4,20 +4,20 @@ import org.springframework.http.HttpStatus;
 
 public class RespBean {
     private Integer status;
-    private String msg;
-    private Object obj;
+    private String message;
+    private Object data;
 
-    public static RespBean ok(String msg, Object obj) {
-        return new RespBean(HttpStatus.OK.value(), msg, obj);
+    public static RespBean ok(String message, Object data) {
+        return new RespBean(HttpStatus.OK.value(), message, data);
     }
 
 
-    public static RespBean ok(Object obj) {
-        return ok(null, obj);
+    public static RespBean ok(Object data) {
+        return ok(null, data);
     }
 
-    public static RespBean ok(String msg) {
-        return ok(msg, null);
+    public static RespBean ok(String message) {
+        return ok(message, null);
     }
 
     public static RespBean ok() {
@@ -25,8 +25,8 @@ public class RespBean {
     }
 
 
-    public static RespBean error(String msg) {
-        return new RespBean(HttpStatus.INTERNAL_SERVER_ERROR.value(), msg, null);
+    public static RespBean error(String message) {
+        return new RespBean(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, null);
     }
 
     public static RespBean error() {
@@ -34,22 +34,22 @@ public class RespBean {
     }
 
 
-    public static RespBean unauthorized(String msg) {
-        return new RespBean(HttpStatus.UNAUTHORIZED.value(), msg, null);
+    public static RespBean unauthorized(String message) {
+        return new RespBean(HttpStatus.UNAUTHORIZED.value(), message, null);
     }
 
-    public static RespBean forbidden(String msg) {
-        return new RespBean(HttpStatus.FORBIDDEN.value(), msg, null);
+    public static RespBean forbidden(String message) {
+        return new RespBean(HttpStatus.FORBIDDEN.value(), message, null);
     }
 
 
     private RespBean() {
     }
 
-    private RespBean(Integer status, String msg, Object obj) {
+    private RespBean(Integer status, String message, Object data) {
         this.status = status;
-        this.msg = msg;
-        this.obj = obj;
+        this.message = message;
+        this.data = data;
     }
 
 
@@ -62,21 +62,21 @@ public class RespBean {
         return this;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public RespBean setMsg(String msg) {
-        this.msg = msg;
+    public RespBean setMessage(String message) {
+        this.message = message;
         return this;
     }
 
-    public Object getObj() {
-        return obj;
+    public Object getData() {
+        return data;
     }
 
-    public RespBean setObj(Object obj) {
-        this.obj = obj;
+    public RespBean setData(Object data) {
+        this.data = data;
         return this;
     }
 }

@@ -24,11 +24,13 @@ public class PermissionServiceImpl implements PermissionService {
             throw new AccessTokenRequiredException(null);
         }
         //下面可以改成从数据库获取用户权限并进行权限校验
+        /*
         boolean flag = RandomUtils.nextInt() % 2 == 0;
 
         if (!flag) {
             log.info("访问未授权");
         }
-        return flag;
+        */
+        return true;
     }
 }

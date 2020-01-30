@@ -17,7 +17,6 @@ import java.util.Date;
 public class GatewayAuditLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-
         //认证成功后授权前
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         excuteSql(String.format("insert into log(username,create_date) values('%s','%s')", username, new Date().toLocaleString()));

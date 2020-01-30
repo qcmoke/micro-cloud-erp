@@ -4,53 +4,31 @@ server:
 spring:
   application:
     name: micro-cloud-erp-gateway
-  ##redis配置（限流需要）
-  redis:
-    host: 127.0.0.1
-    database: 0  #Redis数据库索引（默认为0）
-    port: 6379  # Redis服务器连接端口
-    password:   # Redis服务器连接密码（默认为空）
-    #timeout: 0  # 连接超时时间（毫秒）
 
 #网关配置
 zuul:
   #路由转发配置
   routes:
-    token:
+    auth:
       url: http://localhost:9090
+    system:
+      url: http://localhost:8080
     order:
       url: http://localhost:8081
     stock:
       url: http://localhost:8082
   #敏感头过滤配置（默认敏感头信息Authorization、Cookie、Set-Cookie会被过滤，以至于不转发的，那么网关后的服务也就获取不到。如果要获取则设置zuul.sensitiveHeaders为空即可转发所有敏感头。）
   sensitive-headers:
-  #限流配置
-  ratelimit:
-    enabled: true #是否起开启限流
-    repository: REDIS #存储请求到redis来实现请求限制，JPA也可以
-    default-policy-list: #默认限流策略(refresh-interval秒钟内可以过limit个请求，这些请求时间总和不能超过quota。存储type组合存储到redis里)
-      - limit: 2
-        quota: 1
-        refresh-interval: 3
-        type:
-          - url
-          - httpmethod
-#    policy-list: #自定义限流策略
-#      token:
-#        - limit: 2
-#          quota: 1
-#          refresh-interval: 3
-#          type:
-#            - url
-#            - httpmethod
 
 
 ###配置oauth2，通过client-id和client-secret到认证服务器认证并获取jwt签名的秘钥
-security:
-  oauth2:
-    client:
-      client-id: gateway
-      client-secret: 123456
-    resource:
-      jwt:
-        key-uri: http://127.0.0.1:9090/oauth/token_key
+#security:
+#  oauth2:
+#    resource:
+#      id: ${spring.application.name}
+#      user-info-uri: http://127.0.0.1:9090/user
+
+#      jwt:
+#        #资源服务器启动时会去鉴权中心获取公钥
+#        key-uri: http://127.0.0.1:9090/oauth/token_key
+

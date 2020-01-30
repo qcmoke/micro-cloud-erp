@@ -20,8 +20,6 @@ import java.io.IOException;
 public class GatewayAccessDeniedHandler extends OAuth2AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        //super.handle(request,response,e);
-
         String msg = "权限不足，授权失败! auth fail 403! e=" + e.getMessage();
         log.error(msg);
         request.setAttribute("logAuthFailMsg", msg);
