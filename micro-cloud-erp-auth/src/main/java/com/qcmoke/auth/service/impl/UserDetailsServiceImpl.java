@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         AuthUser authUser = userDetailsDao.findByName(username);
         if (authUser == null) {
-            throw new UsernameNotFoundException("不存在该用户,username=" + username);
+            throw new UsernameNotFoundException("账号不存在, username= " + username);
         }
         return authUser;
     }

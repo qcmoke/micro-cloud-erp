@@ -1,6 +1,6 @@
 package com.qcmoke.stock.controller;
 
-import com.qcmoke.core.utils.RespBean;
+import com.qcmoke.common.utils.RespBean;
 import com.qcmoke.stock.entity.CodeTokenInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;

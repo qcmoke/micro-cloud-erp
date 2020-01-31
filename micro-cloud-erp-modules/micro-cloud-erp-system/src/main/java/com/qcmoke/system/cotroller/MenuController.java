@@ -2,7 +2,7 @@ package com.qcmoke.system.cotroller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.qcmoke.common.entity.router.VueRouter;
-import com.qcmoke.core.utils.RespBean;
+import com.qcmoke.common.utils.RespBean;
 import com.qcmoke.system.entity.Menu;
 import com.qcmoke.system.service.IMenuService;
 import lombok.extern.slf4j.Slf4j;

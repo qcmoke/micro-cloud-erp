@@ -1,6 +1,6 @@
 package com.qcmoke.gateway.controller;
 
-import com.qcmoke.core.utils.RespBean;
+import com.qcmoke.common.utils.RespBean;
 import com.qcmoke.gateway.utils.GatewayUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;

@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.qcmoke.stock.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

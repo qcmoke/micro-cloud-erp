@@ -1,6 +1,6 @@
 package com.qcmoke.system.cotroller;
 
-import com.qcmoke.core.utils.RespBean;
+import com.qcmoke.common.utils.RespBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -16,7 +16,6 @@
 
 
     <modules>
-        <module>micro-cloud-erp-common</module>
         <module>micro-cloud-erp-finance</module>
         <module>micro-cloud-erp-order</module>
         <module>micro-cloud-erp-order-business</module>

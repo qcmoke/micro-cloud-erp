@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qcmoke.core.entity.CurrentUser;
+import com.qcmoke.common.entity.CurrentUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
