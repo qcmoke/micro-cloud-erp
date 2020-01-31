@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.utils;
+package com.qcmoke.system.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qcmoke.common.entity.CurrentUser;

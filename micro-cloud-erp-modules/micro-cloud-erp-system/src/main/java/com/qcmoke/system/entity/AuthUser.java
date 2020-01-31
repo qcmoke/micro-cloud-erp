@@ -1,13 +1,18 @@
-package com.qcmoke.auth.entity;
+package com.qcmoke.system.entity;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
 import java.util.Date;
 
-
+/**
+ * @author MrBird
+ */
 @Getter
 @Setter
 @ToString

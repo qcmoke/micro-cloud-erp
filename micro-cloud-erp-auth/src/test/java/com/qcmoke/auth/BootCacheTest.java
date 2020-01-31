@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @SpringBootTest
@@ -16,9 +17,11 @@ public class BootCacheTest {
     private RedisService redisService;
     @Autowired
     private Oauth2SecurityProperties oauth2SecurityProperties;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
 
     @Test
     public void test1() {
-
+        System.out.println(redisConnectionFactory.getConnection());
     }
 }

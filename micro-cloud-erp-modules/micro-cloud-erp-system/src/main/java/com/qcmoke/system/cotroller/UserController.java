@@ -1,18 +1,31 @@
 package com.qcmoke.system.cotroller;
 
 import com.qcmoke.common.utils.RespBean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RequestMapping("/user")
 @RestController
 public class UserController {
+
+    /**
+     * 获取认证完成的用户信息
+     */
+    @GetMapping("/detail")
+    public Principal currentUser(Principal principal) {
+        log.info("获取用户信息Principal={}", principal);
+        return principal;
+    }
+
 
     @GetMapping("/index")
     public RespBean index() throws ParseException {

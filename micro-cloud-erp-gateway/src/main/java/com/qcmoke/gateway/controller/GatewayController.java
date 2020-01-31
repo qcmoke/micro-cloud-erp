@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.controller;
 
 import com.qcmoke.common.utils.RespBean;
-import com.qcmoke.gateway.utils.GatewayUtil;
+import com.qcmoke.common.utils.SecurityOAuth2Util;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,11 +23,11 @@ public class GatewayController {
         System.out.println(map);
 
         HashMap<String, Object> userInfo = new HashMap<String, Object>() {{
-            put("currentTokenValue", GatewayUtil.getCurrentTokenValue());
-            put("currentUserAuthority", GatewayUtil.getCurrentUserAuthority());
-            put("currentUsername", GatewayUtil.getCurrentUsername());
+            put("currentTokenValue", SecurityOAuth2Util.getCurrentTokenValue());
+            put("currentUserAuthority", SecurityOAuth2Util.getCurrentUserAuthority());
+            put("currentUsername", SecurityOAuth2Util.getCurrentUsername());
             put("authentication", SecurityContextHolder.getContext().getAuthentication());
-            put("CurrentUser", GatewayUtil.getCurrentUser());
+            put("CurrentUser", SecurityOAuth2Util.getCurrentUser());
             put("principal", principal);
         }};
         return RespBean.ok(userInfo);

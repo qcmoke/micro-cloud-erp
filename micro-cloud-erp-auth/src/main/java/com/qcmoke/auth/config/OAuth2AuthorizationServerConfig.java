@@ -1,11 +1,13 @@
 package com.qcmoke.auth.config;
 
+import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -23,6 +25,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
+import java.util.UUID;
 
 @Configuration
 @EnableAuthorizationServer
@@ -34,6 +37,11 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
+    @Autowired
+    private Oauth2SecurityProperties oauth2SecurityProperties;
+    @Autowired
+    private RedisConnectionFactory redisConnectionFactory;
+
     /**
      * 配置认证服务器
      * 1、token保存的地方
@@ -45,11 +53,16 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-                .userDetailsService(userDetailsService)
-                .tokenStore(tokenStore())
-                .tokenEnhancer(jwtAccessTokenConverter())
-                .authenticationManager(authenticationManager);
+                .userDetailsService(userDetailsService)//设置token关联的用户信息
+                .tokenStore(tokenStore())//配置保存token的地方，比如：数据库、redis、jwt里
+                .authenticationManager(authenticationManager);//认证管理器
+//                .exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
+        if (oauth2SecurityProperties.getEnableJwt()) {
+            //endpoints.accessTokenConverter(jwtAccessTokenConverter());
+            endpoints.tokenEnhancer(jwtAccessTokenConverter());
+        }
     }
+
 
     /**
      * 配置认证客户端
@@ -75,7 +88,6 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
     }
 
 
-
     /**
      * token保存方式
      *
@@ -83,13 +95,24 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
      */
     @Bean
     public TokenStore tokenStore() {
-        return new JwtTokenStore(jwtAccessTokenConverter());
+        if (oauth2SecurityProperties.getEnableJwt()) {
+            return new JwtTokenStore(jwtAccessTokenConverter());
+        } else {
+            CustomRedisTokenStore redisTokenStore = new CustomRedisTokenStore(redisConnectionFactory);
+            // 解决每次生成的 token都一样的问题
+            redisTokenStore.setAuthenticationKeyGenerator(oAuth2Authentication -> UUID.randomUUID().toString());
+            return redisTokenStore;
+        }
     }
 
+
+    /**
+     * @return
+     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
 
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter(){
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter() {
             //可以重写该方法对token进行增强
             @Override
             public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
