@@ -1,6 +1,6 @@
 package com.qcmoke.auth.constant;
 
-public interface Oauth2URLConstant {
+public interface AuthUrlConstant {
     String ALL_URL = "/**";
 
     String OAUTH_ALL_URL = "/oauth/**";
@@ -17,5 +17,8 @@ public interface Oauth2URLConstant {
 
     String OAUTH_ERROR_URL = "/oauth/error";
 
-    String LOGIN_URL = "/login";
+    /**
+     * 授权码认证模式登录地址
+     */
+    String LOGIN_PAGE = "/login";
 }
