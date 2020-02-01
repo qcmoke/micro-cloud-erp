@@ -1,4 +1,4 @@
-package com.qcmoke.stock;
+package com.qcmoke.system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

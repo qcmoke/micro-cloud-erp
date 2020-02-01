@@ -1,18 +1,15 @@
-package com.qcmoke.stock.controller;
+package com.qcmoke.system.controller;
 
-import com.qcmoke.common.utils.RespBean;
-import com.qcmoke.stock.entity.CodeTokenInfo;
+import com.qcmoke.system.entity.CodeTokenInfo;
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
-import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
@@ -23,13 +20,13 @@ public class AdminController {
     private RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/callback")
-    public String callback(String code, String state, HttpSession session) {
+    public String callback(String code, String state) {
         try {
             String oauthServiceUrl = "http://127.0.0.1:9090/oauth/token";
             LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>() {{
                 add("code", code);
                 add("grant_type", "authorization_code");
-                add("redirect_uri", "http://127.0.0.1:8083/admin/callback");
+                add("redirect_uri", "http://127.0.0.1:80/admin/callback");
             }};
             HttpHeaders headers = new HttpHeaders() {{
                 setContentType(MediaType.APPLICATION_FORM_URLENCODED);
@@ -44,8 +41,9 @@ public class AdminController {
             );
 
             CodeTokenInfo codeTokenInfo = tokenInfoResponse.getBody();
-            log.info("codeTokenInfo={}", codeTokenInfo);
-            session.setAttribute("codeTokenInfo", codeTokenInfo);
+            log.info("codeTokenInfo={},state={}", codeTokenInfo, state);
+
+
             return "redirect:/index.html?status=success";
         } catch (Exception e) {
             log.error("e={}", e.getMessage());
@@ -53,15 +51,6 @@ public class AdminController {
         return "redirect:/error.html";
     }
 
-    @ResponseBody
-    @GetMapping("/me")
-    public RespBean me(HttpSession session) {
-        Object codeTokenInfo = session.getAttribute("codeTokenInfo");
-        if (codeTokenInfo == null) {
-            return RespBean.unauthorized("未认证");
-        }
-        return RespBean.ok(codeTokenInfo);
-    }
 
     private String getAuthorizationHeader(String clientId, String clientSecret) {
         if (clientId == null || clientSecret == null) {

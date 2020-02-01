@@ -1,4 +1,4 @@
-package com.qcmoke.stock.controller;
+package com.qcmoke.system.controller;
 
 import com.qcmoke.common.utils.RespBean;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.qcmoke.stock.entity;
+package com.qcmoke.system.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
