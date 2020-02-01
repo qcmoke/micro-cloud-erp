@@ -18,13 +18,8 @@ mybatis-plus:
   global-config:
     banner: false
 
-
-#security:
-#  oauth2:
-#    client:
-#      client-id: admin
-#      client-secret: 123456
-#    resource:
-#      #资源服务器启动时会去鉴权中心获取公钥并完成验证
-#      jwt:
-#        key-uri: http://127.0.0.1:9090/oauth/token_key
+security:
+  oauth2:
+    resource:
+      id: ${spring.application.name}
+      user-info-uri: http://127.0.0.1:9090/user

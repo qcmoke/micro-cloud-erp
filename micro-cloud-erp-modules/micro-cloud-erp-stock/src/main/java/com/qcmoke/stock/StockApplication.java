@@ -6,7 +6,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @EnableResourceServer
-@EnableGlobalMethodSecurity(prePostEnabled = true) //启用授权注解
+//启用授权注解
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication
 public class StockApplication {
     public static void main(String[] args) {

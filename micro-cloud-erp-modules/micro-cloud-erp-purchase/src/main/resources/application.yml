@@ -1,7 +1,0 @@
-spring:
-  #qcmoke-security-core的spring-boot-starter-jdbc依赖需要配置数据库连接
-  datasource:
-    username: root
-    password: 123456
-    url: jdbc:mysql://127.0.0.1:3306/qcmoke_security?useUnicode=true&characterEncoding=utf8&useSSL=false
-    driver-class-name: com.mysql.jdbc.Driver

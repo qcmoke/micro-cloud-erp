@@ -1,6 +1,5 @@
 package com.qcmoke.auth.config;
 
-import com.qcmoke.auth.constant.Oauth2SecurityConstant;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import com.qcmoke.common.handler.PermissionExpressionHandler;
 import com.qcmoke.common.handler.SecurityOAuth2AccessDeniedHandler;
@@ -28,15 +27,15 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.requestMatchers()
-                .antMatchers(Oauth2SecurityConstant.ALL_URL)
-                .and()
-                .authorizeRequests()
-                .antMatchers(StringUtils.splitByWholeSeparatorPreserveAllTokens(oauth2SecurityProperties.getAnonUrl(), ",")).permitAll()
-                .anyRequest().authenticated()
+        http.authorizeRequests()
+                .antMatchers(StringUtils.splitByWholeSeparatorPreserveAllTokens(oauth2SecurityProperties.getAnonUrl(), ",")).permitAll();
+
+        http.antMatcher("/user").authorizeRequests().anyRequest().authenticated();
+
+        http.authorizeRequests()
                 .anyRequest().access("#permissionService.notAllowedAnonymousUser(request,authentication)");
 
+        http.csrf().disable();
     }
 
 

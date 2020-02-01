@@ -3,24 +3,22 @@ server:
 
 spring:
   application:
-    name: micro-cloud-erp-order                            #对外暴露的微服务的名称（重点）
+    name: micro-cloud-erp-order
 
 eureka:
-  client: #客户端注册进eureka服务列表内
+  client:
     service-url:
       defaultZone: http://localhost:7001/eureka
   #个性化定制
   instance:
+    #服务实例id（application.name可以对应多个instance）
     instance-id: micro-cloud-erp-order-8081
-    prefer-ip-address: true     #显示前缀ip
+    #显示前缀ip
+    prefer-ip-address: true
 
 
-###配置oauth2，通过client-id和client-secret到认证服务器认证并获取jwt签名的秘钥
 security:
   oauth2:
-    client:
-      client-id: orderServer
-      client-secret: 123456
     resource:
-      jwt:
-        key-uri: http://127.0.0.1:9090/oauth/token_key
+      id: ${spring.application.name}
+      user-info-uri: http://127.0.0.1:9090/user

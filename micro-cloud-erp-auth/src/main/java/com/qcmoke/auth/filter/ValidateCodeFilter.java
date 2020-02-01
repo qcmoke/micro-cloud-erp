@@ -1,7 +1,7 @@
 package com.qcmoke.auth.filter;
 
 import com.qcmoke.auth.constant.GrantTypeConstant;
-import com.qcmoke.auth.constant.Oauth2SecurityConstant;
+import com.qcmoke.auth.constant.Oauth2URLConstant;
 import com.qcmoke.auth.constant.ParamsConstant;
 import com.qcmoke.auth.exception.ValidateCodeException;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
@@ -44,7 +44,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         String clientId = getClientId(header);
-        RequestMatcher matcher = new AntPathRequestMatcher(Oauth2SecurityConstant.OAUTH_TOKEN_URL, HttpMethod.POST.toString());
+        RequestMatcher matcher = new AntPathRequestMatcher(Oauth2URLConstant.OAUTH_TOKEN_URL, HttpMethod.POST.toString());
         if (matcher.matches(request)
                 && StringUtils.equalsIgnoreCase(request.getParameter(ParamsConstant.GRANT_TYPE), GrantTypeConstant.PASSWORD)
                 && !StringUtils.equalsAnyIgnoreCase(clientId, StringUtils.split(oauth2SecurityProperties.getIgnoreValidateCodeClientIds(), ","))) {

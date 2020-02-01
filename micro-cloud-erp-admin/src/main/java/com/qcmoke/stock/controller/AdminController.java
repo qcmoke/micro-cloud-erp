@@ -46,7 +46,7 @@ public class AdminController {
             CodeTokenInfo codeTokenInfo = tokenInfoResponse.getBody();
             log.info("codeTokenInfo={}", codeTokenInfo);
             session.setAttribute("codeTokenInfo", codeTokenInfo);
-            return "redirect:/index.html";
+            return "redirect:/index.html?status=success";
         } catch (Exception e) {
             log.error("e={}", e.getMessage());
         }

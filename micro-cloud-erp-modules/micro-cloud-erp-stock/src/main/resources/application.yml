@@ -1,12 +1,8 @@
 server:
   port: 8082
 
-###配置oauth2，通过client-id和client-secret到认证服务器认证并获取jwt签名的秘钥
 security:
   oauth2:
-    client:
-      client-id: stockServer
-      client-secret: 123456
     resource:
-      jwt:
-        key-uri: http://127.0.0.1:9090/oauth/token_key
+      id: ${spring.application.name}
+      user-info-uri: http://127.0.0.1:9090/user

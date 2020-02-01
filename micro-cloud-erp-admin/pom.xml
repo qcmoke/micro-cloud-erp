@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>micro-cloud-erp-modules</artifactId>
+        <artifactId>micro-cloud-erp</artifactId>
         <groupId>com.qcmoke</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -18,6 +18,13 @@
             <groupId>com.qcmoke</groupId>
             <artifactId>micro-cloud-erp-common</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <!--oauth2-->
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-starter-oauth2</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

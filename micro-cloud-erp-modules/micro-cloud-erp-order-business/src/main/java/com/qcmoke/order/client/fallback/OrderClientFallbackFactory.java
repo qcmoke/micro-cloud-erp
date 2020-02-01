@@ -1,15 +1,15 @@
-package com.qcmoke.common.service.fallback;
+package com.qcmoke.order.client.fallback;
 
-import com.qcmoke.common.service.OrderService;
+import com.qcmoke.order.client.OrderClient;
 import com.qcmoke.common.utils.RespBean;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class OrderServiceFallbackFactory implements FallbackFactory<OrderService> {
+public class OrderClientFallbackFactory implements FallbackFactory<OrderClient> {
     @Override
-    public OrderService create(Throwable throwable) {
-        return new OrderService() {
+    public OrderClient create(Throwable throwable) {
+        return new OrderClient() {
             @Override
             public RespBean getOrder(Integer id) {
                 log.info("id={} e={}", id, throwable.getMessage());
