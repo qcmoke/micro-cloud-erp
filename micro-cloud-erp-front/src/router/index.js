@@ -99,7 +99,7 @@ router.beforeEach((to, from, next) => {
     if (token.length && user) {
       if (!asyncRouter) {
         if (!userRouter) {
-          request.get(`system/menu/${user.username}`).then((res) => {
+          request.get('system/menu/getCurrentUserRouters').then(res => {
             const permissions = res.data.data.permissions
             store.commit('account/setPermissions', permissions)
             asyncRouter = res.data.data.routes
@@ -131,7 +131,7 @@ router.afterEach(() => {
 function go(to, next) {
   asyncRouter = filterAsyncRouter(asyncRouter)
   router.addRoutes(asyncRouter)
-  next({ ...to, replace: true })//  hack方法,确保addRoutes已完成, replace设置为true，那么导航不会留下history记录，点击浏览器回退按钮不会再回到这个路由
+  next({ ...to, replace: true }) //  hack方法,确保addRoutes已完成, replace设置为true，那么导航不会留下history记录，点击浏览器回退按钮不会再回到这个路由
 }
 
 function save(name, data) {
@@ -143,7 +143,7 @@ function get(name) {
 }
 
 function filterAsyncRouter(routes) {
-  return routes.filter((route) => {
+  return routes.filter(route => {
     const component = route.component
     if (component) {
       if (route.component === 'Layout') {

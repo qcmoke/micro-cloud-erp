@@ -6,7 +6,7 @@ import com.qcmoke.auth.constant.ParamsConstant;
 import com.qcmoke.auth.exception.ValidateCodeException;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import com.qcmoke.auth.service.ValidateCodeService;
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -53,7 +53,7 @@ public class ValidateCodeFilter extends OncePerRequestFilter {
                 chain.doFilter(request, response);
             } catch (ValidateCodeException e) {
                 log.error(e.getMessage());
-                ResponseWriterUtil.writeJson(RespBean.error(e.getMessage()));
+                ResponseWriterUtil.writeJson(Result.error(e.getMessage()));
             }
         } else {
             chain.doFilter(request, response);

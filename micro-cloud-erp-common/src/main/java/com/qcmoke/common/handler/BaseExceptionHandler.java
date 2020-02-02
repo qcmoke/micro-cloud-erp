@@ -1,7 +1,7 @@
 package com.qcmoke.common.handler;
 
 
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -24,9 +24,9 @@ public class BaseExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RespBean handleException(Exception e) {
+    public Result handleException(Exception e) {
         log.error("系统内部异常，异常信息", e);
-        return RespBean.error("系统内部异常");
+        return Result.error("系统内部异常");
     }
 
 
@@ -38,14 +38,14 @@ public class BaseExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RespBean handleBindException(BindException e) {
+    public Result handleBindException(BindException e) {
         StringBuilder message = new StringBuilder();
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         for (FieldError error : fieldErrors) {
             message.append(error.getField()).append(error.getDefaultMessage()).append(",");
         }
         message = new StringBuilder(message.substring(0, message.length() - 1));
-        return RespBean.error(message.toString());
+        return Result.error(message.toString());
     }
 
     /**
@@ -56,7 +56,7 @@ public class BaseExceptionHandler {
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public RespBean handleConstraintViolationException(ConstraintViolationException e) {
+    public Result handleConstraintViolationException(ConstraintViolationException e) {
         StringBuilder message = new StringBuilder();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
@@ -65,26 +65,26 @@ public class BaseExceptionHandler {
             message.append(pathArr[1]).append(violation.getMessage()).append(",");
         }
         message = new StringBuilder(message.substring(0, message.length() - 1));
-        return RespBean.error(message.toString());
+        return Result.error(message.toString());
     }
 
 
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public RespBean handleAccessDeniedException() {
-        return RespBean.forbidden("没有权限访问该资源");
+    public Result handleAccessDeniedException() {
+        return Result.forbidden("没有权限访问该资源");
     }
 
     @ExceptionHandler(value = HttpMediaTypeNotSupportedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RespBean handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        return RespBean.error("改方法不支持" + StringUtils.substringBetween(e.getMessage(), "'", "'") + "媒体类型");
+    public Result handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+        return Result.error("改方法不支持" + StringUtils.substringBetween(e.getMessage(), "'", "'") + "媒体类型");
     }
 
     @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RespBean handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        return RespBean.error("该方法不支持" + StringUtils.substringBetween(e.getMessage(), "'", "'") + "请求方法");
+    public Result handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return Result.error("该方法不支持" + StringUtils.substringBetween(e.getMessage(), "'", "'") + "请求方法");
     }
 
 }

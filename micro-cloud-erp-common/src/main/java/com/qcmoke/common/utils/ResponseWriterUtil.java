@@ -16,14 +16,14 @@ public class ResponseWriterUtil {
     /**
      * @param httpServletResponse HttpServletResponse
      * @param status              相应状态码
-     * @param respBean            RespBean
+     * @param result            RespBean
      */
-    public static void writeJson(HttpServletResponse httpServletResponse, final int status, RespBean respBean) {
+    public static void writeJson(HttpServletResponse httpServletResponse, final int status, Result result) {
         try {
             httpServletResponse.setStatus(status);
             httpServletResponse.setContentType("application/json;charset=UTF-8");
             PrintWriter out = httpServletResponse.getWriter();
-            out.write(new ObjectMapper().writeValueAsString(respBean));
+            out.write(new ObjectMapper().writeValueAsString(result));
             out.flush();
             out.close();
         } catch (IOException e) {
@@ -33,14 +33,14 @@ public class ResponseWriterUtil {
 
 
     /**
-     * @param respBean RespBean
+     * @param result RespBean
      */
-    public static void writeJson(RespBean respBean) {
+    public static void writeJson(Result result) {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes != null) {
             HttpServletResponse httpServletResponse = requestAttributes.getResponse();
             if (httpServletResponse != null) {
-                ResponseWriterUtil.writeJson(httpServletResponse, respBean.getStatus(), respBean);
+                ResponseWriterUtil.writeJson(httpServletResponse, result.getStatus(), result);
             }
         }
     }

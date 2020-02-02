@@ -1,6 +1,6 @@
 package com.qcmoke.system.cotroller;
 
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,7 +28,7 @@ public class UserController {
 
 
     @GetMapping("/index")
-    public RespBean index() throws ParseException {
+    public Result index() throws ParseException {
         Map<String, Object> data = new HashMap<>();
         // 获取系统访问记录
         data.put("totalVisitCount", 11);
@@ -38,7 +38,7 @@ public class UserController {
         // 获取近期系统访问记录
         data.put("lastTenVisitCount", list);
         data.put("lastTenUserVisitCount", list);
-        return RespBean.ok(data);
+        return Result.ok(data);
     }
 
 

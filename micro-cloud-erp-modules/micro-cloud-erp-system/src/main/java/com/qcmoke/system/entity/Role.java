@@ -11,9 +11,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * @author MrBird
- */
+
 @Data
 @TableName("t_role")
 public class Role implements Serializable {

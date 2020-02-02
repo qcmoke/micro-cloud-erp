@@ -1,6 +1,6 @@
 package com.qcmoke.common.handler;
 
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -21,6 +21,6 @@ public class SecurityOAuth2AccessDeniedHandler extends OAuth2AccessDeniedHandler
         String msg = "权限不足，授权失败! auth fail 403! e=" + e.getMessage();
         log.error(msg);
         request.setAttribute("logAuthFailMsg", msg);
-        ResponseWriterUtil.writeJson(RespBean.forbidden(msg));
+        ResponseWriterUtil.writeJson(Result.forbidden(msg));
     }
 }

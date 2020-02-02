@@ -6,9 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * @author MrBird
- */
+
 @Data
 @TableName("t_user_role")
 public class UserRole implements Serializable {

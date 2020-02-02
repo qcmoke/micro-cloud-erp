@@ -1,7 +1,7 @@
 package com.qcmoke.system.controller;
 
 import com.qcmoke.system.entity.CodeTokenInfo;
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;

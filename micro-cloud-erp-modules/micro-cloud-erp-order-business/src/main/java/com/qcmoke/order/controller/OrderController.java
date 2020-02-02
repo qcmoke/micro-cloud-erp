@@ -1,7 +1,7 @@
 package com.qcmoke.order.controller;
 
 import com.qcmoke.common.dto.OrderDto;
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import com.qcmoke.common.utils.RpcResult;
 import com.qcmoke.common.utils.SecurityOAuth2Util;
 import com.qcmoke.order.client.OrderClient;
@@ -19,12 +19,12 @@ public class OrderController {
     private OrderClient orderClient;
 
     @GetMapping("/getOrderByUserName")
-    public RespBean get() {
+    public Result get() {
         String username = SecurityOAuth2Util.getCurrentUsername();
         RpcResult<List<OrderDto>> result = orderClient.getOrder(username);
         if (result.getStatus() == RpcResult.ERROR_STATUS) {
-            return RespBean.error(result.getMessage());
+            return Result.error(result.getMessage());
         }
-        return RespBean.ok(result.getData());
+        return Result.ok(result.getData());
     }
 }

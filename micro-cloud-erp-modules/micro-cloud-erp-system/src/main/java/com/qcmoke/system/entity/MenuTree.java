@@ -3,9 +3,7 @@ package com.qcmoke.system.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-/**
- * @author MrBird
- */
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MenuTree extends Tree<Menu>{

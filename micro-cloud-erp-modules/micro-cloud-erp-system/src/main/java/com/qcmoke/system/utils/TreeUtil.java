@@ -6,9 +6,7 @@ import com.qcmoke.system.entity.Tree;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author MrBird
- */
+
 public class TreeUtil {
 
     private final static String TOP_NODE_ID = "0";

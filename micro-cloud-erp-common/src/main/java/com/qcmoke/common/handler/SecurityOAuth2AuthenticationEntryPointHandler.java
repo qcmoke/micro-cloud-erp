@@ -1,7 +1,7 @@
 package com.qcmoke.common.handler;
 
 import com.qcmoke.common.exception.NotAllowedAnonymousUserException;
-import com.qcmoke.common.utils.RespBean;
+import com.qcmoke.common.utils.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -23,11 +23,11 @@ public class SecurityOAuth2AuthenticationEntryPointHandler extends OAuth2Authent
         if (e instanceof NotAllowedAnonymousUserException) {//AccessTokenRequiredException
             msg = "请求中无token，不支持匿名授权，auth fail 401！e=" + e.getMessage();
             log.error(msg);
-            ResponseWriterUtil.writeJson(RespBean.unauthorized(msg));
+            ResponseWriterUtil.writeJson(Result.unauthorized(msg));
             return;
         }
         msg = "token非法，auth fail 401！e=" + e.getMessage();
         log.error(msg);
-        ResponseWriterUtil.writeJson(RespBean.unauthorized(msg));
+        ResponseWriterUtil.writeJson(Result.unauthorized(msg));
     }
 }
