@@ -1,14 +1,16 @@
 package com.qcmoke.order.controller;
 
-import com.qcmoke.common.entity.CurrentUser;
+import com.qcmoke.common.dto.OrderDto;
 import com.qcmoke.common.utils.RespBean;
-import com.qcmoke.common.utils.ReturnResult;
+import com.qcmoke.common.utils.RpcResult;
+import com.qcmoke.common.utils.SecurityOAuth2Util;
 import com.qcmoke.order.client.OrderClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequestMapping("/business")
 @RestController
@@ -16,12 +18,13 @@ public class OrderController {
     @Autowired
     private OrderClient orderClient;
 
-    @RequestMapping(value = "/getOrder/{id}", method = RequestMethod.GET)
-    ReturnResult<CurrentUser> get(@PathVariable("id") Integer id) {
-        RespBean respBean = orderClient.getOrder(id);
-        return new ReturnResult<CurrentUser>()
-                .message("kk")
-                .status(200)
-                .data(new CurrentUser());
+    @GetMapping("/getOrderByUserName")
+    public RespBean get() {
+        String username = SecurityOAuth2Util.getCurrentUsername();
+        RpcResult<List<OrderDto>> result = orderClient.getOrder(username);
+        if (result.getStatus() == RpcResult.ERROR_STATUS) {
+            return RespBean.error(result.getMessage());
+        }
+        return RespBean.ok(result.getData());
     }
 }

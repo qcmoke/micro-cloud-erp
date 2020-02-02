@@ -56,7 +56,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .userDetailsService(userDetailsService)//设置token关联的用户信息
                 .tokenStore(tokenStore())//配置保存token的地方，比如：数据库、redis、jwt里
                 .authenticationManager(authenticationManager);//认证管理器
-//                .exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
+                //.exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
         if (oauth2SecurityProperties.getEnableJwt()) {
             //endpoints.accessTokenConverter(jwtAccessTokenConverter());
             endpoints.tokenEnhancer(jwtAccessTokenConverter());

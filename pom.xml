@@ -17,6 +17,7 @@
         <module>micro-cloud-erp-gateway</module>
         <module>micro-cloud-erp-admin</module>
         <module>micro-cloud-erp-modules</module>
+        <module>micro-cloud-erp-api</module>
     </modules>
 
 
