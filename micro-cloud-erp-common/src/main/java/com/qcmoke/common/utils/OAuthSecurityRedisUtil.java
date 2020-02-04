@@ -14,7 +14,7 @@ import java.util.LinkedHashMap;
 
 
 @Slf4j
-public class SecurityOAuth2Util {
+public class OAuthSecurityRedisUtil extends OAuthSecurityUtil {
 
 
     /**
@@ -62,7 +62,7 @@ public class SecurityOAuth2Util {
         return details.getTokenValue();
     }
 
-    private static OAuth2Authentication getOAuth2Authentication() {
+    public static OAuth2Authentication getOAuth2Authentication() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return (OAuth2Authentication) authentication;
     }
@@ -71,4 +71,5 @@ public class SecurityOAuth2Util {
     private static LinkedHashMap<String, Object> getAuthenticationDetails() {
         return (LinkedHashMap<String, Object>) getOAuth2Authentication().getUserAuthentication().getDetails();
     }
+
 }

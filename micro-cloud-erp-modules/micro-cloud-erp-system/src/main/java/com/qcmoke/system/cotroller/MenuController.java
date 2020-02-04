@@ -2,7 +2,7 @@ package com.qcmoke.system.cotroller;
 
 import com.qcmoke.common.entity.router.VueRouter;
 import com.qcmoke.common.utils.Result;
-import com.qcmoke.common.utils.SecurityOAuth2Util;
+import com.qcmoke.common.utils.OAuthSecurityRedisUtil;
 import com.qcmoke.system.entity.Menu;
 import com.qcmoke.system.service.IMenuService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class MenuController {
 
     @GetMapping("/getCurrentUserRouters")
     public Result getUserRouters() {
-        String currentUsername = SecurityOAuth2Util.getCurrentUsername();
+        String currentUsername = OAuthSecurityRedisUtil.getCurrentUsername();
         Map<String, Object> result = new HashMap<>();
         List<VueRouter<Menu>> userRouters = this.menuService.getUserRouters(currentUsername);
         String userPermissions = this.menuService.findUserPermissions(currentUsername);

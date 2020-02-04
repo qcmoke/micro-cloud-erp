@@ -28,7 +28,7 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.antMatcher(AuthUrlConstant.ALL_URL);//被资源服务器控制的url
+        http.antMatcher(AuthUrlConstant.ALL_RESOURCE_URL);//以/resource开头的所有请求都被认证服务器控制
         http.authorizeRequests()
                 .antMatchers(StringUtils.splitByWholeSeparatorPreserveAllTokens(oauth2SecurityProperties.getAnonUrl(), ",")).permitAll()
                 .anyRequest().authenticated()

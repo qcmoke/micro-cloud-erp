@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public class UserDetailsDao {
 
     private String findUserPermissions(String username) {
         String sql = "  SELECT " +
-                "       DISTINCT m.perms" +
+                "       DISTINCT m.perms,r.role_name as roleName" +
                 "       FROM t_role r" +
                 "                LEFT JOIN t_user_role ur ON (r.role_id = ur.role_id)" +
                 "                LEFT JOIN t_user u ON (u.user_id = ur.user_id)" +
@@ -86,7 +87,13 @@ public class UserDetailsDao {
                 "       WHERE u.username = ?" +
                 "       AND m.perms IS NOT NULL" +
                 "       AND m.perms <> ''";
-        List<String> userPermissions = systemJdbcTemplate.queryForList(sql, String.class, username);
+        List<Map<String, Object>> list = systemJdbcTemplate.queryForList(sql, username);
+
+        ArrayList<String> userPermissions = new ArrayList<>();
+        list.forEach(map -> {
+            //userPermissions.add((String) map.get("perms"));
+            userPermissions.add((String) map.get("roleName"));
+        });
         return String.join(",", userPermissions);
     }
 }

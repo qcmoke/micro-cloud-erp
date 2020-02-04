@@ -1,5 +1,7 @@
 package com.qcmoke.auth.config;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -17,14 +20,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Configuration
@@ -56,7 +58,7 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .userDetailsService(userDetailsService)//设置token关联的用户信息
                 .tokenStore(tokenStore())//配置保存token的地方，比如：数据库、redis、jwt里
                 .authenticationManager(authenticationManager);//认证管理器
-                //.exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
+        //.exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
         if (oauth2SecurityProperties.getEnableJwt()) {
             //endpoints.accessTokenConverter(jwtAccessTokenConverter());
             endpoints.tokenEnhancer(jwtAccessTokenConverter());
@@ -115,23 +117,26 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter() {
             //可以重写该方法对token进行增强
             @Override
-            public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-                return super.enhance(accessToken, authentication);
+            public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication authentication) {
+                Object principal = authentication.getPrincipal();
+                JSONObject user = JSONObject.parseObject(JSONObject.toJSONString(principal, SerializerFeature.WriteMapNullValue));//WriteMapNullValue空值的属性要保留，默认移除空值属性
+                user.remove("authorities");
+                //设置附加信息
+                ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(new HashMap<String, Object>() {{
+                    put("user", user);
+                }});
+                return super.enhance(oAuth2AccessToken, authentication);
             }
         };
 
-        //1、使用秘钥进行签名（以下两种可选）
-        //accessTokenConverter.setSigningKey("123456"); //使用对称加密签名
+        /*使用秘钥签名（以下两种可选）*/
+        //(1)使用对称加密签名
+        //accessTokenConverter.setSigningKey("123456");
+        //(2)使用非对称加密证书文件进行签名
         KeyProperties keyProperties = keyProperties();
         converter.setKeyPair(new KeyStoreKeyFactory(keyProperties.getKeyStore().getLocation(), keyProperties.getKeyStore().getPassword().toCharArray())
                 .getKeyPair(keyProperties.getKeyStore().getAlias(), keyProperties.getKeyStore().getSecret().toCharArray())
-        );//使用非对称加密证书文件进行签名
-
-        //3、配置自定义的UserAuthenticationConverter
-        DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();
-        DefaultUserAuthenticationConverter userAuthenticationConverter = new DefaultUserAuthenticationConverter();
-        userAuthenticationConverter.setUserDetailsService(userDetailsService);
-        accessTokenConverter.setUserTokenConverter(userAuthenticationConverter);
+        );
 
         return converter;
     }

@@ -4,6 +4,23 @@ server:
 spring:
   application:
     name: micro-cloud-erp-gateway
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    username: root
+    password: 123456
+  #redis配置
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 10000
+    timeout: 5000
 
 #网关配置
 zuul:
@@ -21,14 +38,46 @@ zuul:
   sensitive-headers:
 
 
-###配置oauth2，通过client-id和client-secret到认证服务器认证并获取jwt签名的秘钥
+gateway:
+  security:
+    #免认证白名单
+    ignoreAuthenticateUrl: /auth/**
+    #免授权白名单（包括免认证的url，防止白名单加载数据库）
+    ignoreAuthorizationUrl: ${gateway.security.ignoreAuthenticateUrl},/gateway/userInfo
+
+####认证服务器使用jwt token时，这种方式不会每次请求都会去认证服务器进行token校验，jwt token自身就带有信息，在资源服务器里通过公钥即可完成token校验，避免了每次向认证服务器进行token校验请求
+##（1）这种方式资源服务器启动时会去认证服务器获取公钥（好处是，认证服务器如果密钥对修改了也能动态获取公钥），但需要同时配置client-id、client-secret、jwt.key-uri，此外在启动当前资源服务器时，认证服务器一定要先启动。
 security:
   oauth2:
+    client:
+      client-id: gateway
+      client-secret: 123456
     resource:
-      id: ${spring.application.name}
-      user-info-uri: http://127.0.0.1:9090/user
+      jwt:
+        key-uri: http://127.0.0.1:9090/oauth/token_key
 
+
+###（2）这种方式直接通过公钥进行token认证（写死公钥的方式）,只需要配置jwt.key-value即可（此外这种方式也可以在ResourceServerConfig类里通过jwtAccessTokenConverter.setVerifierKey(publicKey)进行灵活配置）
+#security:
+#  oauth2:
+#    resource:
 #      jwt:
-#        #资源服务器启动时会去鉴权中心获取公钥
-#        key-uri: http://127.0.0.1:9090/oauth/token_key
+#        key-value: |
+#          -----BEGIN PUBLIC KEY-----
+#          MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwlJSUTtDeUML9LYp6X/r
+#          5/3LxdKaLLwpTPr+OHPYjRnYCdYXpG/CN13A+fubmX0Hs8zLfSN7Y+Ao93g1VDou
+#          Y6FPcrDqoQ71AuH7lZG2eqHyOaOYKgfUSAG8N6I2OWZ7z1t1dRSBJbioP0xAic+O
+#          8O31Mej23l64yuV9GogWRu0XjKam5fLumWLMmGGlMVYYZHUgX1AFbZQzgrophmug
+#          dm5EOQWtok6Y3tS2/vbjVh/x/MNFMWsUVFjMi9t8UUU1v2S7twL/oPDXIc+lqoPX
+#          UqqGXX5EZ0zn+yzwx2Ge53vTTut64wgrZCYuothNU0ULkfSVoW8SjJUjSwPJAKDI
+#          0wIDAQAB
+#          -----END PUBLIC KEY-----
 
+
+
+###认证服务器使用redis token时，通过user-info-uri进行token验证和获取用户信息到principal,这种方式每次请求都会到认证服务器进行token校验，有一定的性能问题
+#security:
+#  oauth2:
+#    resource:
+##      id: ${spring.application.name}
+##      user-info-uri: http://127.0.0.1:9090/resource/user

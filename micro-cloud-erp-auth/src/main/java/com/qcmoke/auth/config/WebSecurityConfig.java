@@ -32,8 +32,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);//被认证服务器控制的url
-        http.requestMatchers().antMatchers(AuthUrlConstant.OAUTH_ALL_URL, AuthUrlConstant.LOGIN_PAGE);
+        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class);
+        http.requestMatchers().antMatchers(AuthUrlConstant.OAUTH_ALL_URL, AuthUrlConstant.LOGIN_PAGE);//以/oauth开头的所有请求和/login的请求都被认证服务器控制
         http.formLogin().permitAll();
         http.authorizeRequests()
                 .antMatchers(AuthUrlConstant.LOGIN_PAGE).permitAll()

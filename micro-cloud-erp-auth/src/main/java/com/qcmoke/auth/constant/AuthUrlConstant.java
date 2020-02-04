@@ -1,7 +1,7 @@
 package com.qcmoke.auth.constant;
 
 public interface AuthUrlConstant {
-    String ALL_URL = "/**";
+    String ALL_RESOURCE_URL = "/resource/**";
 
     String OAUTH_ALL_URL = "/oauth/**";
 

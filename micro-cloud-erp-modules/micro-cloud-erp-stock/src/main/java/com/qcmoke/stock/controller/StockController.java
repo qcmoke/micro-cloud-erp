@@ -47,6 +47,7 @@ public class StockController {
 
 
     @GetMapping("/demo")
+    @PreAuthorize("hasAuthority('user:view')")
     public Object demo() {
         return "demo";
     }

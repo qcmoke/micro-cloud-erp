@@ -1,35 +1,27 @@
 package com.qcmoke.gateway.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.qcmoke.common.utils.OAuthSecurityJwtUtil;
 import com.qcmoke.common.utils.Result;
-import com.qcmoke.common.utils.SecurityOAuth2Util;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
 
+@Slf4j
 @RequestMapping("/gateway")
 @RestController
 public class GatewayController {
 
     @GetMapping("/userInfo")
-    public Result currentUser(Principal principal, OAuth2Authentication auth) {
-
-        Map map = (Map) auth.getUserAuthentication().getDetails();
-        System.out.println(map);
-
-        HashMap<String, Object> userInfo = new HashMap<String, Object>() {{
-            put("currentTokenValue", SecurityOAuth2Util.getCurrentTokenValue());
-            put("currentUserAuthority", SecurityOAuth2Util.getCurrentUserAuthority());
-            put("currentUsername", SecurityOAuth2Util.getCurrentUsername());
-            put("authentication", SecurityContextHolder.getContext().getAuthentication());
-            put("CurrentUser", SecurityOAuth2Util.getCurrentUser());
-            put("principal", principal);
-        }};
-        return Result.ok(userInfo);
+    public Result currentUser(Principal principal, OAuth2Authentication oAuth2Authentication, HttpServletRequest request) {
+        log.info("Principal={}", principal);
+        log.info("OAuth2Authentication={}", oAuth2Authentication);
+        JSONObject jsonObject = OAuthSecurityJwtUtil.getPrincipal(request);
+        return Result.ok(jsonObject);
     }
 }
