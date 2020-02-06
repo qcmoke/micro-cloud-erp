@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: mc-auth-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
   datasource:
     auth:
       #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
@@ -30,13 +34,13 @@ spring:
         max-wait: 10000
     timeout: 5000
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:7001/eureka
-  instance:
-    instance-id: mc-auth-server-9090
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:7001/eureka
+#  instance:
+#    instance-id: mc-auth-server-9090
+#    prefer-ip-address: true
 
 
 #非对称加密秘钥库配置
