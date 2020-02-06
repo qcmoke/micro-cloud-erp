@@ -3,11 +3,12 @@ package com.qcmoke.auth;
 import com.qcmoke.common.annotation.EnableAutoRedisService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
 @EnableAutoRedisService
-@EnableEurekaClient
+//@EnableEurekaClient
+@EnableDiscoveryClient
 @SpringBootApplication
 public class OAuth2AuthServer {
 

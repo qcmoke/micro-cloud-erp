@@ -7,19 +7,23 @@ server:
 spring:
   application:
     name: mc-ums-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: 123456
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:7001/eureka
-  instance:
-    instance-id: mc-ums-server-8080
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:7001/eureka
+#  instance:
+#    instance-id: mc-ums-server-8080
+#    prefer-ip-address: true
 
 ##配置mybatis plus
 mybatis-plus:

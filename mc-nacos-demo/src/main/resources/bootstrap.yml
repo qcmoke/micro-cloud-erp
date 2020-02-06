@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: mc-nacos-demo
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        server-addr: 127.0.0.1:8848
+        group: DEFAULT_GROUP
+        prefix: mc-nacos-demo
+        file-extension: yaml
+        namespace: 8173f142-d4ae-4431-9c10-35c8621c05cb

@@ -4,14 +4,18 @@ server:
 spring:
   application:
     name: mc-oms-business-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:7001/eureka/
-  instance:
-    instance-id: mc-oms-business-server-81
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:7001/eureka/
+#  instance:
+#    instance-id: mc-oms-business-server-81
+#    prefer-ip-address: true
 
 #feign注解支持hystrix服务降级处理
 feign:

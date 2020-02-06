@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: mc-gateway-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
@@ -23,13 +27,13 @@ spring:
     timeout: 5000
 
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:7001/eureka
-  instance:
-    instance-id: mc-gateway-server-9070
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:7001/eureka
+#  instance:
+#    instance-id: mc-gateway-server-9070
+#    prefer-ip-address: true
 
 
 #网关配置
