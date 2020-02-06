@@ -1,12 +1,12 @@
-package com.qcmoke.gateway.config;
+package com.qcmoke.zuul.config;
 
 import com.qcmoke.auth.common.handler.PermissionExpressionHandler;
 import com.qcmoke.auth.common.handler.SecurityOAuth2AccessDeniedHandler;
 import com.qcmoke.auth.common.handler.SecurityOAuth2AuthenticationEntryPointHandler;
-import com.qcmoke.gateway.authorization.CustomMetadataSource;
-import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
-import com.qcmoke.gateway.filter.GatewayAuthLogFilter;
-import com.qcmoke.gateway.properties.GatewayAuthProperties;
+import com.qcmoke.zuul.authorization.CustomMetadataSource;
+import com.qcmoke.zuul.authorization.UrlAccessDecisionManager;
+import com.qcmoke.zuul.filter.AuthLogFilter;
+import com.qcmoke.zuul.properties.ZuulAuthProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,23 +19,23 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 
 @Configuration
 @EnableResourceServer
-public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter {
+public class ZuulResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
     private CustomMetadataSource metadataSource;
     @Autowired
     private UrlAccessDecisionManager urlAccessDecisionManager;
     @Autowired
-    private GatewayAuthProperties gatewayAuthProperties;
+    private ZuulAuthProperties zuulAuthProperties;
     @Autowired
-    private GatewayAuthLogFilter gatewayAuthLogFilter;
+    private AuthLogFilter authLogFilter;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(gatewayAuthLogFilter, FilterSecurityInterceptor.class);
+        http.addFilterBefore(authLogFilter, FilterSecurityInterceptor.class);
         http
                 .authorizeRequests()
-                .antMatchers(StringUtils.split(gatewayAuthProperties.getIgnoreAuthenticateUrl(), ",")).permitAll()
+                .antMatchers(StringUtils.split(zuulAuthProperties.getIgnoreAuthenticateUrl(), ",")).permitAll()
                 .anyRequest().authenticated()
                 .anyRequest().access("#permissionService.notAllowedAnonymousUser(request,authentication)")//通过当前的请求和当前的用户得到请求是否授权,使用GatewayWebSecurityExpressionHandler表达式处理器去解析这个表达式
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {

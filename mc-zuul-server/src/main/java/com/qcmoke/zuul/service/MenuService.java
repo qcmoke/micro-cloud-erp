@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.service;
+package com.qcmoke.zuul.service;
 
 import com.alibaba.fastjson.JSONArray;
 

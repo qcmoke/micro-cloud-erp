@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.filter;
+package com.qcmoke.zuul.filter;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qcmoke.common.utils.OAuthSecurityJwtUtil;
@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class GatewayAuthLogFilter extends OncePerRequestFilter {
+public class AuthLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         //认证成功后授权前

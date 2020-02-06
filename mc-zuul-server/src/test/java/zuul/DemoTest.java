@@ -1,4 +1,4 @@
-package com.qcmoke.gateway;
+package com.qcmoke.zuul;
 
 import org.junit.Test;
 

@@ -1,10 +1,10 @@
-package com.qcmoke.gateway.authorization;
+package com.qcmoke.zuul.authorization;
 
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.qcmoke.gateway.properties.GatewayAuthProperties;
-import com.qcmoke.gateway.service.MenuService;
+import com.qcmoke.zuul.properties.ZuulAuthProperties;
+import com.qcmoke.zuul.service.MenuService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
@@ -30,14 +30,14 @@ public class CustomMetadataSource implements FilterInvocationSecurityMetadataSou
     private MenuService menuService;
     AntPathMatcher antPathMatcher = new AntPathMatcher();
     @Autowired
-    private GatewayAuthProperties gatewayAuthProperties;
+    private ZuulAuthProperties zuulAuthProperties;
 
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) {
         String requestUrl = ((FilterInvocation) o).getRequestUrl();
         //免授权白名单
-        String[] ignoreAuthorizationUrl = StringUtils.split(gatewayAuthProperties.getIgnoreAuthorizationUrl(), ",");
+        String[] ignoreAuthorizationUrl = StringUtils.split(zuulAuthProperties.getIgnoreAuthorizationUrl(), ",");
         for (String ignoreUrl : ignoreAuthorizationUrl) {
             if (antPathMatcher.match(ignoreUrl, requestUrl)) {
                 return null;

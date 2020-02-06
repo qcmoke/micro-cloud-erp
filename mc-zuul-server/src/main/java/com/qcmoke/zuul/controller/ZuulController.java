@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.controller;
+package com.qcmoke.zuul.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qcmoke.common.utils.OAuthSecurityJwtUtil;
@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Slf4j
-@RequestMapping("/gateway")
+@RequestMapping("/zuul")
 @RestController
-public class GatewayController {
+public class ZuulController {
 
     @GetMapping("/userInfo")
     public Result<Object> currentUser(Principal principal, OAuth2Authentication oAuth2Authentication, HttpServletRequest request) {

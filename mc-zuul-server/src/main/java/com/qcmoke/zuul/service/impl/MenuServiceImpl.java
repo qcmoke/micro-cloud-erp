@@ -1,9 +1,9 @@
-package com.qcmoke.gateway.service.impl;
+package com.qcmoke.zuul.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
 import com.qcmoke.common.service.RedisService;
-import com.qcmoke.gateway.dao.MenuDao;
-import com.qcmoke.gateway.service.MenuService;
+import com.qcmoke.zuul.dao.MenuDao;
+import com.qcmoke.zuul.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

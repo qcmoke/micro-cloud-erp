@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.properties;
+package com.qcmoke.zuul.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 @ConfigurationProperties(prefix = "gateway.security")
-public class GatewayAuthProperties {
+public class ZuulAuthProperties {
 
     /**
      * 免认证访问路径

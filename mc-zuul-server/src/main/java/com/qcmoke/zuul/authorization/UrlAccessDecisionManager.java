@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.authorization;
+package com.qcmoke.zuul.authorization;
 
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;

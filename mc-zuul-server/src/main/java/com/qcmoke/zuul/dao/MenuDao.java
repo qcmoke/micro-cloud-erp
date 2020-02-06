@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.dao;
+package com.qcmoke.zuul.dao;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;

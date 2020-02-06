@@ -1,6 +1,6 @@
-package com.qcmoke.gateway;
+package com.qcmoke.zuul;
 
-import com.qcmoke.gateway.properties.GatewayAuthProperties;
+import com.qcmoke.zuul.properties.ZuulAuthProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +12,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BootDemoTest {
 
     @Autowired
-    private GatewayAuthProperties gatewayAuthProperties;
+    private ZuulAuthProperties zuulAuthProperties;
 
     @Test
     public void test1() {
-        System.out.println(gatewayAuthProperties.getIgnoreAuthenticateUrl());
+        System.out.println(zuulAuthProperties.getIgnoreAuthenticateUrl());
     }
 }

@@ -1,4 +1,4 @@
-package com.qcmoke.gateway.filter;
+package com.qcmoke.zuul.filter;
 
 import com.netflix.client.ClientException;
 import com.netflix.zuul.context.RequestContext;
