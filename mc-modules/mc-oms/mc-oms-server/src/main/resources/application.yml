@@ -1,0 +1,17 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: mc-oms-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  #个性化定制
+  instance:
+    #服务实例id（application.name可以对应多个instance）
+    instance-id: mc-oms-server-8081
+    #显示前缀ip
+    prefer-ip-address: true

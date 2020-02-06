@@ -1,8 +1,0 @@
-server:
-  port: 8082
-
-security:
-  oauth2:
-    resource:
-      id: ${spring.application.name}
-      user-info-uri: http://127.0.0.1:9090/resource/user

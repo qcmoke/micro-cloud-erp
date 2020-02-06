@@ -1,0 +1,27 @@
+server:
+  port: 8082
+
+
+spring:
+  application:
+    name: mc-wms-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+  #个性化定制
+  instance:
+    #服务实例id（application.name可以对应多个instance）
+    instance-id: mc-wms-server-8082
+    #显示前缀ip
+    prefer-ip-address: true
+
+security:
+  oauth2:
+    client:
+      client-id: gateway
+      client-secret: 123456
+    resource:
+      jwt:
+        key-uri: http://127.0.0.1:9070/auth/oauth/token_key #让网关负载均衡到认证服务器获取公钥

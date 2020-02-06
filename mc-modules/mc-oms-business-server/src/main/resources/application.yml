@@ -1,0 +1,26 @@
+server:
+  port: 81
+
+spring:
+  application:
+    name: mc-oms-business-server
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  instance:
+    instance-id: mc-oms-business-server-81
+    prefer-ip-address: true
+
+#feign注解支持hystrix服务降级处理
+feign:
+  hystrix:
+    enabled: true
+#启用feign注解支持hystrix服务降级处理后，解决http head不能发送的问题
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          strategy: SEMAPHORE
