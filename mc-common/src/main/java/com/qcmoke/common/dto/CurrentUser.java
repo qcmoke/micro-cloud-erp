@@ -24,7 +24,7 @@ public class CurrentUser implements Serializable {
     private String password;
     private String username;
     @JsonIgnore
-    private Set authorities;
+    private Set<String> authorities;
     private boolean accountNonExpired;
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;

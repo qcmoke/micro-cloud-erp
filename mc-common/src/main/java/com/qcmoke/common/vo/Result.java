@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 
 import java.io.Serializable;
 
+/**
+ * @author qcmoke
+ */
 public class Result<T> implements Serializable {
     private Integer status;
     private String message;

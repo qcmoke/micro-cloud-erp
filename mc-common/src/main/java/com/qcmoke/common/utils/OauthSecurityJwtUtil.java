@@ -3,11 +3,13 @@ package com.qcmoke.common.utils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.qcmoke.common.dto.CurrentUser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 
 public class OauthSecurityJwtUtil extends OauthSecurityUtil {
@@ -31,19 +34,29 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
      * @return CurrentUser 当前用户信息
      */
     public static CurrentUser getCurrentUser(HttpServletRequest request) {
+        JSONObject jsonObject = getJwtClaimsFromHeader(request);
+        return getCurrentUser(jsonObject);
+    }
+
+    public static CurrentUser getCurrentUser(JSONObject jsonObject) {
         try {
-            JSONObject jsonObject = getJwtClaimsFromHeader(request);
             if (jsonObject == null) {
                 return null;
             }
-            return JSON.parseObject(
+            CurrentUser currentUser = JSON.parseObject(
                     JSONObject.toJSONString(jsonObject.get(JWT_USER_PROPERTY), SerializerFeature.WriteMapNullValue),
                     CurrentUser.class);
+            JSONArray jsonArray = (JSONArray) jsonObject.get(JWT_USER_AUTHORITIES_PROPERTY);
+            Set<String> authorities = JSON.parseObject(JSON.toJSONString(jsonArray, SerializerFeature.WriteMapNullValue), new TypeReference<Set<String>>() {
+            });
+            currentUser.setAuthorities(authorities);
+            return currentUser;
         } catch (Exception e) {
             logger.error("获取当前用户信息失败", e);
             return null;
         }
     }
+
 
     /**
      * 获取在线用户名称
@@ -56,8 +69,8 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return currentUser.getUsername();
     }
 
-    public static JSONObject getJwtClaimsFromHeader(HttpServletRequest request) {
-        String token = getAccessToken(request);
+
+    public static JSONObject getJwtClaimsFromHeader(String token) {
         if (StringUtils.isBlank(token)) {
             return null;
         }
@@ -74,8 +87,14 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return null;
     }
 
-    public static JSONObject getPrincipal(HttpServletRequest request) {
-        JSONObject jwtJsonObject = getJwtClaimsFromHeader(request);
+
+    public static JSONObject getJwtClaimsFromHeader(HttpServletRequest request) {
+        String token = getAccessToken(request);
+        return getJwtClaimsFromHeader(token);
+    }
+
+
+    public static JSONObject getPrincipal(JSONObject jwtJsonObject) {
         if (jwtJsonObject == null) {
             return null;
         }
@@ -91,6 +110,14 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return user;
     }
 
+    public static JSONObject getPrincipal(HttpServletRequest request) {
+        JSONObject jwtJsonObject = getJwtClaimsFromHeader(request);
+        if (jwtJsonObject == null) {
+            return null;
+        }
+        return getPrincipal(jwtJsonObject);
+    }
+
     /**
      * 获取当前用户权限集
      */
@@ -100,15 +127,21 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
             return null;
         }
         return (JSONArray) principal.get(JWT_USER_AUTHORITIES_PROPERTY);
-
     }
 
-    public static boolean checkToken(String accessToken,String publicKey) {
+
+    public static boolean checkToken(String accessToken, String publicKey) {
         try {
             JwtHelper.decodeAndVerify(accessToken, new RsaVerifier(publicKey));
         } catch (Exception e) {
             return false;
         }
         return true;
+    }
+
+    public static CurrentUser getCurrentUserForWebFlux(ServerHttpRequest request) {
+        String accessToken = getAccessTokenForWebFlux(request);
+        JSONObject claims = getJwtClaimsFromHeader(accessToken);
+        return getCurrentUser(claims);
     }
 }
