@@ -1,6 +1,6 @@
 package com.qcmoke.oms.business.controller;
 
-import com.qcmoke.common.utils.OAuthSecurityJwtUtil;
+import com.qcmoke.common.utils.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.business.client.OrderClient;
 import com.qcmoke.oms.dto.OrderDto;
@@ -21,7 +21,7 @@ public class OrderController {
 
     @GetMapping("/getOrderByUserName")
     public Result<Object> get(HttpServletRequest request) {
-        String username = OAuthSecurityJwtUtil.getCurrentUsername(request);
+        String username = OauthSecurityJwtUtil.getCurrentUsername(request);
         Result<List<OrderDto>> result = orderClient.getOrder(username);
         if (result.getStatus() == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
             return Result.error(result.getMessage());

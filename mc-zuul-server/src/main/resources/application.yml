@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: mc-zuul-server
+    name: mc-gateway-server
   cloud:
     nacos:
       discovery:
@@ -66,7 +66,7 @@ gateway:
     #免认证白名单
     ignoreAuthenticateUrl: /auth/**
     #免授权白名单（包括免认证的url，防止白名单加载数据库）
-    ignoreAuthorizationUrl: ${gateway.security.ignoreAuthenticateUrl},/zuul/userInfo
+    ignoreAuthorizationUrl: ${gateway.security.ignoreAuthenticateUrl},/gateway/userInfo
 
 ####认证服务器使用jwt token时，这种方式不会每次请求都会去认证服务器进行token校验，jwt token自身就带有信息，在资源服务器里通过公钥即可完成token校验，避免了每次向认证服务器进行token校验请求
 ##（1）这种方式资源服务器启动时会去认证服务器获取公钥（好处是，认证服务器如果密钥对修改了也能动态获取公钥），但需要同时配置client-id、client-secret、jwt.key-uri，此外在启动当前资源服务器时，认证服务器一定要先启动。

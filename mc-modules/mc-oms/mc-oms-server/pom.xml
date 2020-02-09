@@ -26,12 +26,6 @@
             <artifactId>mc-oms-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
-        <!--  hystrix -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

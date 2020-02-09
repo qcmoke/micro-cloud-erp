@@ -1,11 +1,18 @@
 package com.qcmoke.gateway;
 
 
+import com.qcmoke.common.annotation.EnableAutoPublicKeyService;
+import com.qcmoke.common.annotation.EnableAutoRedisService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
+/**
+ * @author qcmoke
+ */
+@EnableAutoRedisService
+@EnableAutoPublicKeyService
 @EnableDiscoveryClient
 @SpringBootApplication
 public class GatewayApplication {

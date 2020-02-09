@@ -18,6 +18,9 @@ import javax.validation.Path;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * @author qcmoke
+ */
 @Slf4j
 public class BaseExceptionHandler {
 

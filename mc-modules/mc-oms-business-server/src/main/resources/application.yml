@@ -21,10 +21,20 @@ spring:
 feign:
   hystrix:
     enabled: true
-#启用feign注解支持hystrix服务降级处理后，解决http head不能发送的问题
+
+ribbon:
+  #请求连接的超时时间 默认的时间为 1 秒
+  ConnectTimeout: 5000
+  #请求处理的超时时间
+  ReadTimeout: 5000
+
 hystrix:
   command:
     default:
       execution:
         isolation:
+          #启用feign注解支持hystrix服务降级处理后，解决http head不能发送的问题
           strategy: SEMAPHORE
+          #建议配置Hystrix的超时时间要大于ribbon的超时时间，否则会在接口调用还未完成的时候直接进入回调方法
+          thread:
+            timeoutInMilliseconds: 7000 #默认是1秒

@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * 定义常用的 Redis操作
+ * @author qcmoke
  */
 public interface RedisService {
 

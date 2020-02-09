@@ -5,6 +5,9 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * @author qcmoke
+ */
 @Data
 public class TokenInfo implements Serializable {
 

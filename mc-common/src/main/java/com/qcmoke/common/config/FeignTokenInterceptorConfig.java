@@ -12,6 +12,7 @@ import java.util.Enumeration;
 
 /**
  * Feign调用时添加http head请求头
+ * @author qcmoke
  */
 @Slf4j
 public class FeignTokenInterceptorConfig {

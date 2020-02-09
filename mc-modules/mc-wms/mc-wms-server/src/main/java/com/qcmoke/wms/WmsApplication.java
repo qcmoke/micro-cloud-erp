@@ -8,8 +8,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 
 @EnableResourceServer
 @EnableDiscoveryClient
-//@EnableEurekaClient
-@EnableGlobalMethodSecurity(prePostEnabled = true)//启用授权注解
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @SpringBootApplication
 public class WmsApplication {
     public static void main(String[] args) {

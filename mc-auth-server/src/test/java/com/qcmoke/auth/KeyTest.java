@@ -1,5 +1,8 @@
 package com.qcmoke.auth;
 
+import com.qcmoke.common.utils.KeyStoreUtils;
+import com.qcmoke.common.utils.RsaUtils;
+import com.qcmoke.common.utils.security.RSAUtils;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -11,12 +14,13 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.util.Map;
 
 public class KeyTest {
     @Test
     public void testKey() throws KeyStoreException, IOException, CertificateException, NoSuchAlgorithmException {
 
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("key/qcmoke.key"), "123456password".toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("key/qcmoke.keystore"), "123456password".toCharArray());
         KeyPair keyPair = keyStoreKeyFactory.getKeyPair("qcmoke", "123456secret".toCharArray());
         System.out.println(keyPair.getPrivate());
         System.out.println(keyPair.getPublic());
@@ -41,8 +45,6 @@ public class KeyTest {
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         Certificate cert = cf.generateCertificate(new ClassPathResource("key/qcmoke.crt").getInputStream());
         PublicKey pubKey = cert.getPublicKey();
-
-
 
 
         //3、构建加密解密类
@@ -83,5 +85,49 @@ public class KeyTest {
         }
 
         return ret.toString();
+    }
+
+
+    @Test
+    public void test3() throws IOException {
+        String data = "qqq";
+        byte[] encrypt = KeyStoreUtils.encrypt(
+                new ClassPathResource("key/qcmoke.keystore").getInputStream(),
+                "123456password",
+                "qcmoke",
+                "123456secret", data.getBytes());
+        System.out.println(new String(encrypt));
+
+
+        byte[] decrypt = KeyStoreUtils.decrypt(new ClassPathResource("key/qcmoke.crt").getInputStream(), encrypt);
+        System.out.println(new String(decrypt));
+    }
+
+
+    @Test
+    public void test4() throws Exception {
+        RsaUtils.generateKey("f:/public.key", "f:/private.key", "123456");
+        KeyPair keyPair = RsaUtils.getKeyPair(RsaUtils.getPrivateKey("f:/private.key"), RsaUtils.getPublicKey("f:/public.key"));
+    }
+
+    @Test
+    public void test5() throws Exception {
+        PrivateKey privateKey = RsaUtils.getPrivateKey(new ClassPathResource("key/private.key").getFile().getAbsolutePath());
+        PublicKey publicKey = RsaUtils.getPublicKey(new ClassPathResource("key/public.key").getFile().getAbsolutePath());
+        byte[] encrypt = RsaUtils.encrypt(privateKey, "hah".getBytes());
+        System.out.println(new String(encrypt));
+
+        byte[] decrypt = RsaUtils.decrypt(publicKey, encrypt);
+        System.out.println(new String(decrypt));
+    }
+
+    @Test
+    public void test6() throws SignatureException {
+        String data = "hello";
+//        Map<String, String> keys = RSAUtils.createKeys(2048);
+        String  publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx55x0CG1tpdFewgvuOf4c3DLFCGlCpbyASIJhX5pL1o/cGuRcf3/nT5sEpcGcPN2cUnd57BBw8h5/H4422riF6hE71zerGKnsR2lWAmgZmTcghRGLgs+1xKp6sUFQttJSQcIS928iN6VJmlCkF70HT2Ya/n/rfF8ymx8Kx7UdlQIDAQAB";
+        String  privateKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALHnnHQIbW2l0V7CC+45/hzcMsUIaUKlvIBIgmFfmkvWj9wa5Fx/f+dPmwSlwZw83ZxSd3nsEHDyHn8fjjbauIXqETvXN6sYqexHaVYCaBmZNyCFEYuCz7XEqnqxQVC20lJBwhL3byI3pUmaUKQXvQdPZhr+f+t8XzKbHwrHtR2VAgMBAAECgYAaykMAIijAY0EFIPmE9Uyz8eDfVOXs+GJLex/PJANrOjNNtOsAlt6e6ZjxeTiPm4bPvIdrX8YWDA/Vmt3imstAdsstcFHGGgRryaSVkLtklHoCOirEMJR84SIwx7coro8uRcJVY+lo6r40uCq/4naAa11Wif49DYsMsNmNiCRNgQJBAOYXqrh1V/E4HgTxgkwJeEBbb8CoCSDGxnzxT0wsflqXMJ1VmSVNJ/eV2F7WIg9cK0umJBaFKEvGXVx9faQg6bUCQQDF76be6mq2fTLGViAzX+tODUuLp+/q9B55eVwcvJ21s3HS5GRI0AMeILtvvC+rFrn8LoW/hOqtBxI0sJYl5FBhAkEA2a2QPHv/G90cQU7+FtNqqXAXtGsEX7bN90wP2h/J1ghs3Jwri2eIJSnlDiuFA4UODL58K7YD3lQm5SZvo8PjdQJAadyZyAFh34YoYNFxWWjEpbMQo3nHJEc6AUf6DtiGFMcLanqCdDrkX/mrpb/lUsDN6eVL3TmOdcohX5LOSyfIIQJBANQwNmTer7NnwgQLD1utxgaNHXcrNEdpj3OLUiXcupbLWS1dgCysKmrSJYUsuSFGjnDV5uMYUCU1+uJSuJSkJXQ=";
+        String rsaSignContent = RSAUtils.rsaSign(data, privateKey, "utf-8");
+        boolean b = RSAUtils.doCheck("hello", rsaSignContent, publicKey, "utf-8");
     }
 }

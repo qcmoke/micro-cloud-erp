@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用于从 IOC容器中获取 Bean
+ * @author qcmoke
  */
 public class SpringContextUtil implements ApplicationContextAware {
     private static ApplicationContext applicationContext;

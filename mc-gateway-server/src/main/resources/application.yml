@@ -11,6 +11,7 @@ spring:
 
     gateway:
       routes:
+        # 配置路由：1、id：路由的唯一标识，可以任意不重复的字符串；2、url：路由地址，表示指向的目标服务器地址；3、predicates：断言，标识进入url的请求条件；4、filters：过滤器，表示进入路由的过程中执行的过滤
         - id: mc-auth-server
           uri: lb://mc-auth-server
           predicates:

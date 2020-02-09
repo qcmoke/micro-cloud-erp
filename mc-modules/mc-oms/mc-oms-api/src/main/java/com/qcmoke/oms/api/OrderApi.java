@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+/**
+ * @author qcmoke
+ */
 @RequestMapping("/order")
 public interface OrderApi {
     @GetMapping(value = "/get/{username}")

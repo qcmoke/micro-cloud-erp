@@ -28,9 +28,16 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
-        <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
+        <!--<platform-bom.version>Cairo-SR7</platform-bom.version>
+       <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
+       <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
+       <spring-cloud-alibaba.version>2.0.1.RELEASE</spring-cloud-alibaba.version>-->
+
+        <platform-bom.version>Cairo-SR8</platform-bom.version>
+        <spring-boot.version>2.0.9.RELEASE</spring-boot.version>
+        <spring-cloud.version>Finchley.SR4</spring-cloud.version><!--cloud升级版本到Finchley.SR4后需要加reactive-streams这个依赖-->
         <spring-cloud-alibaba.version>2.0.1.RELEASE</spring-cloud-alibaba.version>
+
         <!--忽略编译时执行test-->
         <skipTests>true</skipTests>
     </properties>
@@ -47,7 +54,7 @@
             <dependency>
                 <groupId>io.spring.platform</groupId>
                 <artifactId>platform-bom</artifactId>
-                <version>Cairo-SR7</version>
+                <version>${platform-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -1,6 +1,6 @@
 package com.qcmoke.ums.cotroller;
 
-import com.qcmoke.common.utils.OAuthSecurityJwtUtil;
+import com.qcmoke.common.utils.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.ums.entity.Menu;
 import com.qcmoke.ums.service.IMenuService;
@@ -29,7 +29,7 @@ public class MenuController {
 
     @GetMapping("/getCurrentUserRouters")
     public Result<Object> getUserRouters(HttpServletRequest request) {
-        String currentUsername = OAuthSecurityJwtUtil.getCurrentUsername(request);
+        String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
         Map<String, Object> result = new HashMap<>();
         List<VueRouter<Menu>> userRouters = this.menuService.getUserRouters(currentUsername);
         String userPermissions = this.menuService.findUserPermissions(currentUsername);
