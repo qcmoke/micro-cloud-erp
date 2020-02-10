@@ -1,9 +1,7 @@
 package com.qcmoke.auth.config;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.qcmoke.auth.common.entity.AuthUser;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
-import com.qcmoke.common.utils.OauthSecurityJwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -122,12 +120,10 @@ public class Oauth2AuthorizationServerConfig extends AuthorizationServerConfigur
             //可以重写该方法对token进行增强
             @Override
             public OAuth2AccessToken enhance(OAuth2AccessToken oAuth2AccessToken, OAuth2Authentication authentication) {
-                Object principal = authentication.getPrincipal();
-                JSONObject user = JSONObject.parseObject(JSONObject.toJSONString(principal, SerializerFeature.WriteMapNullValue));//WriteMapNullValue空值的属性要保留，默认移除空值属性
-                user.remove(OauthSecurityJwtUtil.JWT_USER_AUTHORITIES_PROPERTY);
+                AuthUser authUser = (AuthUser) authentication.getPrincipal();
                 //设置附加信息
-                ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(new HashMap<String, Object>() {{
-                    put(OauthSecurityJwtUtil.JWT_USER_PROPERTY, user);
+                ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(new HashMap<String, Object>(1) {{
+                    put("uid", authUser.getUid());
                 }});
                 return super.enhance(oAuth2AccessToken, authentication);
             }

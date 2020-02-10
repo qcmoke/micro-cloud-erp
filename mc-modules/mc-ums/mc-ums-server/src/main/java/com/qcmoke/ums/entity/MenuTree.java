@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 
+/**
+ * @author qcmoke
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class MenuTree extends Tree<Menu>{

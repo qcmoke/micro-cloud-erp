@@ -5,10 +5,10 @@
     <select id="findUserPermissions" resultType="menu">
         select distinct m.perms
         from t_role r
-                 left join t_user_role ur on (r.role_id = ur.role_id)
-                 left join t_user u on (u.user_id = ur.user_id)
-                 left join t_role_menu rm on (rm.role_id = r.role_id)
-                 left join t_menu m on (m.menu_id = rm.menu_id)
+                 left join t_user_role ur on (r.rid = ur.rid)
+                 left join t_user u on (u.uid = ur.uid)
+                 left join t_role_menu rm on (rm.rid = r.rid)
+                 left join t_menu m on (m.mid = rm.mid)
         where u.username = #{userName}
           and m.perms is not null
           and m.perms &lt;&gt; ''
@@ -18,12 +18,12 @@
         select m.*
         from t_menu m
         where m.type &lt;&gt; 1
-          and m.MENU_ID in
-              (select distinct rm.menu_id
+          and m.mid in
+              (select distinct rm.mid
                from t_role_menu rm
-                        left join t_role r on (rm.role_id = r.role_id)
-                        left join t_user_role ur on (ur.role_id = r.role_id)
-                        left join t_user u on (u.user_id = ur.user_id)
+                        left join t_role r on (rm.rid = r.rid)
+                        left join t_user_role ur on (ur.rid = r.rid)
+                        left join t_user u on (u.uid = ur.uid)
                where u.username = #{userName})
         order by m.order_num
     </select>

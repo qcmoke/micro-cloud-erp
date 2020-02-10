@@ -1,8 +1,9 @@
 package com.qcmoke.gateway.filter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.qcmoke.common.utils.OauthSecurityJwtUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -14,26 +15,26 @@ import java.io.IOException;
 
 /**
  * 日志过滤器
+ *
  * @author qcmoke
  */
 @Component
 @Slf4j
 public class AuthLogFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
         //认证成功后授权前
-        JSONObject jwt = OauthSecurityJwtUtil.getPrincipal(request);
-        if (jwt == null) {
+        String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
+        if (StringUtils.isBlank(currentUsername)) {
             log("匿名用户访问");
             chain.doFilter(request, response);
             return;
         }
-        String username = (String) jwt.get("username");
-        log(username + "开始进行授权");
+        log(currentUsername + "开始进行授权");
         //授权中
         chain.doFilter(request, response);
         //授权成功后
-        log(username + "完成授权");
+        log(currentUsername + "完成授权");
     }
 
     private void log(String sql) {

@@ -6,8 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -15,9 +13,6 @@ import java.util.Date;
 @Data
 @TableName("t_menu")
 public class Menu implements Serializable {
-
-    private static final long serialVersionUID = 7187628714679791771L;
-
     // 菜单
     public static final String TYPE_MENU = "0";
     // 按钮
@@ -26,76 +21,66 @@ public class Menu implements Serializable {
     /**
      * 菜单/按钮ID
      */
-    @TableId(value = "MENU_ID", type = IdType.AUTO)
-    private Long menuId;
+    @TableId(type = IdType.AUTO)
+    private Long mid;
 
     /**
      * 上级菜单ID
      */
-    @TableField("PARENT_ID")
+    @TableField("parent_id")
     private Long parentId;
 
     /**
      * 菜单/按钮名称
      */
-    @TableField("MENU_NAME")
-    @NotBlank(message = "{required}")
-    @Size(max = 10, message = "{noMoreThan}")
-    private String menuName;
+    @TableField("mname")
+    private String mname;
 
     /**
      * 菜单URL
      */
-    @TableField("PATH")
-    @Size(max = 100, message = "{noMoreThan}")
+    @TableField("path")
     private String path;
 
     /**
      * 对应 Vue组件
      */
-    @TableField("COMPONENT")
-    @Size(max = 100, message = "{noMoreThan}")
+    @TableField("component")
     private String component;
 
     /**
      * 权限标识
      */
-    @TableField("PERMS")
-    @Size(max = 50, message = "{noMoreThan}")
+    @TableField("perms")
     private String perms;
 
     /**
      * 图标
      */
-    @TableField("ICON")
+    @TableField("icon")
     private String icon;
 
     /**
      * 类型 0菜单 1按钮
      */
-    @TableField("TYPE")
-    @NotBlank(message = "{required}")
+    @TableField("type")
     private String type;
 
     /**
      * 排序
      */
-    @TableField("ORDER_NUM")
+    @TableField("order_num")
     private Integer orderNum;
 
     /**
      * 创建时间
      */
-    @TableField("CREATE_TIME")
+    @TableField("create_time")
     private Date createTime;
 
     /**
      * 修改时间
      */
-    @TableField("MODIFY_TIME")
+    @TableField("modify_time")
     private Date modifyTime;
-
-    private transient String createTimeFrom;
-    private transient String createTimeTo;
-
 }

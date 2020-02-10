@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * @author qcmoke
+ */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Tree<T> {

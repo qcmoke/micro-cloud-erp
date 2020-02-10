@@ -42,7 +42,7 @@ public class SecurityController {
     @GetMapping("/user")
     public Object currentUser(HttpServletRequest request) {
         if (oauth2SecurityProperties.getEnableJwt()) {
-            return OauthSecurityJwtUtil.getPrincipal(request);
+            return OauthSecurityJwtUtil.getCurrentUser(request);
         }
         return OauthSecurityRedisUtil.getOAuth2Authentication().getPrincipal();
     }

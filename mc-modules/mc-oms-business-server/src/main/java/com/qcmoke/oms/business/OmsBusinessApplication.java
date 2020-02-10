@@ -1,6 +1,6 @@
 package com.qcmoke.oms.business;
 
-import com.qcmoke.common.annotation.EnableAutoCommonConfig;
+import com.qcmoke.common.annotation.EnableAutoResourceServerSecurityConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 /**
  * @author qcmoke
  */
-@EnableAutoCommonConfig
+@EnableAutoResourceServerSecurityConfig
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication

@@ -26,6 +26,11 @@ public class OauthSecurityUtil {
     private static final Log logger = LogFactory.getLog(OauthSecurityUtil.class);
 
 
+    /**
+     * 从请求头里获取Bearer Token
+     * @param request ServerHttpRequest
+     * @return Bearer Token
+     */
     public static String getAccessTokenForWebFlux(ServerHttpRequest request) {
         if (request == null) {
             return null;
@@ -40,6 +45,12 @@ public class OauthSecurityUtil {
     }
 
 
+    /**
+     * 从请求头里获取Bearer Token
+     *
+     * @param request HttpServletRequest
+     * @return Bearer Token
+     */
     public static String getAccessToken(HttpServletRequest request) {
         if (request == null) {
             return null;
@@ -53,7 +64,28 @@ public class OauthSecurityUtil {
         return authorization.substring(7);
     }
 
-    public static String getAuthBasicToken(String clientId, String clientSecret) {
+    /**
+     * 从请求头里 Basic Token
+     *
+     * @param request HttpServletRequest
+     * @return Basic Token
+     */
+    public static String getBasicToken(HttpServletRequest request) {
+        String authorization = request.getHeader(HEADER_TOKEN_NAME);
+        if (StringUtils.isEmpty(authorization) || !authorization.contains(TOKEN_BASIC_PREFIX)) {
+            return null;
+        }
+        return authorization.substring(6);
+    }
+
+    /**
+     * 生成basic token
+     *
+     * @param clientId     clientId
+     * @param clientSecret clientSecret
+     * @return basic token
+     */
+    public static String generateBasicToken(String clientId, String clientSecret) {
         if (clientId == null || clientSecret == null) {
             logger.warn("Null Client ID or Client Secret detected. Endpoint that requires authentication will reject request with 401 error.");
             return null;
@@ -63,12 +95,17 @@ public class OauthSecurityUtil {
     }
 
 
+    /**
+     * 人认证服务器获取公钥
+     *
+     * @return 公钥
+     */
     public static String getPublicKeyFromAuthServer() {
         try {
             String oauthServiceUrl = "http://127.0.0.1:9090/oauth/token_key";
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-            headers.set(HEADER_TOKEN_NAME, getAuthBasicToken("admin", "123456"));
+            headers.set(HEADER_TOKEN_NAME, generateBasicToken("admin", "123456"));
             MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
             HttpEntity<MultiValueMap<String, String>> entity = new HttpEntity<>(params, headers);
             ResponseEntity<JSONObject> response = new RestTemplate().exchange(

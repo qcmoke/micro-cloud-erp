@@ -1,9 +1,8 @@
 package com.qcmoke.gateway.authorization;
 
 
-import com.qcmoke.gateway.properties.GatewayAuthProperties;
 import com.qcmoke.gateway.service.MenuService;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
@@ -26,26 +25,18 @@ import java.util.Set;
  *
  * @author qcmoke
  */
+@Slf4j
 @Component
 public class CustomMetadataSource implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
     private MenuService menuService;
     AntPathMatcher antPathMatcher = new AntPathMatcher();
-    @Autowired
-    private GatewayAuthProperties gatewayAuthProperties;
 
     @Override
-    public Collection<ConfigAttribute> getAttributes(Object o) {
-
-        String requestUrl = ((FilterInvocation) o).getRequestUrl();
-        //免授权白名单
-        String[] ignoreAuthorizationUrl = StringUtils.split(gatewayAuthProperties.getIgnoreAuthorizationUrl(), ",");
-        for (String ignoreUrl : ignoreAuthorizationUrl) {
-            if (antPathMatcher.match(ignoreUrl, requestUrl)) {
-                return null;
-            }
-        }
+    public Collection<ConfigAttribute> getAttributes(Object filterInvocation) {
+        String requestUrl = ((FilterInvocation) filterInvocation).getRequestUrl();
+        //对请求url进行授权
         Map<String, Set<String>> metadataMap = menuService.getMetadataMap();
         for (Map.Entry<String, Set<String>> metadataDto : metadataMap.entrySet()) {
             String acl = metadataDto.getKey();
@@ -53,8 +44,8 @@ public class CustomMetadataSource implements FilterInvocationSecurityMetadataSou
                 Set<String> roles = metadataDto.getValue();
                 return getAttributesByRoles(roles);
             }
-
         }
+
         //没有匹配上的资源，都是登录访问，对于登录的角色可自定义为ROLE_LOGIN角色
         //如果返回null的话，意味着当前这个请求不需要任何角色就能访问，甚至不需要登录,即白名单。
         return SecurityConfig.createList("ROLE_LOGIN");

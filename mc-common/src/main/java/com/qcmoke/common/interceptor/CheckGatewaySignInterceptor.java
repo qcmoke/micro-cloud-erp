@@ -24,33 +24,35 @@ public class CheckGatewaySignInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String accessToken = OauthSecurityUtil.getAccessToken(request);
+        String basicToken = OauthSecurityUtil.getBasicToken(request);
+
+        String content = null;
         String gatewaySign = request.getHeader("gatewaySign");
         String gatewayPublicKey = request.getHeader("gatewayPublicKey");
-        if (StringUtils.isBlank(accessToken)) {
-            doError("非法访问！未携带有效的accessToken！");
+
+        if (StringUtils.isBlank(accessToken) && StringUtils.isBlank(basicToken)) {
+            ResponseWriterUtil.writeJson(Result.forbidden("非法访问！未携带有效的令牌"));
             return false;
         }
+        if (StringUtils.isNoneBlank(accessToken)) {
+            content = accessToken;
+        } else {
+            content = basicToken;
+        }
+
         if (StringUtils.isBlank(gatewaySign) || StringUtils.isBlank(gatewayPublicKey)) {
             log.error("网关签名或者网关公钥为空,gatewaySign={},gatewayPublicKey={}", gatewaySign, gatewayPublicKey);
-            doError("gatewaySign 验签失败,非法访问！请通过网关访问！");
+            ResponseWriterUtil.writeJson(Result.error("网关签名或者网关公钥为空,非法访问！请通过网关访问！"));
             return false;
         }
-        boolean isOk = false;
         try {
-            isOk = RSAUtils.doCheck(accessToken, gatewaySign, gatewayPublicKey, "utf-8");
+            //验签
+            RSAUtils.doCheck(content, gatewaySign, gatewayPublicKey, "utf-8");
         } catch (SignatureException e) {
-            doError("gatewaySign 验签失败,非法访问！e=" + e.getMessage());
-            return false;
-        }
-        if (!isOk) {
-            doError("gatewaySign 验签失败,非法访问！请通过网关访问！");
+            log.error("网关验签令牌失败,非法访问！ e={}", e.getMessage());
+            ResponseWriterUtil.writeJson(Result.error("令牌未经网关签名,非法访问！请通过网关访问！"));
             return false;
         }
         return true;
-    }
-
-    private void doError(String errorMsg) {
-        log.error(errorMsg);
-        ResponseWriterUtil.writeJson(Result.forbidden(errorMsg));
     }
 }

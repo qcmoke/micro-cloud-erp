@@ -6,14 +6,15 @@ spring:
     name: mc-gateway-server
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-    password: 123456
+    password: qcmoke123456
   #redis配置
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 39.106.195.202
     port: 6379
+    password: qcmoke123456
     jedis:
       pool:
         min-idle: 8
@@ -25,7 +26,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 39.106.195.202:8848
 
     gateway:
       routes:
@@ -38,21 +39,21 @@ spring:
         - id: mc-ums-server
           uri: lb://mc-ums-server
           predicates:
-            - Path=/system/**
+            - Path=/ums/**
           filters:
         - id: mc-oms-server
           uri: lb://mc-oms-server
           predicates:
-            - Path=/order/**
+            - Path=/oms/**
           filters:
         - id: mc-oms-business-server
           uri: lb://mc-oms-business-server
           predicates:
-            - Path=/order-business/**
+            - Path=/oms-business/**
           filters:
         - id: mc-wms-server
           uri: lb://mc-wms-server
           predicates:
-            - Path=/stock/**
+            - Path=/wms/**
       default-filters:
         - StripPrefix=1

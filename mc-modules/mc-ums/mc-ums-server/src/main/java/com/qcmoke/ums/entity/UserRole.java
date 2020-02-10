@@ -7,16 +7,19 @@ import lombok.Data;
 import java.io.Serializable;
 
 
+/**
+ * @author qcmoke
+ */
 @Data
 @TableName("t_user_role")
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = -3166012934498268403L;
 
-    @TableField(value = "USER_ID")
-    private Long userId;
+    @TableField(value = "uid")
+    private Long uid;
 
-    @TableField(value = "ROLE_ID")
-    private Long roleId;
+    @TableField(value = "rid")
+    private Long rid;
 
 }

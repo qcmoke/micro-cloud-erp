@@ -7,17 +7,18 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 39.106.195.202:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/micro-cloud-erp-system?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-    password: 123456
+    password: qcmoke123456
   #redis配置
   redis:
     database: 0
-    host: 127.0.0.1
+    host: 39.106.195.202
     port: 6379
+    password: qcmoke123456
     jedis:
       pool:
         min-idle: 8
@@ -25,15 +26,6 @@ spring:
         max-active: 2000
         max-wait: 10000
     timeout: 5000
-
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:7001/eureka
-#  instance:
-#    instance-id: mc-gateway-server-9070
-#    prefer-ip-address: true
 
 
 #网关配置
@@ -49,24 +41,37 @@ zuul:
     auth:
       #url: http://localhost:9090
       serviceId: mc-auth-server
-    system:
+    ums:
       serviceId: mc-ums-server
-    order:
+    oms:
       serviceId: mc-oms-server
-    order-business:
+    oms-business:
       serviceId: mc-oms-business-server
-    stock:
+    wms:
       serviceId: mc-wms-server
   #敏感头过滤配置（默认敏感头信息Authorization、Cookie、Set-Cookie会被过滤，以至于不转发的，那么网关后的服务也就获取不到。如果要获取则设置zuul.sensitiveHeaders为空即可转发所有敏感头。）
   sensitive-headers:
+  host:
+    socket-timeout-millis: 50000
+    connect-timeout-millis: 5000
+
+ribbon:
+  #请求连接的超时时间 默认的时间为 1 秒
+  ConnectTimeout: 5000
+  #请求处理的超时时间
+  ReadTimeout: 5000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          #启用feign注解支持hystrix服务降级处理后，解决http head不能发送的问题
+          strategy: SEMAPHORE
+          #建议配置Hystrix的超时时间要大于ribbon的超时时间，否则会在接口调用还未完成的时候直接进入回调方法
+          thread:
+            timeoutInMilliseconds: 7000 #默认是1秒
 
 
-gateway:
-  security:
-    #免认证白名单
-    ignoreAuthenticateUrl: /auth/**
-    #免授权白名单（包括免认证的url，防止白名单加载数据库）
-    ignoreAuthorizationUrl: ${gateway.security.ignoreAuthenticateUrl},/gateway/userInfo
 
 ####认证服务器使用jwt token时，这种方式不会每次请求都会去认证服务器进行token校验，jwt token自身就带有信息，在资源服务器里通过公钥即可完成token校验，避免了每次向认证服务器进行token校验请求
 ##（1）这种方式资源服务器启动时会去认证服务器获取公钥（好处是，认证服务器如果密钥对修改了也能动态获取公钥），但需要同时配置client-id、client-secret、jwt.key-uri，此外在启动当前资源服务器时，认证服务器一定要先启动。

@@ -5,10 +5,10 @@ import com.qcmoke.auth.common.handler.SecurityOAuth2AccessDeniedHandler;
 import com.qcmoke.auth.common.handler.SecurityOAuth2AuthenticationEntryPointHandler;
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
+import com.qcmoke.gateway.constant.RouteConstant;
 import com.qcmoke.gateway.filter.AuthGatewaySignFiler;
 import com.qcmoke.gateway.filter.AuthLogFilter;
-import com.qcmoke.gateway.properties.GatewayAuthProperties;
-import org.apache.commons.lang3.StringUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -17,10 +17,13 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.util.AntPathMatcher;
 
 /**
  * @author qcmoke
  */
+@Slf4j
 @Configuration
 @EnableResourceServer
 public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter {
@@ -30,22 +33,19 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
     @Autowired
     private UrlAccessDecisionManager urlAccessDecisionManager;
     @Autowired
-    private GatewayAuthProperties gatewayAuthProperties;
-    @Autowired
     private AuthLogFilter authLogFilter;
     @Autowired
     private AuthGatewaySignFiler authGatewaySignFiler;
+    AntPathMatcher antPathMatcher = new AntPathMatcher();
+
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        //设置免认证白名单(不经过SecurityInterceptor，直接通过)
+        http.requestMatcher(new NegatedRequestMatcher(request -> antPathMatcher.match(RouteConstant.OAUTH_ROUTE_URL, request.getRequestURI())));
         http.addFilterBefore(authLogFilter, FilterSecurityInterceptor.class);
         http.addFilterAfter(authGatewaySignFiler, FilterSecurityInterceptor.class);
-        http
-                .authorizeRequests()
-                .antMatchers(StringUtils.split(gatewayAuthProperties.getIgnoreAuthenticateUrl(), ",")).permitAll()
-                .anyRequest().authenticated()
-                //通过当前的请求和当前的用户得到请求是否授权,使用GatewayWebSecurityExpressionHandler表达式处理器去解析这个表达式
-                .anyRequest().access("#permissionService.notAllowedAnonymousUser(request,authentication)")
+        http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override
                     public <O extends FilterSecurityInterceptor> O postProcess(O o) {
@@ -55,7 +55,10 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
                         o.setAccessDecisionManager(urlAccessDecisionManager);
                         return o;
                     }
-                });
+                })
+                //通过当前的请求和当前的用户得到请求是否授权,使用GatewayWebSecurityExpressionHandler表达式处理器去解析这个表达式
+                .anyRequest().access("#permissionService.notAllowedAnonymousUser(request,authentication)")
+                .anyRequest().authenticated();
     }
 
 
