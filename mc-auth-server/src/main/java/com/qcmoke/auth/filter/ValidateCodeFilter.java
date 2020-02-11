@@ -30,6 +30,7 @@ import java.util.Base64;
 /**
  * 验证码过滤器
  * 给oauth2密码认证模式添加验证码
+ * @author qcmoke
  */
 @Slf4j
 @Component

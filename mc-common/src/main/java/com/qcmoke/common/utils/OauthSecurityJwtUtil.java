@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
-import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,7 +27,7 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
      * @return CurrentUser 当前用户信息
      */
     public static CurrentUser getCurrentUser(HttpServletRequest request) {
-        JSONObject jwtJson = getJwtClaimsFromHeader(request);
+        JSONObject jwtJson = getJwtJson(request);
         return getCurrentUser(jwtJson);
     }
 
@@ -39,9 +38,9 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
      * @return CurrentUser 当前用户信息
      */
     public static CurrentUser getCurrentUserForWebFlux(ServerHttpRequest request) {
-        String accessToken = getAccessTokenForWebFlux(request);
-        JSONObject claims = getJwtClaimsFromHeader(accessToken);
-        return getCurrentUser(claims);
+        String accessToken = getBearerTokenForWebFlux(request);
+        JSONObject jwtJson = getJwtJson(accessToken);
+        return getCurrentUser(jwtJson);
     }
 
 
@@ -59,43 +58,25 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return currentUser.getUsername();
     }
 
-
-    /**
-     * 使用公钥校验Bearer Token
-     *
-     * @param accessToken Bearer Token
-     * @param publicKey   公钥
-     * @return boolean
-     */
-    public static boolean checkToken(String accessToken, String publicKey) {
+    private static CurrentUser getCurrentUser(JSONObject jwtJson) {
         try {
-            JwtHelper.decodeAndVerify(accessToken, new RsaVerifier(publicKey));
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
-    }
-
-
-    private static CurrentUser getCurrentUser(JSONObject jsonObject) {
-        try {
-            if (jsonObject == null) {
+            if (jwtJson == null) {
                 return null;
             }
-            return JSON.parseObject(JSONObject.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue), CurrentUser.class);
+            return JSON.parseObject(JSONObject.toJSONString(jwtJson, SerializerFeature.WriteMapNullValue), CurrentUser.class);
         } catch (Exception e) {
             logger.error("获取当前用户信息失败", e);
             return null;
         }
     }
 
-    private static JSONObject getJwtClaimsFromHeader(String token) {
-        if (StringUtils.isBlank(token)) {
+    private static JSONObject getJwtJson(String accessToken) {
+        if (StringUtils.isBlank(accessToken)) {
             return null;
         }
         try {
             //解析jwt
-            Jwt decode = JwtHelper.decode(token);
+            Jwt decode = JwtHelper.decode(accessToken);
             //得到 jwt中的用户信息
             String claims = decode.getClaims();
             //将jwt转为Map
@@ -107,8 +88,8 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
     }
 
 
-    private static JSONObject getJwtClaimsFromHeader(HttpServletRequest request) {
-        String token = getAccessToken(request);
-        return getJwtClaimsFromHeader(token);
+    private static JSONObject getJwtJson(HttpServletRequest request) {
+        String accessToken = getBearerToken(request);
+        return getJwtJson(accessToken);
     }
 }

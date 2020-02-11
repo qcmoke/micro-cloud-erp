@@ -39,37 +39,49 @@ zuul:
   #路由转发配置
   routes:
     auth:
-      #url: http://localhost:9090
+      path: /auth/**
       serviceId: mc-auth-server
+      #url: http://localhost:9090
     ums:
+      path: /ums/**
       serviceId: mc-ums-server
     oms:
+      path: /oms/**
       serviceId: mc-oms-server
     oms-business:
+      path: /oms-business/**
       serviceId: mc-oms-business-server
     wms:
+      path: /wms/**
       serviceId: mc-wms-server
   #敏感头过滤配置（默认敏感头信息Authorization、Cookie、Set-Cookie会被过滤，以至于不转发的，那么网关后的服务也就获取不到。如果要获取则设置zuul.sensitiveHeaders为空即可转发所有敏感头。）
   sensitive-headers:
+  #网关超时时间配置(对于路由使用url时生效)
   host:
-    socket-timeout-millis: 50000
-    connect-timeout-millis: 5000
+    #服务器请求超时时间
+    connect-timeout-millis: 2000
+    #请求处理超时时间(服务器响应超时时间)
+    socket-timeout-millis: 30000
+  #取消重试机制
+  retryable: false
 
+#网关超时时间配置(对于路由使用serviceId时生效)
 ribbon:
-  #请求连接的超时时间 默认的时间为 1 秒
-  ConnectTimeout: 5000
-  #请求处理的超时时间
-  ReadTimeout: 5000
+  #请务器请求超时时间,设置为2秒
+  ConnectTimeout: 2000
+  #请求处理超时时间(服务器响应超时时间),设置为30秒
+  ReadTimeout: 30000
 hystrix:
   command:
     default:
       execution:
         isolation:
-          #启用feign注解支持hystrix服务降级处理后，解决http head不能发送的问题
+          ##线程隔离策略配置，官方推荐使用THREAD，即下游依赖的请求在一个单独的线程中隔离，这里为了解决feign转发时需要携带head信息,所以讲策略设置为SEMAPHORE，即下游依赖请求在当前调用线程中执行
           strategy: SEMAPHORE
           #建议配置Hystrix的超时时间要大于ribbon的超时时间，否则会在接口调用还未完成的时候直接进入回调方法
           thread:
-            timeoutInMilliseconds: 7000 #默认是1秒
+            #hystrix超时时间，默认是1秒，设置为64秒。hystrix.default.timeoutInMilliseconds >= (host.connectTimeoutMillis + host.socketTimeoutMillis) + (ribbon.ConnectTimeout +ribbon.ReadTimeout)
+            timeoutInMilliseconds: 64000
 
 
 
@@ -82,7 +94,7 @@ security:
       client-secret: 123456
     resource:
       jwt:
-        key-uri: http://127.0.0.1:9090/oauth/token_key
+        key-uri: http://39.106.195.202:9090/oauth/token_key
 
 
 ###（2）这种方式直接通过公钥进行token认证（写死公钥的方式）,只需要配置jwt.key-value即可（此外这种方式也可以在ResourceServerConfig类里通过jwtAccessTokenConverter.setVerifierKey(publicKey)进行灵活配置）

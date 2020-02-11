@@ -4,6 +4,7 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 
 /**
  * 不支持匿名用户授权异常
+ * @author qcmoke
  */
 public class NotAllowedAnonymousUserException extends InsufficientAuthenticationException {
     public NotAllowedAnonymousUserException(String msg) {

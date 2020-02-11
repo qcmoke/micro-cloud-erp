@@ -11,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
- * Created by HUFENG on 2016/5/25 0025.
  * AES加密，+BASE64（通过key，生成128位秘钥） key填充方式
  * 128位
  */

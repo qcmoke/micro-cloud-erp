@@ -4,6 +4,9 @@ import com.qcmoke.auth.constant.ImageTypeConstant;
 import lombok.Data;
 
 
+/**
+ * @author qcmoke
+ */
 @Data
 public class ValidateCodeProperties {
 

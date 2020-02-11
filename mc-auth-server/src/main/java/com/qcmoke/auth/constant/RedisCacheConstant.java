@@ -1,5 +1,8 @@
 package com.qcmoke.auth.constant;
 
+/**
+ * @author qcmoke
+ */
 public interface RedisCacheConstant {
 
 

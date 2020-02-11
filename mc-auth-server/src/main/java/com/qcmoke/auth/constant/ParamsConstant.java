@@ -2,6 +2,7 @@ package com.qcmoke.auth.constant;
 
 /**
  * 请求参数常量
+ * @author qcmoke
  */
 public interface ParamsConstant {
     /**

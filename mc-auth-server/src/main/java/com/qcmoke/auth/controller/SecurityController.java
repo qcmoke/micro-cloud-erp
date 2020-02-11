@@ -26,16 +26,12 @@ import java.io.IOException;
 @RequestMapping("/resource")
 @RestController
 public class SecurityController {
-
     @Autowired
     private ValidateCodeService validateCodeService;
-
     @Autowired
     private ConsumerTokenServices consumerTokenServices;
-
     @Autowired
     private Oauth2SecurityProperties oauth2SecurityProperties;
-
     /**
      * 获取认证完成的用户信息
      */
@@ -61,7 +57,7 @@ public class SecurityController {
      */
     @DeleteMapping(value = "/logout")
     public Result<Object> revokeToken(HttpServletRequest request) {
-        if (consumerTokenServices.revokeToken(OauthSecurityUtil.getAccessToken(request))) {
+        if (consumerTokenServices.revokeToken(OauthSecurityUtil.getBearerToken(request))) {
             return Result.ok("注销成功");
         } else {
             return Result.error("注销失败");

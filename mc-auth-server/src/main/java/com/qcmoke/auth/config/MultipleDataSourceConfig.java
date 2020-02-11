@@ -12,6 +12,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 
+/**
+ * @author qcmoke
+ */
 @Configuration
 public class MultipleDataSourceConfig {
 

@@ -28,11 +28,15 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * @author qcmoke
+ */
 @Configuration
 @EnableAuthorizationServer
 public class Oauth2AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Qualifier("authDataSource")
     @Autowired
     private DataSource dataSource;
     @Qualifier("userDetailsServiceImpl")

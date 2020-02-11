@@ -5,6 +5,9 @@ import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 
+/**
+ * @author qcmoke
+ */
 @Data
 @SpringBootConfiguration
 @PropertySource(value = {"classpath:auth.properties"})

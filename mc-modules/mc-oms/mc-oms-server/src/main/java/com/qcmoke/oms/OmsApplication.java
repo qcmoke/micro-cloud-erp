@@ -1,6 +1,6 @@
 package com.qcmoke.oms;
 
-import com.qcmoke.common.annotation.EnableAutoResourceServerSecurityConfig;
+import com.qcmoke.common.annotation.EnableAutoResourceServerSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -8,7 +8,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author qcmoke
  */
-@EnableAutoResourceServerSecurityConfig
+@EnableAutoResourceServerSecurity
 @EnableDiscoveryClient
 @SpringBootApplication
 public class OmsApplication {

@@ -1,8 +1,8 @@
 package com.qcmoke.auth.config;
 
 import com.qcmoke.auth.common.handler.PermissionExpressionHandler;
-import com.qcmoke.auth.common.handler.SecurityOAuth2AccessDeniedHandler;
-import com.qcmoke.auth.common.handler.SecurityOAuth2AuthenticationEntryPointHandler;
+import com.qcmoke.auth.common.handler.SecurityOauth2AccessDeniedHandler;
+import com.qcmoke.auth.common.handler.SecurityOauth2AuthenticationEntryPointHandler;
 import com.qcmoke.auth.constant.AuthUrlConstant;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
      */
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        http.antMatcher(AuthUrlConstant.ALL_RESOURCE_URL);//以/resource开头的所有请求都被认证服务器控制
+        //以/resource开头的所有请求都被认证服务器控制
+        http.antMatcher(AuthUrlConstant.ALL_RESOURCE_URL);
         http.authorizeRequests()
                 .antMatchers(StringUtils.splitByWholeSeparatorPreserveAllTokens(oauth2SecurityProperties.getAnonUrl(), ",")).permitAll()
                 .anyRequest().authenticated()
@@ -39,8 +40,8 @@ public class OAuth2ResourceServerConfig extends ResourceServerConfigurerAdapter 
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.authenticationEntryPoint(new SecurityOAuth2AuthenticationEntryPointHandler())
-                .accessDeniedHandler(new SecurityOAuth2AccessDeniedHandler())
+        resources.authenticationEntryPoint(new SecurityOauth2AuthenticationEntryPointHandler())
+                .accessDeniedHandler(new SecurityOauth2AccessDeniedHandler())
                 .expressionHandler(new PermissionExpressionHandler());
     }
 }

@@ -1,8 +1,6 @@
 server:
   port: 8080
 
-
-
 ## 数据源
 spring:
   application:
@@ -29,14 +27,6 @@ spring:
         max-active: 2000
         max-wait: 10000
     timeout: 5000
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:7001/eureka
-#  instance:
-#    instance-id: mc-ums-server-8080
-#    prefer-ip-address: true
 
 ##配置mybatis plus
 mybatis-plus:

@@ -2,6 +2,7 @@ package com.qcmoke.auth.constant;
 
 /**
  * 认证类型常量类
+ * @author qcmoke
  */
 public interface GrantTypeConstant {
     /**

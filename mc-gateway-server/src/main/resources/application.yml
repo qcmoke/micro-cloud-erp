@@ -1,6 +1,12 @@
 server:
   port: 9070
 
+jwt-oauth-service-public-key:
+  oauth-service-ip: 39.106.195.202
+  oauth-service-port: 9090
+  client-id: gateway
+  client-secret: 123456
+
 spring:
   application:
     name: mc-gateway-server

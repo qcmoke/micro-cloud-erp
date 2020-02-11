@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+/**
+ * @author qcmoke
+ */
 @RestControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 public class SecurityExceptionHandler extends BaseExceptionHandler {

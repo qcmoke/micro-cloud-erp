@@ -1,8 +1,8 @@
 package com.qcmoke.gateway.config;
 
 import com.qcmoke.auth.common.handler.PermissionExpressionHandler;
-import com.qcmoke.auth.common.handler.SecurityOAuth2AccessDeniedHandler;
-import com.qcmoke.auth.common.handler.SecurityOAuth2AuthenticationEntryPointHandler;
+import com.qcmoke.auth.common.handler.SecurityOauth2AccessDeniedHandler;
+import com.qcmoke.auth.common.handler.SecurityOauth2AuthenticationEntryPointHandler;
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
 import com.qcmoke.gateway.constant.RouteConstant;
@@ -69,8 +69,8 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
         //resources.tokenServices(defaultTokenServices);
         resources
-                .authenticationEntryPoint(new SecurityOAuth2AuthenticationEntryPointHandler())
-                .accessDeniedHandler(new SecurityOAuth2AccessDeniedHandler())
+                .authenticationEntryPoint(new SecurityOauth2AuthenticationEntryPointHandler())
+                .accessDeniedHandler(new SecurityOauth2AccessDeniedHandler())
                 //支持表达式#permissionService.hasPermission(request,authentication)
                 .expressionHandler(new PermissionExpressionHandler());
     }

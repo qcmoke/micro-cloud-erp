@@ -21,5 +21,5 @@ import java.lang.annotation.*;
         CheckGatewaySignInterceptorMvcConfig.class,
         //Feign调用时添加http head请求头
         FeignTokenInterceptorConfig.class})
-public @interface EnableAutoResourceServerSecurityConfig {
+public @interface EnableAutoResourceServerSecurity {
 }

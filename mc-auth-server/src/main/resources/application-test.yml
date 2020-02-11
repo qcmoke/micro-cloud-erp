@@ -1,0 +1,44 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: mc-auth-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 39.106.195.202:8848
+  datasource:
+    auth:
+      #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
+      jdbc-url: jdbc:mysql://39.106.195.202:3306/mc-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      username: root
+      password: qcmoke123456
+      driver-class-name: com.mysql.jdbc.Driver
+    system:
+      jdbc-url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      username: root
+      password: qcmoke123456
+      driver-class-name: com.mysql.jdbc.Driver
+
+  #redis配置
+  redis:
+    database: 0
+    host: 39.106.195.202
+    port: 6379
+    password: qcmoke123456
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 10000
+    timeout: 5000
+
+#非对称加密秘钥库配置
+encrypt:
+  key-store:
+    location: classpath:key/qcmoke.keystore
+    alias: qcmoke
+    password: 123456password
+    secret: 123456secret

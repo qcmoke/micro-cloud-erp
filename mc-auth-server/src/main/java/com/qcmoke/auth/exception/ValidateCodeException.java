@@ -2,6 +2,7 @@ package com.qcmoke.auth.exception;
 
 /**
  * 验证码类型异常
+ * @author qcmoke
  */
 public class ValidateCodeException extends Exception {
 

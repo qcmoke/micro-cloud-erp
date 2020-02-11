@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 安全表达式处理器
  * 让#permissionService.hasPermission(request,authentication)起作用
+ * @author qcmoke
  */
 public class PermissionExpressionHandler extends OAuth2WebSecurityExpressionHandler {
 

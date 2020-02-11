@@ -1,6 +1,6 @@
 package com.qcmoke.oms.business;
 
-import com.qcmoke.common.annotation.EnableAutoResourceServerSecurityConfig;
+import com.qcmoke.common.annotation.EnableAutoFeignTokenInterceptor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -9,7 +9,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 /**
  * @author qcmoke
  */
-@EnableAutoResourceServerSecurityConfig
+@EnableAutoFeignTokenInterceptor
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication

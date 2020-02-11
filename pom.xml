@@ -12,14 +12,14 @@
 
     <modules>
         <module>mc-common</module>
-        <module>mc-registry-server</module>
+        <module>mc-auth-common</module>
         <module>mc-auth-server</module>
+        <module>mc-registry-server</module>
         <module>mc-gateway-server</module>
         <module>mc-zuul-server</module>
-        <module>mc-admin-server</module>
         <module>mc-config-server</module>
+        <module>mc-admin-server</module>
         <module>mc-modules</module>
-        <module>mc-auth-common</module>
         <module>mc-nacos-demo</module>
     </modules>
 
