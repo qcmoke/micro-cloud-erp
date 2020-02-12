@@ -16,6 +16,7 @@
     <properties>
         <jjwt.version>0.9.1</jjwt.version>
         <fastjson.version>1.2.58</fastjson.version>
+        <p6spy.version>3.8.1</p6spy.version>
     </properties>
 
     <dependencies>
@@ -77,6 +78,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
+        </dependency>
+        <!--p6spy sql性能分析-->
+        <dependency>
+            <groupId>p6spy</groupId>
+            <artifactId>p6spy</artifactId>
+            <version>${p6spy.version}</version>
         </dependency>
         <!--redis-->
         <dependency>

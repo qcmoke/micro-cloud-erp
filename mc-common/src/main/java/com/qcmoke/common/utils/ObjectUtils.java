@@ -1,6 +1,8 @@
 package com.qcmoke.common.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -14,6 +16,7 @@ import java.util.Set;
  * @author qcmoke
  */
 public class ObjectUtils {
+    private static final Log logger = LogFactory.getLog(ObjectUtils.class);
 
     /**
      * 判断对象是否非空
@@ -150,6 +153,7 @@ public class ObjectUtils {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
+            logger.error(e.getMessage());
             e.printStackTrace();
         } finally {
             try {

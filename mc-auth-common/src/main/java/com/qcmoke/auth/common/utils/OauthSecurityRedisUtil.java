@@ -3,7 +3,7 @@ package com.qcmoke.auth.common.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qcmoke.auth.common.entity.AuthUser;
 import com.qcmoke.auth.common.entity.CurrentUser;
-import com.qcmoke.common.utils.OauthSecurityUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;

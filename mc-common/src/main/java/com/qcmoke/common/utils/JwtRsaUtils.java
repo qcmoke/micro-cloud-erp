@@ -1,5 +1,6 @@
 package com.qcmoke.common.utils;
 
+import com.qcmoke.common.utils.security.RSAUtils;
 import io.jsonwebtoken.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
@@ -17,34 +18,34 @@ public class JwtRsaUtils {
     private static final Log logger = LogFactory.getLog(JwtRsaUtils.class);
 
     /**
-     * 私钥加密token
+     * 生成jwt token（使用私钥加密）
      *
      * @param expData       载荷中的数据
+     * @param privateKey    私钥
      * @param expireMinutes 过期时间，单位秒
-     * @return
-     * @throws Exception
+     * @return jwt token
      */
-    public static String generateToken(Map<String, Object> expData, PrivateKey key, int expireMinutes) throws Exception {
+    public static String generateToken(Map<String, Object> expData, PrivateKey privateKey, int expireMinutes) {
         return Jwts.builder()
                 .setClaims(expData)
                 .setExpiration(DateUtils.addMinutes(new Date(), expireMinutes))
-                .signWith(SignatureAlgorithm.RS256, key)
+                .signWith(SignatureAlgorithm.RS256, privateKey)
                 .compact();
     }
 
     /**
-     * 公钥解析token
+     * 公钥解析并校验jwt token
      *
      * @param token     用户请求中的token
      * @param publicKey 公钥
      * @return Jws<Claims>
-     * @throws ExpiredJwtException
-     * @throws UnsupportedJwtException
-     * @throws MalformedJwtException
-     * @throws SignatureException
-     * @throws IllegalArgumentException
+     * @throws ExpiredJwtException      ExpiredJwtException
+     * @throws UnsupportedJwtException  UnsupportedJwtException
+     * @throws MalformedJwtException    MalformedJwtException
+     * @throws SignatureException       SignatureException
+     * @throws IllegalArgumentException IllegalArgumentException
      */
-    public static Jws<Claims> parserToken(String token, PublicKey publicKey) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
+    public static Jws<Claims> parserAndVerifyToken(String token, PublicKey publicKey) throws ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException {
         return Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token);
     }
 
@@ -57,7 +58,7 @@ public class JwtRsaUtils {
      */
     public static Date getExpired(String token, PublicKey key) {
         try {
-            return parserToken(token, key).getBody().getExpiration();
+            return parserAndVerifyToken(token, key).getBody().getExpiration();
         } catch (ExpiredJwtException e) {
             return e.getClaims().getExpiration();
         } catch (Exception e) {
@@ -72,11 +73,11 @@ public class JwtRsaUtils {
      *
      * @param token     用户请求中的token
      * @param publicKey 公钥
-     * @return
+     * @return boolean
      */
     public static boolean isExpired(String token, PublicKey publicKey) {
         try {
-            return parserToken(token, publicKey).getBody().getExpiration().before(new Date());
+            return parserAndVerifyToken(token, publicKey).getBody().getExpiration().before(new Date());
         } catch (ExpiredJwtException e) {
             return e.getClaims().getExpiration().before(new Date());
         } catch (Exception e) {
@@ -95,7 +96,7 @@ public class JwtRsaUtils {
      */
     public static Map<String, Object> getInfoFromToken(String token, PublicKey publicKey) {
         try {
-            return parserToken(token, publicKey).getBody();
+            return parserAndVerifyToken(token, publicKey).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         } catch (Exception e) {
@@ -118,7 +119,7 @@ public class JwtRsaUtils {
                 "UqqGXX5EZ0zn+yzwx2Ge53vTTut64wgrZCYuothNU0ULkfSVoW8SjJUjSwPJAKDI\n" +
                 "0wIDAQAB\n" +
                 "-----END PUBLIC KEY-----";
-        PublicKey publicKey = RsaUtils.getPublicKeyFromPemEncoded(pemKey);
+        PublicKey publicKey = RSAUtils.getPublicKeyFromPemEncoded(pemKey);
         System.out.println(getExpired(jwtToken, publicKey));
         System.out.println(isExpired(jwtToken, publicKey));
         System.out.println(getInfoFromToken(jwtToken, publicKey));

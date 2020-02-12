@@ -3,8 +3,8 @@ package com.qcmoke.gateway.filter;
 import com.qcmoke.common.dto.CurrentUser;
 import com.qcmoke.common.service.PublicKeyService;
 import com.qcmoke.common.utils.JwtRsaUtils;
-import com.qcmoke.common.utils.OauthSecurityJwtUtil;
-import com.qcmoke.common.utils.OauthSecurityUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
@@ -36,7 +36,7 @@ import java.util.Collection;
  * @author qcmoke
  */
 @Slf4j
-@Order(0)
+@Order(1)
 @Component
 public class AuthGlobalFilter implements GlobalFilter {
     @Autowired
@@ -45,17 +45,22 @@ public class AuthGlobalFilter implements GlobalFilter {
     private CustomMetadataSource customMetadataSource;
     @Autowired
     private UrlAccessDecisionManager urlAccessDecisionManager;
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
         String path = request.getURI().getPath();
-        if (antPathMatcher.match(RouteConstant.OAUTH_ROUTE_URL, path)) {
+        if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, path)) {
             return chain.filter(exchange);
         }
-        PublicKey publicKey = publicKeyService.getPublicKey();
+        PublicKey publicKey = null;
+        try {
+            publicKey = publicKeyService.getPublicKey();
+        } catch (Exception e) {
+            return ResponseWriterUtil.makeResponse(response, Result.error("服务器异常，无法获取公钥"));
+        }
         if (publicKey == null) {
             return ResponseWriterUtil.makeResponse(response, Result.error("服务器异常，无法获取公钥"));
         }
@@ -64,7 +69,7 @@ public class AuthGlobalFilter implements GlobalFilter {
             return ResponseWriterUtil.makeResponse(response, Result.error("未认证，无访问令牌"));
         }
         try {
-            JwtRsaUtils.parserToken(bearerToken, publicKey);
+            JwtRsaUtils.parserAndVerifyToken(bearerToken, publicKey);
         } catch (ExpiredJwtException e) {
             return ResponseWriterUtil.makeResponse(response, Result.error("令牌已失效,e=" + e.getMessage()));
         } catch (UnsupportedJwtException e) {

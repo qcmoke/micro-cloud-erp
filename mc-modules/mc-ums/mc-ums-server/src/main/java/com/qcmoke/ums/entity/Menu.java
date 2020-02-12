@@ -1,86 +1,91 @@
 package com.qcmoke.ums.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
 
-
+/**
+ * <p>
+ * 菜单表
+ * </p>
+ *
+ * @author qcmoke
+ * @since 2020-02-12
+ */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @TableName("t_menu")
 public class Menu implements Serializable {
-    // 菜单
-    public static final String TYPE_MENU = "0";
-    // 按钮
-    public static final String TYPE_BUTTON = "1";
+
+private static final long serialVersionUID=1L;
 
     /**
      * 菜单/按钮ID
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "mid", type = IdType.AUTO)
     private Long mid;
 
     /**
      * 上级菜单ID
      */
-    @TableField("parent_id")
     private Long parentId;
 
     /**
      * 菜单/按钮名称
      */
-    @TableField("mname")
     private String mname;
 
     /**
-     * 菜单URL
+     * 后端网关对应api
      */
-    @TableField("path")
+    private String api;
+
+    /**
+     * 对应路由path
+     */
     private String path;
 
     /**
-     * 对应 Vue组件
+     * 对应路由组件component
      */
-    @TableField("component")
     private String component;
 
     /**
-     * 权限标识
+     * 权限标识(可以用于权限注解和前端vue权限指令)
      */
-    @TableField("perms")
     private String perms;
 
     /**
      * 图标
      */
-    @TableField("icon")
     private String icon;
 
     /**
      * 类型 0菜单 1按钮
      */
-    @TableField("type")
     private String type;
 
     /**
      * 排序
      */
-    @TableField("order_num")
-    private Integer orderNum;
+    private Double orderNum;
 
     /**
      * 创建时间
      */
-    @TableField("create_time")
     private Date createTime;
 
     /**
      * 修改时间
      */
-    @TableField("modify_time")
     private Date modifyTime;
+
+
 }

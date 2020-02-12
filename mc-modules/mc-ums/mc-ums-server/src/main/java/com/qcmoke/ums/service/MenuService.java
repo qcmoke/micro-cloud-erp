@@ -1,12 +1,15 @@
 package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcmoke.ums.vo.VueRouter;
 import com.qcmoke.ums.entity.Menu;
+import com.qcmoke.ums.vo.VueRouter;
 
 import java.util.List;
 
-public interface IMenuService extends IService<Menu> {
+/**
+ * @author qcmoke
+ */
+public interface MenuService extends IService<Menu> {
 
     String findUserPermissions(String username);
 

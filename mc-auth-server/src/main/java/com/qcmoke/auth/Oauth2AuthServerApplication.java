@@ -1,6 +1,7 @@
 package com.qcmoke.auth;
 
 import com.qcmoke.common.annotation.EnableAutoRedisService;
+import com.qcmoke.common.annotation.EnableAutoResourceServerSecurity;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -9,6 +10,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 /**
  * @author qcmoke
  */
+@EnableAutoResourceServerSecurity
 @EnableAutoRedisService
 @EnableDiscoveryClient
 @SpringBootApplication

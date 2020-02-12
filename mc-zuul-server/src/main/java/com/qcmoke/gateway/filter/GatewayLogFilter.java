@@ -1,6 +1,6 @@
 package com.qcmoke.gateway.filter;
 
-import com.qcmoke.common.utils.OauthSecurityJwtUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class AuthLogFilter extends OncePerRequestFilter {
+public class GatewayLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
         //认证成功后授权前

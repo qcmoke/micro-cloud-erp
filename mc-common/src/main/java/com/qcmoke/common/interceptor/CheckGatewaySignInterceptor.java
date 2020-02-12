@@ -1,6 +1,5 @@
 package com.qcmoke.common.interceptor;
 
-import com.qcmoke.common.utils.OauthSecurityUtil;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import com.qcmoke.common.utils.security.RSAUtils;
 import com.qcmoke.common.vo.Result;
@@ -26,35 +25,23 @@ public class CheckGatewaySignInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String accessToken = OauthSecurityUtil.getBearerToken(request);
-        String basicToken = OauthSecurityUtil.getBasicToken(request);
-
-        String content = null;
-        String gatewaySign = request.getHeader("gatewaySign");
-
-        if (StringUtils.isBlank(accessToken) && StringUtils.isBlank(basicToken)) {
-            ResponseWriterUtil.writeJson(Result.forbidden("非法访问！未携带有效的令牌"));
-            return false;
-        }
-        if (StringUtils.isNoneBlank(accessToken)) {
-            content = accessToken;
-        } else {
-            content = basicToken;
-        }
-
-        if (StringUtils.isBlank(gatewaySign) || StringUtils.isBlank(GATEWAY_PUBLIC_KEY)) {
-            log.error("网关签名空,gatewaySign={}", gatewaySign);
-            ResponseWriterUtil.writeJson(Result.error("网关签名为空,非法访问！请通过网关访问！"));
+        String gatewaySignContent = request.getHeader("gatewaySignContent");
+        String gatewaySignResult = request.getHeader("gatewaySignResult");
+        if (StringUtils.isBlank(gatewaySignContent) || StringUtils.isBlank(gatewaySignResult)) {
+            log.error("gatewaySignContent={},gatewaySignResult={}", gatewaySignContent, gatewaySignResult);
+            ResponseWriterUtil.writeJson(Result.error("网关验签内容为空,非法访问！请通过网关访问！"));
             return false;
         }
         try {
             //验签
-            RSAUtils.doCheck(content, gatewaySign, GATEWAY_PUBLIC_KEY, StandardCharsets.UTF_8.name());
+            boolean isCheck = RSAUtils.doCheck(gatewaySignContent, gatewaySignResult, GATEWAY_PUBLIC_KEY, StandardCharsets.UTF_8.name());
+            if (isCheck) {
+                return true;
+            }
         } catch (SignatureException e) {
-            log.error("网关验签令牌失败,非法访问！ e={}", e.getMessage());
-            ResponseWriterUtil.writeJson(Result.error("令牌未经网关签名,非法访问！请通过网关访问！"));
-            return false;
+            log.error("网关验签失败,非法访问！ e={}", e.getMessage());
         }
-        return true;
+        ResponseWriterUtil.writeJson(Result.error("网关验签失败,非法访问！请通过网关访问！"));
+        return false;
     }
 }

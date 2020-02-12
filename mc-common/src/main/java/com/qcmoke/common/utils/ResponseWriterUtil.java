@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * @author qcmoke
+ */
 public class ResponseWriterUtil {
     private static final Log logger = LogFactory.getLog(ResponseWriterUtil.class);
 

@@ -3,7 +3,7 @@ package com.qcmoke.ums.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.ums.entity.Menu;
 import com.qcmoke.ums.mapper.MenuMapper;
-import com.qcmoke.ums.service.IMenuService;
+import com.qcmoke.ums.service.MenuService;
 import com.qcmoke.ums.utils.TreeUtil;
 import com.qcmoke.ums.vo.RouterMeta;
 import com.qcmoke.ums.vo.VueRouter;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service("menuService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Override
     public String findUserPermissions(String username) {

@@ -6,8 +6,7 @@ import com.qcmoke.auth.common.handler.SecurityOauth2AuthenticationEntryPointHand
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
 import com.qcmoke.gateway.constant.RouteConstant;
-import com.qcmoke.gateway.filter.AuthGatewaySignFiler;
-import com.qcmoke.gateway.filter.AuthLogFilter;
+import com.qcmoke.gateway.filter.GatewayLogFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -33,18 +32,14 @@ public class GatewayResourceServerConfig extends ResourceServerConfigurerAdapter
     @Autowired
     private UrlAccessDecisionManager urlAccessDecisionManager;
     @Autowired
-    private AuthLogFilter authLogFilter;
-    @Autowired
-    private AuthGatewaySignFiler authGatewaySignFiler;
-    AntPathMatcher antPathMatcher = new AntPathMatcher();
-
+    private GatewayLogFilter gatewayLogFilter;
+    private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         //设置免认证白名单(不经过SecurityInterceptor，直接通过)
-        http.requestMatcher(new NegatedRequestMatcher(request -> antPathMatcher.match(RouteConstant.OAUTH_ROUTE_URL, request.getRequestURI())));
-        http.addFilterBefore(authLogFilter, FilterSecurityInterceptor.class);
-        http.addFilterAfter(authGatewaySignFiler, FilterSecurityInterceptor.class);
+        http.requestMatcher(new NegatedRequestMatcher(request -> antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, request.getRequestURI())));
+        http.addFilterBefore(gatewayLogFilter, FilterSecurityInterceptor.class);
         http.authorizeRequests()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     @Override

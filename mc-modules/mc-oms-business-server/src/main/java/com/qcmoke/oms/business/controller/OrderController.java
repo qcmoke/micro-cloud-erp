@@ -1,6 +1,6 @@
 package com.qcmoke.oms.business.controller;
 
-import com.qcmoke.common.utils.OauthSecurityJwtUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.business.client.OrderClient;
 import com.qcmoke.oms.dto.OrderDto;

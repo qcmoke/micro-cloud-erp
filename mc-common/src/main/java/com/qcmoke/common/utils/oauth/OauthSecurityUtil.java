@@ -1,4 +1,4 @@
-package com.qcmoke.common.utils;
+package com.qcmoke.common.utils.oauth;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.codec.binary.Base64;
@@ -23,7 +23,6 @@ public class OauthSecurityUtil {
     public static final String HEADER_TOKEN_NAME = "Authorization";
     public static final String TOKEN_BEARER_PREFIX = "Bearer ";
     public static final String TOKEN_BASIC_PREFIX = "Basic ";
-
 
     /**
      * 从请求头里获取Bearer Token
@@ -145,4 +144,5 @@ public class OauthSecurityUtil {
             return null;
         }
     }
+
 }

@@ -34,7 +34,7 @@ public class GatewayApplication {
     private HashMap<String, String> jwtPublicKey;
 
     @Bean
-    public PublicKeyService publicKeyService() {
+    public PublicKeyService publicKeyService() throws Exception {
         PublicKeyServiceImpl publicKeyService = new PublicKeyServiceImpl(
                 jwtPublicKey.get("oauth-service-ip"),
                 jwtPublicKey.get("oauth-service-port"),

@@ -1,9 +1,9 @@
 package com.qcmoke.ums.cotroller;
 
-import com.qcmoke.common.utils.OauthSecurityJwtUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.ums.entity.Menu;
-import com.qcmoke.ums.service.IMenuService;
+import com.qcmoke.ums.service.MenuService;
 import com.qcmoke.ums.vo.VueRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,7 @@ import java.util.Map;
 @RequestMapping("/menu")
 public class MenuController {
     @Autowired
-    private IMenuService menuService;
+    private MenuService menuService;
 
     @GetMapping("/getCurrentUserRouters")
     public Result<Object> getUserRouters(HttpServletRequest request) {

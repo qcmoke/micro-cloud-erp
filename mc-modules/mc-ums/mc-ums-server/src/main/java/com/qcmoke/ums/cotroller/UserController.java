@@ -1,17 +1,22 @@
 package com.qcmoke.ums.cotroller;
 
+import com.qcmoke.common.dto.CurrentUser;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author qcmoke
+ */
 @Slf4j
 @RequestMapping("/user")
 @RestController
@@ -21,9 +26,9 @@ public class UserController {
      * 获取认证完成的用户信息
      */
     @GetMapping("/detail")
-    public Principal currentUser(Principal principal) {
-        log.info("获取用户信息Principal={}", principal);
-        return principal;
+    public Result<Object> currentUser(HttpServletRequest request) {
+        CurrentUser currentUser = OauthSecurityJwtUtil.getCurrentUser(request);
+        return Result.ok(currentUser);
     }
 
 

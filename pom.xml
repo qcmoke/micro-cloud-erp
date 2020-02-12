@@ -14,13 +14,9 @@
         <module>mc-common</module>
         <module>mc-auth-common</module>
         <module>mc-auth-server</module>
-        <module>mc-registry-server</module>
+        <module>mc-modules</module>
         <module>mc-gateway-server</module>
         <module>mc-zuul-server</module>
-        <module>mc-config-server</module>
-        <module>mc-admin-server</module>
-        <module>mc-modules</module>
-        <module>mc-nacos-demo</module>
     </modules>
 
 
@@ -44,13 +40,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- <dependency>
-               <groupId>org.springframework.boot</groupId>
-               <artifactId>spring-boot-dependencies</artifactId>
-               <version>${spring-boot.version}</version>
-               <type>pom</type>
-               <scope>import</scope>
-           </dependency>-->
             <dependency>
                 <groupId>io.spring.platform</groupId>
                 <artifactId>platform-bom</artifactId>
@@ -86,4 +75,12 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>Nexus aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
 </project>

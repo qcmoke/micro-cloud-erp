@@ -1,7 +1,5 @@
 package com.qcmoke.auth;
 
-import com.qcmoke.common.utils.KeyStoreUtils;
-import com.qcmoke.common.utils.temp.RsaUtils;
 import com.qcmoke.common.utils.security.RSAUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.MalformedClaimException;
@@ -17,7 +15,6 @@ import org.springframework.security.jwt.Jwt;
 import org.springframework.security.jwt.JwtHelper;
 import org.springframework.security.jwt.crypto.sign.RsaVerifier;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
-import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import java.io.BufferedInputStream;
@@ -27,8 +24,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Date;
 
 public class KeyTest {
     @Test
@@ -101,39 +96,6 @@ public class KeyTest {
         return ret.toString();
     }
 
-
-    @Test
-    public void test3() throws IOException {
-        String data = "qqq";
-        byte[] encrypt = KeyStoreUtils.encrypt(
-                new ClassPathResource("key/qcmoke.keystore").getInputStream(),
-                "123456password",
-                "qcmoke",
-                "123456secret", data.getBytes());
-        System.out.println(new String(encrypt));
-
-
-        byte[] decrypt = KeyStoreUtils.decrypt(new ClassPathResource("key/qcmoke.crt").getInputStream(), encrypt);
-        System.out.println(new String(decrypt));
-    }
-
-
-    @Test
-    public void test4() throws Exception {
-        RsaUtils.generateKey("f:/public.key", "f:/private.key", "123456");
-        KeyPair keyPair = RsaUtils.getKeyPair(RsaUtils.getPrivateKey("f:/private.key"), RsaUtils.getPublicKey("f:/public.key"));
-    }
-
-    @Test
-    public void test5() throws Exception {
-        PrivateKey privateKey = RsaUtils.getPrivateKey(new ClassPathResource("key/private.key").getFile().getAbsolutePath());
-        PublicKey publicKey = RsaUtils.getPublicKey(new ClassPathResource("key/public.key").getFile().getAbsolutePath());
-        byte[] encrypt = RsaUtils.encrypt(privateKey, "hah".getBytes());
-        System.out.println(new String(encrypt));
-
-        byte[] decrypt = RsaUtils.decrypt(publicKey, encrypt);
-        System.out.println(new String(decrypt));
-    }
 
     @Test
     public void test6() throws SignatureException {

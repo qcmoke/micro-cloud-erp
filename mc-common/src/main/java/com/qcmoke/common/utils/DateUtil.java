@@ -12,6 +12,7 @@ import java.util.Locale;
 
 /**
  * 时间工具类
+ * @author qcmoke
  */
 public class DateUtil {
 

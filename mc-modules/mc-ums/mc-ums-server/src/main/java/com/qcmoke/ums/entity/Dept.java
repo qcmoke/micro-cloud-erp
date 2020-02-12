@@ -1,43 +1,61 @@
 package com.qcmoke.ums.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * <p>
+ * 部门表
+ * </p>
+ *
  * @author qcmoke
+ * @since 2020-02-12
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
 @TableName("t_dept")
 public class Dept implements Serializable {
 
-    private static final long serialVersionUID = -7790334862410409053L;
+private static final long serialVersionUID=1L;
 
+    /**
+     * 部门ID
+     */
     @TableId(value = "dept_id", type = IdType.AUTO)
     private Long deptId;
 
-    @TableField(value = "parent_id")
+    /**
+     * 上级部门ID
+     */
     private Long parentId;
 
-    @TableField(value = "dept_name")
+    /**
+     * 部门名称
+     */
     private String deptName;
 
-    @TableField(value = "order_num")
-    private Integer orderNum;
+    /**
+     * 排序
+     */
+    private Double orderNum;
 
-    @TableField(value = "create_time")
+    /**
+     * 创建时间
+     */
     private Date createTime;
 
-    @TableField(value = "modify_time")
+    /**
+     * 修改时间
+     */
     private Date modifyTime;
 
-    private transient String createTimeFrom;
-
-    private transient String createTimeTo;
 
 }

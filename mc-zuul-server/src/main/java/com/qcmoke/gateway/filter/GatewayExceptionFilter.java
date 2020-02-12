@@ -20,9 +20,9 @@ import java.net.SocketTimeoutException;
  * @author qcmoke
  */
 @Component
-public class CustomSendErrorFilter extends SendErrorFilter {
+public class GatewayExceptionFilter extends SendErrorFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(CustomSendErrorFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(GatewayExceptionFilter.class);
 
     @Override
     public String filterType() {

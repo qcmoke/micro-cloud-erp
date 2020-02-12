@@ -21,21 +21,21 @@ public class DESUtil {
     public static final String KEY_ALGORITHM = "DES";
     //算法名称/加密模式/填充方式
     //DES共有四种工作模式-->>ECB：电子密码本模式、CBC：加密分组链接模式、CFB：加密反馈模式、OFB：输出反馈模式
-//    public static final String CIPHER_ALGORITHM = "DES/ECB/NoPadding";
+    //public static final String CIPHER_ALGORITHM = "DES/ECB/NoPadding";
 
     /**
      * 生成密钥key对象
+     *
      * @param keyStr 密钥字符串
      * @return
      * @throws Exception
      */
     private static SecretKey keyGenerator(String keyStr) throws Exception {
-        byte input[] = HexString2Bytes(keyStr);
+        byte[] input = hexString2Bytes(keyStr);
         DESKeySpec desKey = new DESKeySpec(input);
         //创建一个密匙工厂，然后用它把DESKeySpec转换成
         SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
-        SecretKey securekey = keyFactory.generateSecret(desKey);
-        return securekey;
+        return keyFactory.generateSecret(desKey);
     }
 
     private static int parse(char c) {
@@ -48,13 +48,18 @@ public class DESUtil {
         return (c - '0') & 0x0f;
     }
 
-    // 从十六进制字符串到字节数组转换
-    public static byte[] HexString2Bytes(String hexstr) {
-        byte[] b = new byte[hexstr.length() / 2];
+    /**
+     * 从十六进制字符串到字节数组转换
+     *
+     * @param hexStr 十六进制字符串
+     * @return 字节数组
+     */
+    public static byte[] hexString2Bytes(String hexStr) {
+        byte[] b = new byte[hexStr.length() / 2];
         int j = 0;
         for (int i = 0; i < b.length; i++) {
-            char c0 = hexstr.charAt(j++);
-            char c1 = hexstr.charAt(j++);
+            char c0 = hexStr.charAt(j++);
+            char c1 = hexStr.charAt(j++);
             b[i] = (byte) ((parse(c0) << 4) | parse(c1));
         }
         return b;
@@ -62,8 +67,9 @@ public class DESUtil {
 
     /**
      * 加密数据
+     *
      * @param data 待加密数据
-     * @param key 密钥
+     * @param key  密钥
      * @return 加密后的数据
      */
     public static String encrypt(String data, String key) throws Exception {
@@ -80,8 +86,9 @@ public class DESUtil {
 
     /**
      * 解密数据
+     *
      * @param data 待解密数据
-     * @param key 密钥
+     * @param key  密钥
      * @return 解密后的数据
      */
     public static String decrypt(String data, String key) throws Exception {
@@ -105,8 +112,7 @@ public class DESUtil {
         kgen.init(56, secureRandom);
         SecretKey secretKey = kgen.generateKey();
         byte[] enCodeFormat = secretKey.getEncoded();
-        SecretKeySpec secretKeySpec = new SecretKeySpec(enCodeFormat, KEY_ALGORITHM);
-        return secretKeySpec;
+        return new SecretKeySpec(enCodeFormat, KEY_ALGORITHM);
     }
 
     public static void main(String[] args) throws Exception {
