@@ -1,7 +1,7 @@
 package com.qcmoke.ums.utils;
 
-import com.qcmoke.ums.vo.VueRouter;
-import com.qcmoke.ums.entity.Tree;
+import com.qcmoke.ums.dto.VueRouter;
+import com.qcmoke.ums.dto.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,9 @@ public class TreeUtil {
             for (Tree<T> n : nodes) {
                 String id = n.getId();
                 if (id != null && id.equals(pid)) {
-                    if (n.getChildren() == null)
+                    if (n.getChildren() == null) {
                         n.initChildren();
+                    }
                     n.getChildren().add(node);
                     node.setHasParent(true);
                     n.setHasChildren(true);
@@ -40,8 +41,9 @@ public class TreeUtil {
                     return;
                 }
             }
-            if (topNodes.isEmpty())
+            if (topNodes.isEmpty()) {
                 topNodes.add(node);
+            }
         });
         return topNodes;
     }

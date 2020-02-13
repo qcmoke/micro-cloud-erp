@@ -2,6 +2,7 @@ package com.qcmoke.auth;
 
 import com.qcmoke.common.annotation.EnableAutoRedisService;
 import com.qcmoke.common.annotation.EnableAutoResourceServerSecurity;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -13,6 +14,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableAutoResourceServerSecurity
 @EnableAutoRedisService
 @EnableDiscoveryClient
+@MapperScan("com.qcmoke.auth.mapper")
 @SpringBootApplication
 public class Oauth2AuthServerApplication {
 

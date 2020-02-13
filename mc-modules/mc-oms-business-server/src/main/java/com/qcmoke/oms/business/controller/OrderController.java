@@ -1,7 +1,7 @@
 package com.qcmoke.oms.business.controller;
 
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.oms.business.client.OrderClient;
 import com.qcmoke.oms.dto.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;

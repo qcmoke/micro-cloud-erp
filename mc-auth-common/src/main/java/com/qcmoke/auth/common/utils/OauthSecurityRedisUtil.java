@@ -1,7 +1,7 @@
 package com.qcmoke.auth.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qcmoke.auth.common.entity.AuthUser;
+import com.qcmoke.auth.common.entity.AuthUserDetails;
 import com.qcmoke.auth.common.entity.CurrentUser;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -46,8 +46,8 @@ public class OauthSecurityRedisUtil extends OauthSecurityUtil {
      */
     public static String getCurrentUsername() {
         Object principal = getOAuth2Authentication().getPrincipal();
-        if (principal instanceof AuthUser) {
-            return ((AuthUser) principal).getUsername();
+        if (principal instanceof AuthUserDetails) {
+            return ((AuthUserDetails) principal).getUsername();
         }
         return (String) getOAuth2Authentication().getPrincipal();
     }

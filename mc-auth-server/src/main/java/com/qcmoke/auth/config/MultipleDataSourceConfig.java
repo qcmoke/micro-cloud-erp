@@ -19,9 +19,8 @@ import javax.sql.DataSource;
 public class MultipleDataSourceConfig {
 
     /**
-     * auth数据源（默认）
+     * auth数据源
      */
-    @Primary
     @Bean(name = "authDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.auth")
     public DataSource authDataSource() {
@@ -29,8 +28,9 @@ public class MultipleDataSourceConfig {
     }
 
     /**
-     * system数据源
+     * system数据源（默认）
      */
+    @Primary
     @Bean(name = "systemDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.system")
     public DataSource systemDataSource() {
@@ -41,7 +41,6 @@ public class MultipleDataSourceConfig {
     /**
      * auth jdbc工具
      */
-    @Primary
     @Bean(name = "authJdbcTemplate")
     public JdbcTemplate authJdbcTemplate(@Qualifier("authDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
@@ -63,7 +62,6 @@ public class MultipleDataSourceConfig {
     /**
      * auth事务管理工具
      */
-    @Primary
     @Bean("authTransactionTemplate")
     public TransactionTemplate authTransactionTemplate(@Qualifier("authDataSourceTransactionManager") DataSourceTransactionManager dataSourceTransactionManager) {
         TransactionTemplate transactionTemplate = new TransactionTemplate();
@@ -79,6 +77,7 @@ public class MultipleDataSourceConfig {
     /**
      * system jdbc工具
      */
+    @Primary
     @Bean(name = "systemJdbcTemplate")
     public JdbcTemplate systemJdbcTemplate(@Qualifier("systemDataSource") DataSource dataSource) {
         return new JdbcTemplate(dataSource);
@@ -99,6 +98,7 @@ public class MultipleDataSourceConfig {
     /**
      * system事务管理工具
      */
+    @Primary
     @Bean("systemTransactionTemplate")
     public TransactionTemplate systemTransactionTemplate(@Qualifier("systemDataSourceTransactionManager") DataSourceTransactionManager dataSourceTransactionManager) {
         TransactionTemplate transactionTemplate = new TransactionTemplate();

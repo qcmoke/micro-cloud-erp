@@ -1,7 +1,7 @@
 package com.qcmoke.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.request.RequestContextHolder;

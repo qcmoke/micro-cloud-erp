@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.controller;
 
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.GetMapping;

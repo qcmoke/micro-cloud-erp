@@ -58,6 +58,18 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return currentUser.getUsername();
     }
 
+    /**
+     * @param request
+     * @return
+     */
+    public static Long getCurrentUserId(HttpServletRequest request) {
+        CurrentUser currentUser = getCurrentUser(getJwtJson(request));
+        if (currentUser == null || currentUser.getUid() == null) {
+            return null;
+        }
+        return currentUser.getUid();
+    }
+
     private static CurrentUser getCurrentUser(JSONObject jwtJson) {
         try {
             if (jwtJson == null) {

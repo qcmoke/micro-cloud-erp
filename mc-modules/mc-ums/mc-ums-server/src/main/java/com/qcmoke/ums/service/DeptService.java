@@ -1,7 +1,10 @@
 package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.common.vo.PageQuery;
+import com.qcmoke.ums.dto.PageResult;
 import com.qcmoke.ums.entity.Dept;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +14,8 @@ import com.qcmoke.ums.entity.Dept;
  * @author qcmoke
  * @since 2020-02-12
  */
+@Repository
 public interface DeptService extends IService<Dept> {
 
+    PageResult queryDeptList(PageQuery pageQuery, Dept dept);
 }

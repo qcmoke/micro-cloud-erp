@@ -1,7 +1,7 @@
 package com.qcmoke.auth.common.handler;
 
-import com.qcmoke.common.handler.BaseExceptionHandler;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.handler.GlobalExceptionHandler;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  */
 @RestControllerAdvice
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
-public class SecurityExceptionHandler extends BaseExceptionHandler {
+public class SecurityExceptionHandler extends GlobalExceptionHandler {
 
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)

@@ -1,5 +1,6 @@
 package com.qcmoke.auth;
 
+import com.qcmoke.auth.properties.Oauth2SocialProperties;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class BootAuthTest {
 
     @Autowired
     private KeyProperties keyProperties;
+    @Autowired
+    private Oauth2SocialProperties oauth2SocialProperties;
 
     @Test
     public void testSecret() {
@@ -28,4 +31,8 @@ public class BootAuthTest {
         System.out.println(keyProperties);
     }
 
+    @Test
+    public void test1() {
+        System.out.println(oauth2SocialProperties);
+    }
 }

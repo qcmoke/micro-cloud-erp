@@ -1,6 +1,6 @@
 package com.qcmoke.oms.controller;
 
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.oms.dto.OrderDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -3,20 +3,20 @@ package com.qcmoke.gateway.filter;
 import com.netflix.client.ClientException;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
-import com.qcmoke.common.vo.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.zuul.filters.post.SendErrorFilter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
 
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 
 /**
  * 服务 eureka-client 的异常退回处理类
+ *
  * @author qcmoke
  */
 @Component
@@ -49,7 +49,9 @@ public class GatewayExceptionFilter extends SendErrorFilter {
             logger.error("e={}", errorMsg);
             ResponseWriterUtil.writeJson(context.getResponse(), zuulException.nStatusCode, Result.error(errorMsg));
         } catch (Exception var5) {
-            ReflectionUtils.rethrowRuntimeException(var5);
+            String errorMsg = "服务异常,e=" + var5.getMessage();
+            logger.error("e={}", errorMsg);
+            ResponseWriterUtil.writeJson(Result.error(errorMsg));
         }
         return null;
     }

@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_dept")
 public class Dept implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 部门ID
@@ -45,7 +45,7 @@ private static final long serialVersionUID=1L;
     /**
      * 排序
      */
-    private Double orderNum;
+    private Integer orderNum;
 
     /**
      * 创建时间
@@ -58,4 +58,8 @@ private static final long serialVersionUID=1L;
     private Date modifyTime;
 
 
+    private transient String createTimeFrom;
+
+    private transient String createTimeTo;
+    
 }

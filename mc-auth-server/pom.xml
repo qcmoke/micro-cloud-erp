@@ -15,6 +15,8 @@
 
     <properties>
         <easy-captcha.version>1.6.2</easy-captcha.version>
+        <justAuth-boot.version>1.1.0</justAuth-boot.version>
+        <mybatis-plus-boot.version>3.2.0</mybatis-plus-boot.version>
     </properties>
 
 
@@ -38,7 +40,17 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>com.xkcoding</groupId>
+            <artifactId>justauth-spring-boot-starter</artifactId>
+            <version>${justAuth-boot.version}</version>
+        </dependency>
 
         <!--图形验证码-->
         <dependency>
@@ -47,6 +59,12 @@
             <version>${easy-captcha.version}</version>
         </dependency>
 
+
+        <!--thymeleaf(第三方登录页面使用到)-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
 
         <!--springboot单元测试-->
         <dependency>

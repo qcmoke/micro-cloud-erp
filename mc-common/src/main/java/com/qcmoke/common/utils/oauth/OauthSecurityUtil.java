@@ -36,7 +36,7 @@ public class OauthSecurityUtil {
         }
         //取出头信息
         String authorization = request.getHeader(HEADER_TOKEN_NAME);
-        if (StringUtils.isEmpty(authorization) || !authorization.contains(TOKEN_BEARER_PREFIX)) {
+        if (StringUtils.isEmpty(authorization) || !StringUtils.containsIgnoreCase(authorization, TOKEN_BEARER_PREFIX)) {
             return null;
         }
         //从Bearer 后边开始取出token
@@ -56,7 +56,7 @@ public class OauthSecurityUtil {
         }
         //取出头信息
         String authorization = request.getHeaders().getFirst(HEADER_TOKEN_NAME);
-        if (StringUtils.isEmpty(authorization) || !authorization.contains(TOKEN_BEARER_PREFIX)) {
+        if (StringUtils.isBlank(authorization) || !StringUtils.containsIgnoreCase(authorization, TOKEN_BEARER_PREFIX)) {
             return null;
         }
         //从Bearer 后边开始取出token
@@ -71,7 +71,7 @@ public class OauthSecurityUtil {
      */
     public static String getBasicToken(HttpServletRequest request) {
         String authorization = request.getHeader(HEADER_TOKEN_NAME);
-        if (StringUtils.isEmpty(authorization) || !authorization.contains(TOKEN_BASIC_PREFIX)) {
+        if (StringUtils.isBlank(authorization) || !StringUtils.containsIgnoreCase(authorization, TOKEN_BASIC_PREFIX)) {
             return null;
         }
         return authorization.substring(6);

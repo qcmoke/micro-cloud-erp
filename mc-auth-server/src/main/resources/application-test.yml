@@ -8,6 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
+        ip: 127.0.0.1 #如果在vps上部署，那么需要考虑注册到注册中心时的ip选择问题（默认选择的是内网ip，这里为了方便本地测试，可以指定为公网ip）
   datasource:
     auth:
       #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
@@ -42,3 +43,22 @@ encrypt:
     alias: qcmoke
     password: 123456password
     secret: 123456secret
+
+
+##配置mybatis plus
+mybatis-plus:
+  type-aliases-package: com.qcmoke.auth.entity
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto                                         #MySql主键自增策略
+      table-prefix: t_                                      #全局表前缀
+  configuration:
+    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+
+
+oauth2:
+  social:
+    front-url: http://127.0.0.1:9527
+    client-id: social
+    social_user_password: social123456

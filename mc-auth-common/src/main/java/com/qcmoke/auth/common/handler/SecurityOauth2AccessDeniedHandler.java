@@ -1,7 +1,7 @@
 package com.qcmoke.auth.common.handler;
 
 import com.qcmoke.common.utils.ResponseWriterUtil;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;

@@ -5,8 +5,8 @@ import com.qcmoke.ums.entity.Menu;
 import com.qcmoke.ums.mapper.MenuMapper;
 import com.qcmoke.ums.service.MenuService;
 import com.qcmoke.ums.utils.TreeUtil;
-import com.qcmoke.ums.vo.RouterMeta;
-import com.qcmoke.ums.vo.VueRouter;
+import com.qcmoke.ums.dto.RouterMeta;
+import com.qcmoke.ums.dto.VueRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 /**
  * @author qcmoke
@@ -28,8 +28,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
 
     @Override
     public String findUserPermissions(String username) {
-        List<Menu> userPermissions = this.baseMapper.findUserPermissions(username);
-        return userPermissions.stream().map(Menu::getPerms).collect(Collectors.joining(","));
+        Set<String> permissions = this.baseMapper.findUserPermissions(username);
+        return String.join(",", permissions);
     }
 
     @Override

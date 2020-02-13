@@ -11,7 +11,7 @@
  Target Server Version : 50564
  File Encoding         : 65001
 
- Date: 10/02/2020 14:43:11
+ Date: 13/02/2020 17:39:04
 */
 
 SET NAMES utf8mb4;
@@ -25,7 +25,7 @@ CREATE TABLE `t_dept`  (
   `dept_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '部门ID',
   `parent_id` bigint(20) NOT NULL COMMENT '上级部门ID',
   `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门名称',
-  `order_num` double(20, 0) NULL DEFAULT NULL COMMENT '排序',
+  `order_num` int(20) NULL DEFAULT NULL COMMENT '排序',
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`dept_id`) USING BTREE
@@ -68,7 +68,7 @@ INSERT INTO `t_menu` VALUES (1, 0, '系统管理', NULL, '/system', 'Layout', NU
 INSERT INTO `t_menu` VALUES (2, 0, '系统监控', NULL, '/monitor', 'Layout', NULL, 'el-icon-data-line', '0', 2, '2017-12-27 16:45:51', '2019-01-23 06:27:12');
 INSERT INTO `t_menu` VALUES (3, 1, '用户管理', '', '/system/user', 'async/system/user/Index', 'user:view', '', '0', 1, '2017-12-27 16:47:13', '2020-01-28 17:29:20');
 INSERT INTO `t_menu` VALUES (4, 1, '角色管理', NULL, '/system/role', 'async/system/role/Index', 'role:view', '', '0', 2, '2017-12-27 16:48:09', '2020-01-28 17:30:18');
-INSERT INTO `t_menu` VALUES (5, 1, '菜单管理', '/system/menu/getCurrentUserRouters', '/system/menu', 'async/system/menu/Index', 'menu:view', '', '0', 3, '2017-12-27 16:48:57', '2020-01-28 17:30:31');
+INSERT INTO `t_menu` VALUES (5, 1, '菜单管理', '/ums/menu/getCurrentUserRouters', '/system/menu', 'async/system/menu/Index', 'menu:view', '', '0', 3, '2017-12-27 16:48:57', '2020-01-28 17:30:31');
 INSERT INTO `t_menu` VALUES (6, 1, '部门管理', NULL, '/system/dept', 'async/system/dept/Index', 'dept:view', '', '0', 4, '2017-12-27 16:57:33', '2020-01-28 17:30:37');
 INSERT INTO `t_menu` VALUES (10, 2, '系统日志', NULL, '/monitor/systemlog', 'async/monitor/systemlog/Index', 'log:view', '', '0', 1, '2017-12-27 17:00:50', '2020-01-28 17:28:58');
 INSERT INTO `t_menu` VALUES (11, 3, '新增用户', NULL, '', '', 'user:add', NULL, '1', NULL, '2017-12-27 17:02:58', NULL);
@@ -321,7 +321,7 @@ CREATE TABLE `t_user`  (
   `avatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像',
   `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of t_user
@@ -329,7 +329,30 @@ CREATE TABLE `t_user`  (
 INSERT INTO `t_user` VALUES (1, 'MrBird', '$2a$10$gzhiUb1ldc1Rf3lka4k/WOoFKKGPepHSzJxzcPSN5/65SzkMdc.SK', 2, 'mrbird@qq.com', '17788888888', 1, '2019-06-14 20:39:22', '2019-07-19 10:18:36', '2020-01-28 16:18:09', '0', '1', 'white', 'gaOngJwsRYRaVAuXXcmB.png', '我是帅比作者。');
 INSERT INTO `t_user` VALUES (15, 'scott', '$2a$10$7tATi2STciLHnEgO/RfIxOYf2MQBu/SDVMRDs54rlSYVj2VmwwCHC', 5, 'scott@hotmail.com', '17720888888', 1, '2019-07-20 19:00:32', '2019-07-31 10:14:29', '2020-01-26 22:34:00', '2', NULL, NULL, 'BiazfanxmamNRoxxVxka.png', NULL);
 INSERT INTO `t_user` VALUES (16, 'Jane', '$2a$10$ECkfipOPY7hORVdlSzIOX.8hnig0shAZQPG8pQ7D5iVP.uVogmmHy', 4, 'Jane@hotmail.com', '13489898989', 1, '2019-09-01 10:31:21', '2019-09-01 10:32:10', '2019-09-01 10:32:27', '1', NULL, NULL, '2dd7a2d09fa94bf8b5c52e5318868b4d9.jpg', NULL);
-INSERT INTO `t_user` VALUES (17, 'qcmoke', '$2a$10$IYGlOaQYfpu0JMDPuxY.HO1IV2yyy5ZBg08A5fhx1lseJYRNdLxp.', 1, '', '', 1, '2020-01-26 23:24:09', NULL, '2020-01-28 18:43:48', '0', NULL, NULL, 'default.jpg', NULL);
+INSERT INTO `t_user` VALUES (17, 'qcmoke', '$2a$10$IYGlOaQYfpu0JMDPuxY.HO1IV2yyy5ZBg08A5fhx1lseJYRNdLxp.', 1, 'qcmoke@gmail.com', '13885566777', 1, '2020-01-26 23:24:09', '2020-02-13 17:31:32', '2020-01-28 18:43:48', '0', NULL, 'white', 'BiazfanxmamNRoxxVxka.png', '一个非常帅气的good boy! Peace & Love ! ');
+INSERT INTO `t_user` VALUES (18, 'zhangsan', '$2a$10$i5LI/oQvkUUHQeEZwflhT..EOuUhvwm1R81LuP6zBjg7oGQivSqb2', NULL, NULL, NULL, 1, '2020-02-13 16:45:44', NULL, NULL, '2', NULL, NULL, 'default.jpg', '注册用户');
+
+-- ----------------------------
+-- Table structure for t_user_connection
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_connection`;
+CREATE TABLE `t_user_connection`  (
+  `username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '系统用户名',
+  `provider_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '第三方平台名称',
+  `provider_user_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '第三方平台账户ID',
+  `provider_username` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台用户名',
+  `nick_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台昵称',
+  `image_url` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '第三方平台头像',
+  `location` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '地址',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`username`, `provider_name`, `provider_user_id`) USING BTREE,
+  UNIQUE INDEX `UserConnectionRank`(`username`, `provider_name`, `provider_user_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of t_user_connection
+-- ----------------------------
+INSERT INTO `t_user_connection` VALUES ('qcmoke', 'GITHUB', '30585066', 'qcmoke', 'qcmoke', 'https://avatars1.githubusercontent.com/u/30585066?v=4', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -348,5 +371,6 @@ INSERT INTO `t_user_role` VALUES (15, 2);
 INSERT INTO `t_user_role` VALUES (16, 3);
 INSERT INTO `t_user_role` VALUES (17, 4);
 INSERT INTO `t_user_role` VALUES (17, 2);
+INSERT INTO `t_user_role` VALUES (18, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

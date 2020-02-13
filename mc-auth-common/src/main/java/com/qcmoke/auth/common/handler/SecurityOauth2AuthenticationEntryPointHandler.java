@@ -2,7 +2,7 @@ package com.qcmoke.auth.common.handler;
 
 import com.qcmoke.auth.common.exception.NotAllowedAnonymousUserException;
 import com.qcmoke.common.utils.ResponseWriterUtil;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;

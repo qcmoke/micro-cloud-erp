@@ -2,7 +2,7 @@ package com.qcmoke.common.interceptor;
 
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import com.qcmoke.common.utils.security.RSAUtils;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;

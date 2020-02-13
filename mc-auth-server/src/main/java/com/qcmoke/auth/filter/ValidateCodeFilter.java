@@ -6,7 +6,7 @@ import com.qcmoke.auth.constant.ParamsConstant;
 import com.qcmoke.auth.exception.ValidateCodeException;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import com.qcmoke.auth.service.ValidateCodeService;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

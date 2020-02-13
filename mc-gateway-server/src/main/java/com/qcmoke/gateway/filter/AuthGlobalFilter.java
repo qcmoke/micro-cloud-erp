@@ -5,7 +5,7 @@ import com.qcmoke.common.service.PublicKeyService;
 import com.qcmoke.common.utils.JwtRsaUtils;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
 import com.qcmoke.gateway.constant.RouteConstant;

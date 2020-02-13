@@ -3,7 +3,6 @@ package com.qcmoke.common.utils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用于从 IOC容器中获取 Bean
+ *
  * @author qcmoke
  */
 public class SpringContextUtil implements ApplicationContextAware {
@@ -47,9 +47,9 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     public static HttpServletRequest getHttpServletRequest() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (requestAttributes != null) {
-            return requestAttributes.getRequest();
+        if (requestAttributes == null) {
+            throw new RuntimeException("系统异常，获取请求失败！");
         }
-        return null;
+        return requestAttributes.getRequest();
     }
 }

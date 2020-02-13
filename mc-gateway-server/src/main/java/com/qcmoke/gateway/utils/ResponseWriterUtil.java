@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.utils;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.Result;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
