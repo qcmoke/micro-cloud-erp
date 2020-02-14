@@ -7,9 +7,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * @author qcmoke
@@ -23,15 +23,24 @@ public class ResponseWriterUtil {
      * @param result              RespBean
      */
     public static <T> void writeJson(HttpServletResponse httpServletResponse, final int status, Result<T> result) {
+        ServletOutputStream outputStream = null;
         try {
             httpServletResponse.setStatus(status);
             httpServletResponse.setContentType("application/json;charset=UTF-8");
-            PrintWriter out = httpServletResponse.getWriter();
-            out.write(new ObjectMapper().writeValueAsString(result));
-            out.flush();
-            out.close();
+            outputStream = httpServletResponse.getOutputStream();
+            outputStream.write(new ObjectMapper().writeValueAsString(result).getBytes());
+            outputStream.flush();
+            outputStream.close();
         } catch (IOException e) {
             logger.info("writeJson异常：e=" + e.getMessage());
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 

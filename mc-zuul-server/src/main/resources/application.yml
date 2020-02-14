@@ -58,7 +58,7 @@ zuul:
   sensitive-headers:
   #网关超时时间配置(对于路由使用url时生效)
   host:
-    #服务器请求超时时间
+    #服务器请求超时时间(服务连接被拒绝)
     connect-timeout-millis: 2000
     #请求处理超时时间(服务器响应超时时间)
     socket-timeout-millis: 30000
