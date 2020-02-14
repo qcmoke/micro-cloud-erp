@@ -28,9 +28,9 @@ public class GatewayLogFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
-        String requestURI = request.getRequestURI();
-        if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, requestURI)) {
-            log("用户对认证服务器访问,requestURI:" + requestURI);
+        String requestUri = request.getRequestURI();
+        if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, requestUri)) {
+            log("用户对认证服务器访问,requestURI:" + requestUri);
             chain.doFilter(request, response);
             return;
         }
@@ -38,7 +38,7 @@ public class GatewayLogFilter extends OncePerRequestFilter {
         //认证成功后授权前
         String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
         if (StringUtils.isBlank(currentUsername)) {
-            log("匿名用户访问,requestURI:" + requestURI);
+            log("匿名用户访问,requestURI:" + requestUri);
             chain.doFilter(request, response);
             return;
         }

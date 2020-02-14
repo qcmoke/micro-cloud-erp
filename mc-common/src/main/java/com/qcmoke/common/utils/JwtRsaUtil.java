@@ -1,6 +1,6 @@
 package com.qcmoke.common.utils;
 
-import com.qcmoke.common.utils.security.RSAUtils;
+import com.qcmoke.common.utils.security.RSAUtil;
 import io.jsonwebtoken.*;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * @author qcmoke
  */
-public class JwtRsaUtils {
-    private static final Log logger = LogFactory.getLog(JwtRsaUtils.class);
+public class JwtRsaUtil {
+    private static final Log logger = LogFactory.getLog(JwtRsaUtil.class);
 
     /**
      * 生成jwt token（使用私钥加密）
@@ -119,7 +119,7 @@ public class JwtRsaUtils {
                 "UqqGXX5EZ0zn+yzwx2Ge53vTTut64wgrZCYuothNU0ULkfSVoW8SjJUjSwPJAKDI\n" +
                 "0wIDAQAB\n" +
                 "-----END PUBLIC KEY-----";
-        PublicKey publicKey = RSAUtils.getPublicKeyFromPemEncoded(pemKey);
+        PublicKey publicKey = RSAUtil.getPublicKeyFromPemEncoded(pemKey);
         System.out.println(getExpired(jwtToken, publicKey));
         System.out.println(isExpired(jwtToken, publicKey));
         System.out.println(getInfoFromToken(jwtToken, publicKey));

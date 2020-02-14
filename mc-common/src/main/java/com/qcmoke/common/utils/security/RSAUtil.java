@@ -25,8 +25,8 @@ import java.util.Map;
 /**
  * @author qcmoke
  */
-public class RSAUtils {
-    private static final Log logger = LogFactory.getLog(RSAUtils.class);
+public class RSAUtil {
+    private static final Log logger = LogFactory.getLog(RSAUtil.class);
 
     public static final String CHARSET = "UTF-8";
     /**
@@ -347,7 +347,7 @@ public class RSAUtils {
 
     @SuppressWarnings("all")
     private static void test1() throws NoSuchAlgorithmException, IOException, InvalidKeySpecException {
-        Map<String, String> keyMap = RSAUtils.createKeys(1024);
+        Map<String, String> keyMap = RSAUtil.createKeys(1024);
         //测试
         String publicKey = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCx55x0CG1tpdFewgvuOf4c3DLFCGlCpbyASIJhX5pL1o/cGuRcf3/nT5sEpcGcPN2cUnd57BBw8h5/H4422riF6hE71zerGKnsR2lWAmgZmTcghRGLgs+1xKp6sUFQttJSQcIS928iN6VJmlCkF70HT2Ya/n/rfF8ymx8Kx7UdlQIDAQAB";
         String privateKey = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALHnnHQIbW2l0V7CC+45/hzcMsUIaUKlvIBIgmFfmkvWj9wa5Fx/f+dPmwSlwZw83ZxSd3nsEHDyHn8fjjbauIXqETvXN6sYqexHaVYCaBmZNyCFEYuCz7XEqnqxQVC20lJBwhL3byI3pUmaUKQXvQdPZhr+f+t8XzKbHwrHtR2VAgMBAAECgYAaykMAIijAY0EFIPmE9Uyz8eDfVOXs+GJLex/PJANrOjNNtOsAlt6e6ZjxeTiPm4bPvIdrX8YWDA/Vmt3imstAdsstcFHGGgRryaSVkLtklHoCOirEMJR84SIwx7coro8uRcJVY+lo6r40uCq/4naAa11Wif49DYsMsNmNiCRNgQJBAOYXqrh1V/E4HgTxgkwJeEBbb8CoCSDGxnzxT0wsflqXMJ1VmSVNJ/eV2F7WIg9cK0umJBaFKEvGXVx9faQg6bUCQQDF76be6mq2fTLGViAzX+tODUuLp+/q9B55eVwcvJ21s3HS5GRI0AMeILtvvC+rFrn8LoW/hOqtBxI0sJYl5FBhAkEA2a2QPHv/G90cQU7+FtNqqXAXtGsEX7bN90wP2h/J1ghs3Jwri2eIJSnlDiuFA4UODL58K7YD3lQm5SZvo8PjdQJAadyZyAFh34YoYNFxWWjEpbMQo3nHJEc6AUf6DtiGFMcLanqCdDrkX/mrpb/lUsDN6eVL3TmOdcohX5LOSyfIIQJBANQwNmTer7NnwgQLD1utxgaNHXcrNEdpj3OLUiXcupbLWS1dgCysKmrSJYUsuSFGjnDV5uMYUCU1+uJSuJSkJXQ=";
@@ -360,10 +360,10 @@ public class RSAUtils {
 
         System.out.println("公钥加密——私钥解密");
         String str = "hello";
-        String encodedData = RSAUtils.publicEncrypt(str, RSAUtils.getPublicKey(publicKey));
+        String encodedData = RSAUtil.publicEncrypt(str, RSAUtil.getPublicKey(publicKey));
         System.out.println("密文：\r\n" + encodedData);
 
-        String decodeData = RSAUtils.privateDecrypt(encodedData, RSAUtils.getPrivateKey(privateKey));
+        String decodeData = RSAUtil.privateDecrypt(encodedData, RSAUtil.getPrivateKey(privateKey));
         System.out.println("解密：\r\n" + decodeData);
     }
 

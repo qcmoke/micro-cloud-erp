@@ -21,8 +21,8 @@ public class SecurityExceptionHandler extends GlobalExceptionHandler {
 
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public Result<Object> handleAccessDeniedException() {
-        return Result.forbidden("没有权限访问该资源");
+    public Result<Object> handleAccessDeniedException(AccessDeniedException e) {
+        return Result.forbidden("没有权限访问该资源!e=" + e.getMessage());
     }
 
     @ExceptionHandler(value = NotAllowedAnonymousUserException.class)

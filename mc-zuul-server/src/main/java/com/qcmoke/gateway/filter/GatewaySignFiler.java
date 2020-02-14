@@ -3,7 +3,7 @@ package com.qcmoke.gateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
-import com.qcmoke.common.utils.security.RSAUtils;
+import com.qcmoke.common.utils.security.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -55,7 +55,7 @@ public class GatewaySignFiler extends ZuulFilter {
         //网关签名结果
         String gatewaySignResult = null;
         try {
-            gatewaySignResult = RSAUtils.rsaSign(gatewaySignContent, GATEWAY_PRIVATE_KEY, StandardCharsets.UTF_8.name());
+            gatewaySignResult = RSAUtil.rsaSign(gatewaySignContent, GATEWAY_PRIVATE_KEY, StandardCharsets.UTF_8.name());
         } catch (SignatureException e) {
             log.error("网关签名异常,e=" + e.getMessage());
             throw new ZuulException(e, HttpStatus.INTERNAL_SERVER_ERROR.value(), "网关签名异常");

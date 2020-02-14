@@ -1,20 +1,27 @@
 server:
   port: 9070
 
+#获取公钥配置
 jwt-oauth-service-public-key:
+  #认证服务器的ip
   oauth-service-ip: 39.106.195.202
+  #认证服务器端口
   oauth-service-port: 9090
+  #clientId
   client-id: gateway
+  #clientSecret
   client-secret: 123456
 
 spring:
   application:
     name: mc-gateway-server
+  #数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke123456
+
   #redis配置
   redis:
     database: 0
@@ -30,13 +37,14 @@ spring:
     timeout: 5000
 
   cloud:
+    #注册中心配置
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
-
+    #网关配置
     gateway:
       routes:
-        # 配置路由：1、id：路由的唯一标识，可以任意不重复的字符串；2、url：路由地址，表示指向的目标服务器地址；3、predicates：断言，标识进入url的请求条件；4、filters：过滤器，表示进入路由的过程中执行的过滤
+        # 路由配置：1、id：路由的唯一标识，可以任意不重复的字符串；2、url：路由地址，表示指向的目标服务器地址；3、predicates：断言，标识进入url的请求条件；4、filters：过滤器，表示进入路由的过程中执行的过滤
         - id: mc-auth-server
           uri: lb://mc-auth-server
           predicates:
@@ -46,17 +54,14 @@ spring:
           uri: lb://mc-ums-server
           predicates:
             - Path=/ums/**
-          filters:
         - id: mc-oms-server
           uri: lb://mc-oms-server
           predicates:
             - Path=/oms/**
-          filters:
         - id: mc-oms-business-server
           uri: lb://mc-oms-business-server
           predicates:
             - Path=/oms-business/**
-          filters:
         - id: mc-wms-server
           uri: lb://mc-wms-server
           predicates:

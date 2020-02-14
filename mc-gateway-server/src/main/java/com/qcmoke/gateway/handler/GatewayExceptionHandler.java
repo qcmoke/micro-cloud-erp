@@ -36,27 +36,23 @@ public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
      */
     @Override
     protected Map<String, Object> getErrorAttributes(ServerRequest request, boolean includeStackTrace) {
+        Result<Object> result = null;
         Throwable error = super.getError(request);
-        log.error(
-                "请求发生异常，请求URI：{}，请求方法：{}，异常信息：{}",
-                request.path(), request.methodName(), error.getMessage()
-        );
-        String errorMessage;
+        log.error("请求发生异常，请求URI：{}，请求方法：{}，异常信息：{}", request.path(), request.methodName(), error.getMessage());
         if (error instanceof NotFoundException) {
             String serverId = StringUtils.substringAfterLast(error.getMessage(), "Unable to find instance for ");
             serverId = StringUtils.replace(serverId, "\"", StringUtils.EMPTY);
-            errorMessage = String.format("无法找到%s服务", serverId);
+            String errorMessage = String.format("无法找到%s服务", serverId);
+            result = Result.error(errorMessage).setStatus(HttpStatus.SERVICE_UNAVAILABLE.value());
         } else if (StringUtils.containsIgnoreCase(error.getMessage(), "connection refused")) {
-            errorMessage = "目标服务拒绝连接";
+            result = Result.error().setStatus(HttpStatus.SERVICE_UNAVAILABLE.value()).setMessage("目标服务拒绝连接");
         } else if (error instanceof TimeoutException) {
-            errorMessage = "访问服务超时";
-        } else if (error instanceof ResponseStatusException
-                && StringUtils.containsIgnoreCase(error.getMessage(), HttpStatus.NOT_FOUND.toString())) {
-            errorMessage = "未找到该资源";
+            result = Result.error("访问服务超时").setStatus(HttpStatus.REQUEST_TIMEOUT.value());
+        } else if (error instanceof ResponseStatusException && StringUtils.containsIgnoreCase(error.getMessage(), HttpStatus.NOT_FOUND.toString())) {
+            result = Result.error("未找到该资源").setStatus(HttpStatus.NOT_FOUND.value());
         } else {
-            errorMessage = "网关转发异常";
+            result = Result.error("网关转发异常").setStatus(HttpStatus.BAD_GATEWAY.value());
         }
-        Result<Object> result = Result.error(errorMessage);
         return JSON.parseObject(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
     }
 
@@ -68,8 +64,6 @@ public class GatewayExceptionHandler extends DefaultErrorWebExceptionHandler {
 
     /**
      * 根据status获取对应的HttpStatus
-     *
-     * @param errorAttributes
      */
     @Override
     protected HttpStatus getHttpStatus(Map<String, Object> errorAttributes) {

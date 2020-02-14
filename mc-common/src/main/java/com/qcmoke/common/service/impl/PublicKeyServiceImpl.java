@@ -2,7 +2,7 @@ package com.qcmoke.common.service.impl;
 
 import com.qcmoke.common.service.PublicKeyService;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
-import com.qcmoke.common.utils.security.RSAUtils;
+import com.qcmoke.common.utils.security.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -34,7 +34,7 @@ public class PublicKeyServiceImpl implements PublicKeyService {
     }
 
     /**
-     * 启动应用向认证服务器获取公钥并保存到内存（publicKey）中
+     * 初始化bean时获取公钥并保存到内存（publicKey）中
      */
     @PostConstruct
     public synchronized void init() throws Exception {
@@ -42,7 +42,7 @@ public class PublicKeyServiceImpl implements PublicKeyService {
         if (publicPemKey == null) {
             throw new Exception("无法从认证服务器获取公钥");
         }
-        publicKey = RSAUtils.getPublicKeyFromPemEncoded(publicPemKey);
+        publicKey = RSAUtil.getPublicKeyFromPemEncoded(publicPemKey);
         log.info("get publicKey from auth server!,publicPemKey={}", publicPemKey);
     }
 

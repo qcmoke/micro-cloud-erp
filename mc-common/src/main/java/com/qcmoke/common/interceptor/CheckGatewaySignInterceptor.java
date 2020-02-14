@@ -1,7 +1,7 @@
 package com.qcmoke.common.interceptor;
 
 import com.qcmoke.common.utils.ResponseWriterUtil;
-import com.qcmoke.common.utils.security.RSAUtils;
+import com.qcmoke.common.utils.security.RSAUtil;
 import com.qcmoke.common.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +34,7 @@ public class CheckGatewaySignInterceptor implements HandlerInterceptor {
         }
         try {
             //验签
-            boolean isCheck = RSAUtils.doCheck(gatewaySignContent, gatewaySignResult, GATEWAY_PUBLIC_KEY, StandardCharsets.UTF_8.name());
+            boolean isCheck = RSAUtil.doCheck(gatewaySignContent, gatewaySignResult, GATEWAY_PUBLIC_KEY, StandardCharsets.UTF_8.name());
             if (isCheck) {
                 return true;
             }

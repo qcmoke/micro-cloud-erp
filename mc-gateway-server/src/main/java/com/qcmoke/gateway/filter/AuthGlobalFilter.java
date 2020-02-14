@@ -1,14 +1,15 @@
 package com.qcmoke.gateway.filter;
 
 import com.qcmoke.common.dto.CurrentUser;
+import com.qcmoke.common.dto.Result;
 import com.qcmoke.common.service.PublicKeyService;
-import com.qcmoke.common.utils.JwtRsaUtils;
+import com.qcmoke.common.utils.JwtRsaUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
-import com.qcmoke.common.dto.Result;
 import com.qcmoke.gateway.authorization.CustomMetadataSource;
 import com.qcmoke.gateway.authorization.UrlAccessDecisionManager;
 import com.qcmoke.gateway.constant.RouteConstant;
+import com.qcmoke.gateway.utils.GatewayContextUtil;
 import com.qcmoke.gateway.utils.ResponseWriterUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -51,10 +52,13 @@ public class AuthGlobalFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
         ServerHttpResponse response = exchange.getResponse();
-        String path = request.getURI().getPath();
-        if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, path)) {
+        String originalPath = GatewayContextUtil.getOriginalPath(exchange);
+        log.info("客户端原始请求路径 originalPath={}", originalPath);
+        if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, originalPath)) {
+            log.info("request is auth server....");
             return chain.filter(exchange);
         }
+        log.info("check token and user permission....");
         PublicKey publicKey = null;
         try {
             publicKey = publicKeyService.getPublicKey();
@@ -69,7 +73,7 @@ public class AuthGlobalFilter implements GlobalFilter {
             return ResponseWriterUtil.makeResponse(response, Result.error("未认证，无访问令牌"));
         }
         try {
-            JwtRsaUtils.parserAndVerifyToken(bearerToken, publicKey);
+            JwtRsaUtil.parserAndVerifyToken(bearerToken, publicKey);
         } catch (ExpiredJwtException e) {
             return ResponseWriterUtil.makeResponse(response, Result.error("令牌已失效,e=" + e.getMessage()));
         } catch (UnsupportedJwtException e) {
@@ -83,7 +87,7 @@ public class AuthGlobalFilter implements GlobalFilter {
         } catch (Exception e) {
             return ResponseWriterUtil.makeResponse(response, Result.error("令牌验证失败,e=" + e.getMessage()));
         }
-        Collection<String> urlNeedRoles = customMetadataSource.getAttributes(path);
+        Collection<String> urlNeedRoles = customMetadataSource.getAttributes(originalPath);
         CurrentUser currentUser = OauthSecurityJwtUtil.getCurrentUserForWebFlux(request);
         boolean decide = urlAccessDecisionManager.decide(currentUser, urlNeedRoles);
         if (!decide) {

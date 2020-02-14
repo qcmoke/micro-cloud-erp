@@ -24,10 +24,7 @@ import me.zhyd.oauth.config.AuthSource;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
-import me.zhyd.oauth.request.AuthGithubRequest;
-import me.zhyd.oauth.request.AuthQqRequest;
-import me.zhyd.oauth.request.AuthRequest;
-import me.zhyd.oauth.request.AuthWeChatRequest;
+import me.zhyd.oauth.request.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -251,6 +248,10 @@ public class SocialLoginServiceImpl implements SocialLoginService {
                 break;
             case "github":
                 authRequest = new AuthGithubRequest(authConfig);
+                break;
+            case "gitee":
+                authRequest = new AuthGiteeRequest(authConfig);
+                break;
             default:
                 break;
         }

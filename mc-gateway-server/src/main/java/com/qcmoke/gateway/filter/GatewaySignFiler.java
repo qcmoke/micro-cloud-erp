@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.filter;
 
-import com.qcmoke.common.utils.security.RSAUtils;
 import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.utils.security.RSAUtil;
 import com.qcmoke.gateway.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -19,9 +19,6 @@ import java.util.UUID;
 
 /**
  * 网关签名过滤器
- * <p>
- * 对Basic token或者Bearer token进行签名
- * 要求所有请求都要携带Bearer Token或者Basic Token
  *
  * @author qcmoke
  */
@@ -47,7 +44,7 @@ public class GatewaySignFiler implements GlobalFilter {
         //网关签名结果
         String gatewaySignResult = null;
         try {
-            gatewaySignResult = RSAUtils.rsaSign(gatewaySignContent, GATEWAY_PRIVATE_KEY, StandardCharsets.UTF_8.name());
+            gatewaySignResult = RSAUtil.rsaSign(gatewaySignContent, GATEWAY_PRIVATE_KEY, StandardCharsets.UTF_8.name());
         } catch (SignatureException e) {
             log.error("网关签名异常,e=" + e.getMessage());
             return ResponseWriterUtil.makeResponse(response, Result.error("网关签名异常"));

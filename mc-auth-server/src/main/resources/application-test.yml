@@ -60,7 +60,7 @@ mybatis-plus:
 oauth2:
   social:
     #认证成功进入的前段页面
-    front-url: http://127.0.0.1:9527
+    front-url: http://localhost:9527
     #本地oauth2对于social认证的client-id
     client-id: social
     #第三方认证配置列表
@@ -68,7 +68,11 @@ oauth2:
       - social-type: github
         client-id: a0d287406edbdb70394d
         client-secret: 0dc78340e6a563d562b29adc1d17d9816a9014f9
-        redirect-uri: http://127.0.0.1:9070/auth/resource/social/callback/github
+        redirect-uri: http://localhost:9070/auth/resource/social/callback/github
+      - social-type: gitee
+        client-id: e0b713dfda1c0b068b3b92c9691f178930f17cc4ce6ae0091e5ca2d5f639cf5a
+        client-secret: c001ddc8dfdf7057d64511c5d5021ba35e4482570db8ce0ccb4448f7ddf386a8
+        redirect-uri: http://localhost:9070/auth/resource/social/callback/gitee
       - social-type: qq
         client-id: 101448999
         client-secret: 1d958787a87559bad371c0a9e26eef61

@@ -5,25 +5,21 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.*;
 
 /**
+ * HttpServletRequest包装类
+ * 可用于HeaderMapRequestWrapper wrapperRequest = new RequestWrapper(request);对wrapperRequest进行重新赋值，比如添加请求头，或者请求参数等，然后chain.doFilter(wrapperRequest,response);
+ *
  * @author qcmoke
  */
 public class HeaderMapRequestWrapper extends HttpServletRequestWrapper {
-    /**
-     * construct a wrapper for this request
-     *
-     * @param request
-     */
+    private Map<String, String> headerMap = new HashMap<>();
+
     public HeaderMapRequestWrapper(HttpServletRequest request) {
         super(request);
     }
 
-    private Map<String, String> headerMap = new HashMap<String, String>();
 
     /**
      * add a header with given name and value
-     *
-     * @param name
-     * @param value
      */
     public void addHeader(String name, String value) {
         headerMap.put(name, value);
@@ -38,15 +34,11 @@ public class HeaderMapRequestWrapper extends HttpServletRequestWrapper {
         return headerValue;
     }
 
-    /**
-     * get the Header names
-     */
+
     @Override
     public Enumeration<String> getHeaderNames() {
         List<String> names = Collections.list(super.getHeaderNames());
-        for (String name : headerMap.keySet()) {
-            names.add(name);
-        }
+        names.addAll(headerMap.keySet());
         return Collections.enumeration(names);
     }
 
