@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailVo implements Serializable {
+public class UserDetailDto implements Serializable {
 
     /**
      * 用户ID

@@ -1,4 +1,4 @@
-package com.qcmoke.auth.common.entity;
+package com.qcmoke.auth.common.dto;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

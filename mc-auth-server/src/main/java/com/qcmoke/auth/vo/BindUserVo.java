@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author qcmoke
  */
 @Data
-public class BindUser implements Serializable {
+public class BindUserVo implements Serializable {
 
     private static final long serialVersionUID = -3890998115990166651L;
 

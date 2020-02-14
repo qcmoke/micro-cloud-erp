@@ -1,6 +1,6 @@
 package com.qcmoke.auth.config;
 
-import com.qcmoke.auth.common.entity.AuthUserDetails;
+import com.qcmoke.auth.common.dto.AuthUserDetails;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

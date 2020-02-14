@@ -1,14 +1,18 @@
 package com.qcmoke.auth;
 
 import com.qcmoke.auth.properties.Oauth2SocialProperties;
+import lombok.Data;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@Data
+@Configuration
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class BootAuthTest {

@@ -8,7 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
-        ip: 39.106.195.202 #如果在vps上部署，那么需要考虑注册到注册中心时的ip选择问题（默认选择的是内网ip，这里为了方便本地测试，可以指定为公网ip）
+        ip: 127.0.0.1 #如果在vps上部署，那么需要考虑注册到注册中心时的ip选择问题（默认选择的是内网ip，这里为了方便本地测试，可以指定为公网ip）
   datasource:
     auth:
       #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
@@ -59,6 +59,21 @@ mybatis-plus:
 
 oauth2:
   social:
+    #认证成功进入的前段页面
     front-url: http://127.0.0.1:9527
+    #本地oauth2对于social认证的client-id
     client-id: social
-    social_user_password: social123456
+    #第三方认证配置列表
+    source-list:
+      - social-type: github
+        client-id: a0d287406edbdb70394d
+        client-secret: 0dc78340e6a563d562b29adc1d17d9816a9014f9
+        redirect-uri: http://127.0.0.1:9070/auth/resource/social/callback/github
+      - social-type: qq
+        client-id: 101448999
+        client-secret: 1d958787a87559bad371c0a9e26eef61
+        redirect-uri: http://www.merryyou.cn/login/qq
+      - social-type: weixin
+        client-id: wxd99431bbff8305a0
+        client-secret: 60f78681d063590a469f1b297feff3c4
+        redirect-uri: http://www.pinzhi365.com/qqLogin/weixin

@@ -1,4 +1,4 @@
-package com.qcmoke.auth.common.entity;
+package com.qcmoke.auth.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;

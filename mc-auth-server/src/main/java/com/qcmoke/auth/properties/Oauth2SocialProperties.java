@@ -1,8 +1,11 @@
 package com.qcmoke.auth.properties;
 
+import com.qcmoke.auth.dto.SocialSourceDto;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author qcmoke
@@ -13,5 +16,5 @@ import org.springframework.stereotype.Component;
 public class Oauth2SocialProperties {
     private String frontUrl;
     private String clientId;
-    private String socialUserPassword;
+    private List<SocialSourceDto> sourceList;
 }

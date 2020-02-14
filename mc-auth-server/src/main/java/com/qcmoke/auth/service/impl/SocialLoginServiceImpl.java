@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.qcmoke.auth.constant.GrantTypeConstant;
 import com.qcmoke.auth.constant.ParamsConstant;
 import com.qcmoke.auth.constant.SocialConstant;
+import com.qcmoke.auth.dto.SocialSourceDto;
 import com.qcmoke.auth.entity.User;
 import com.qcmoke.auth.entity.UserConnection;
 import com.qcmoke.auth.entity.UserRole;
@@ -14,11 +15,12 @@ import com.qcmoke.auth.mapper.UserRoleMapper;
 import com.qcmoke.auth.properties.Oauth2SocialProperties;
 import com.qcmoke.auth.service.SocialLoginService;
 import com.qcmoke.auth.service.UserConnectionService;
-import com.qcmoke.auth.vo.BindUser;
+import com.qcmoke.auth.vo.BindUserVo;
 import com.qcmoke.common.utils.SpringContextUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
+import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.config.AuthConfig;
-import me.zhyd.oauth.exception.AuthException;
+import me.zhyd.oauth.config.AuthSource;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthUser;
@@ -45,6 +47,7 @@ import java.util.Map;
 /**
  * @author qcmoke
  */
+@Slf4j
 @Service
 public class SocialLoginServiceImpl implements SocialLoginService {
 
@@ -89,7 +92,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         if (user == null) {
             throw new SocialException("系统中未找到与第三方账号对应的账户");
         }
-        //到数据库获取ClientDetail并得到OAuth2AccessToken
+        //到数据库获取ClientDetail并得到令牌
         OAuth2AccessToken oAuth2AccessToken = getOauth2AccessToken(user);
         //第三方登录成功。设置状态码为9999
         JSONObject result = new JSONObject();
@@ -100,6 +103,13 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
 
+    /**
+     * 生成认证令牌
+     *
+     * @param user
+     * @return
+     * @throws SocialException
+     */
     private OAuth2AccessToken getOauth2AccessToken(User user) throws SocialException {
 
         //设置参数给UserDetailsService作登录类型判断
@@ -114,7 +124,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         Map<String, String> requestParameters = new HashMap<>(5);
         requestParameters.put("grant_type", GrantTypeConstant.PASSWORD);
         requestParameters.put("username", user.getUsername());
-        requestParameters.put("password", oauth2SocialProperties.getSocialUserPassword());
+        requestParameters.put("password", SocialConstant.SOCIAL_USER_PASSWORD);
         String grantTypes = String.join(",", clientDetails.getAuthorizedGrantTypes());
         TokenRequest tokenRequest = new TokenRequest(requestParameters, clientDetails.getClientId(), clientDetails.getScope(), grantTypes);
         return granter.grant(GrantTypeConstant.PASSWORD, tokenRequest);
@@ -133,9 +143,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
     @Override
-    public OAuth2AccessToken bindLogin(BindUser bindUser, AuthUser authUser) throws SocialException {
-        User systemUser = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, bindUser.getBindUsername()));
-        if (systemUser == null || !passwordEncoder.matches(bindUser.getBindPassword(), systemUser.getPassword())) {
+    public OAuth2AccessToken bindLogin(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
+        User systemUser = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, bindUserVo.getBindUsername()));
+        if (systemUser == null || !passwordEncoder.matches(bindUserVo.getBindPassword(), systemUser.getPassword())) {
             throw new SocialException("绑定系统账号失败，用户名或密码错误！");
         }
         this.createConnection(systemUser, authUser);
@@ -144,7 +154,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
     @Override
-    public OAuth2AccessToken signLogin(BindUser registerUser, AuthUser authUser) throws SocialException {
+    public OAuth2AccessToken signLogin(BindUserVo registerUser, AuthUser authUser) throws SocialException {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, registerUser.getBindUsername()));
         if (user != null) {
             throw new SocialException("该用户名已存在！");
@@ -188,8 +198,8 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
     @Override
-    public void bind(BindUser bindUser, AuthUser authUser) throws SocialException {
-        String username = bindUser.getBindUsername();
+    public void bind(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
+        String username = bindUserVo.getBindUsername();
         if (isCurrentUser(username)) {
             UserConnection userConnection = userConnectionService.selectByCondition(authUser.getSource().toString(), authUser.getUuid());
             if (userConnection != null) {
@@ -204,8 +214,8 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
     @Override
-    public void unbind(BindUser bindUser, String oauthType) throws SocialException {
-        String username = bindUser.getBindUsername();
+    public void unbind(BindUserVo bindUserVo, String oauthType) throws SocialException {
+        String username = bindUserVo.getBindUsername();
         if (isCurrentUser(username)) {
             userConnectionService.remove(new LambdaQueryWrapper<UserConnection>().eq(UserConnection::getUsername, username).eq(UserConnection::getProviderName, oauthType));
         } else {
@@ -219,39 +229,53 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
 
+    public static void main(String[] args) {
+        AuthSource github = AuthSource.valueOf("GITHUB");
+        System.out.println(github);
+    }
+
     /**
      * 根据具体的授权来源，获取授权请求工具类
      */
     @Override
-    public AuthRequest getAuthRequest(String source) {
+    public AuthRequest getAuthRequest(String socialType) throws SocialException {
         AuthRequest authRequest = null;
-        switch (source) {
+        SocialSourceDto socialSourceDto = findSocialSource(socialType);
+        AuthConfig authConfig = AuthConfig.builder().clientId(socialSourceDto.getClientId()).clientSecret(socialSourceDto.getClientSecret()).redirectUri(socialSourceDto.getRedirectUri()).build();
+        switch (socialSourceDto.getSocialType()) {
             case "qq":
-                authRequest = new AuthQqRequest(AuthConfig.builder()
-                        .clientId("101448999")
-                        .clientSecret("1d958787a87559bad371c0a9e26eef61")
-                        .redirectUri("http://www.merryyou.cn/login/qq")
-                        .build());
+                authRequest = new AuthQqRequest(authConfig);
                 break;
             case "weixin":
-                authRequest = new AuthWeChatRequest(AuthConfig.builder()
-                        .clientId("wxd99431bbff8305a0")
-                        .clientSecret("60f78681d063590a469f1b297feff3c4")
-                        .redirectUri("http://www.pinzhi365.com/qqLogin/weixin")
-                        .build());
+                authRequest = new AuthWeChatRequest(authConfig);
                 break;
             case "github":
-                authRequest = new AuthGithubRequest(AuthConfig.builder()
-                        .clientId("a0d287406edbdb70394d")
-                        .clientSecret("0dc78340e6a563d562b29adc1d17d9816a9014f9")
-                        .redirectUri("http://127.0.0.1:9070/auth/resource/social/callback/github")
-                        .build());
+                authRequest = new AuthGithubRequest(authConfig);
             default:
                 break;
         }
         if (null == authRequest) {
-            throw new AuthException("未获取到有效的Auth配置");
+            throw new SocialException("未获取到有效的Auth配置");
         }
         return authRequest;
+    }
+
+
+    private SocialSourceDto findSocialSource(String socialType) throws SocialException {
+        List<SocialSourceDto> sourceList = oauth2SocialProperties.getSourceList();
+        SocialSourceDto socialSourceDto = null;
+        for (SocialSourceDto config : sourceList) {
+            String configSocialType = config.getSocialType();
+            if (configSocialType != null && configSocialType.equals(socialType)) {
+                socialSourceDto = config;
+            }
+        }
+        if (socialSourceDto == null) {
+            throw new SocialException("未找到系统相关" + socialType + "的配置");
+        }
+        if (StringUtils.isBlank(socialSourceDto.getClientId()) || StringUtils.isBlank(socialSourceDto.getClientSecret()) || StringUtils.isBlank(socialSourceDto.getRedirectUri())) {
+            throw new SocialException("系统social配置异常");
+        }
+        return socialSourceDto;
     }
 }

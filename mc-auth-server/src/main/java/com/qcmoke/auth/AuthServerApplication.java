@@ -16,10 +16,10 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @EnableDiscoveryClient
 @MapperScan("com.qcmoke.auth.mapper")
 @SpringBootApplication
-public class Oauth2AuthServerApplication {
+public class AuthServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Oauth2AuthServerApplication.class, args);
+        SpringApplication.run(AuthServerApplication.class, args);
     }
 
 }

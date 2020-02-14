@@ -1,13 +1,12 @@
 package com.qcmoke.auth.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.qcmoke.auth.common.entity.AuthUserDetails;
+import com.qcmoke.auth.common.dto.AuthUserDetails;
 import com.qcmoke.auth.constant.ParamsConstant;
 import com.qcmoke.auth.constant.SocialConstant;
 import com.qcmoke.auth.entity.User;
 import com.qcmoke.auth.mapper.MenuMapper;
 import com.qcmoke.auth.mapper.UserMapper;
-import com.qcmoke.auth.properties.Oauth2SocialProperties;
 import com.qcmoke.common.utils.SpringContextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private MenuMapper menuMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private Oauth2SocialProperties oauth2SocialProperties;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -54,7 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         String loginType = (String) httpServletRequest.getAttribute(ParamsConstant.LOGIN_TYPE);
 
         if (StringUtils.equals(loginType, SocialConstant.SOCIAL_LOGIN)) {
-            password = passwordEncoder.encode(oauth2SocialProperties.getSocialUserPassword());
+            password = passwordEncoder.encode(SocialConstant.SOCIAL_USER_PASSWORD);
         }
 
         return new AuthUserDetails(user.getUsername(), password, user.getUid(), user.getStatus(), true, true, true, accountNonLocked,

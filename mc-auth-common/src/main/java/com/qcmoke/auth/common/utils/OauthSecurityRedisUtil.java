@@ -1,8 +1,8 @@
 package com.qcmoke.auth.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.qcmoke.auth.common.entity.AuthUserDetails;
-import com.qcmoke.auth.common.entity.CurrentUser;
+import com.qcmoke.auth.common.dto.AuthUserDetails;
+import com.qcmoke.auth.common.dto.CurrentUser;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
