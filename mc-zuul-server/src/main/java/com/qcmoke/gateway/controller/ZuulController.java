@@ -17,7 +17,7 @@ import java.security.Principal;
 @Slf4j
 @RequestMapping("/gateway")
 @RestController
-public class GatewayController {
+public class ZuulController {
 
     @GetMapping("/userInfo")
     public Result<Object> currentUser(Principal principal, OAuth2Authentication oAuth2Authentication, HttpServletRequest request) {

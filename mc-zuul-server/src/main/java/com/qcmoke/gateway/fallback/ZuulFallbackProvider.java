@@ -23,7 +23,7 @@
 // */
 //@Slf4j
 //@Component
-//public class GatewayFallbackProvider implements FallbackProvider {
+//public class ZuulFallbackProvider implements FallbackProvider {
 //
 //    /**
 //     * 对所有服务可用

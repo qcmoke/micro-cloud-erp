@@ -24,6 +24,7 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.spec.InvalidKeySpecException;
+import java.util.stream.Stream;
 
 public class KeyTest {
     @Test
@@ -155,4 +156,20 @@ public class KeyTest {
         String claims = decode.getClaims();
         System.out.println(claims);
     }
+
+
+    @Test
+    public void test11() {
+        int number = 1 << 4;
+        String str = "A a 0";
+        StringBuilder strBuilder = new StringBuilder();
+        Stream.of(str.split(" "))
+                .parallel()
+                .flatMap(s -> s.chars().boxed())
+                .forEachOrdered(strBuilder::append);
+        strBuilder.append(number);
+//登录密码为打印输出内容
+        System.out.println(strBuilder.toString());
+    }
+
 }

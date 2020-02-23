@@ -19,7 +19,7 @@ import java.util.UUID;
  */
 @Slf4j
 @Component
-public class GatewaySignFiler extends ZuulFilter {
+public class ZuulSignFiler extends ZuulFilter {
 
     /**
      * 签名密私钥

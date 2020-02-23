@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-public class GatewayExceptionFilter extends SendErrorFilter {
+public class ZuulSendErrorFilter extends SendErrorFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(GatewayExceptionFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(ZuulSendErrorFilter.class);
 
     @Override
     public String filterType() {

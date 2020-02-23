@@ -17,9 +17,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 @MapperScan("com.qcmoke.auth.mapper")
 @SpringBootApplication
 public class AuthServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(AuthServerApplication.class, args);
     }
-
 }

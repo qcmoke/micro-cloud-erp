@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 @Component
 @Slf4j
-public class GatewayLogFilter extends OncePerRequestFilter {
+public class ZuulLogFilter extends OncePerRequestFilter {
 
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
 
