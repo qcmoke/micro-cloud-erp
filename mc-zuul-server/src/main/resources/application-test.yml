@@ -8,6 +8,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
+        ip: 129.204.185.161
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
@@ -121,8 +122,3 @@ security:
 #    resource:
 ##      id: ${spring.application.name}
 ##      user-info-uri: http://127.0.0.1:9090/resource/user
-
-
-logging:
-  level:
-    com.qcmoke: debug

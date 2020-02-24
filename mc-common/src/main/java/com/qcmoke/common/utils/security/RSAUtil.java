@@ -2,11 +2,9 @@ package com.qcmoke.common.utils.security;
 
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import sun.misc.BASE64Decoder;
 
 import javax.crypto.Cipher;
 import java.io.*;
@@ -76,7 +74,7 @@ public class RSAUtil {
      *
      * @param publicKey 密钥字符串（经过base64编码）
      */
-    public static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+    public static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过X509编码的Key指令获得公钥对象
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.decodeBase64(publicKey));
@@ -98,7 +96,7 @@ public class RSAUtil {
         String base64 = pem.substring(beginIndex, endIndex).trim();
         PublicKey publicKey;
         try {
-            byte[] decode = new BASE64Decoder().decodeBuffer(base64);
+            byte[] decode = Base64.decodeBase64(base64);
             X509EncodedKeySpec spec = new X509EncodedKeySpec(decode);
             KeyFactory kf = KeyFactory.getInstance(ALGORITHM);
             publicKey = kf.generatePublic(spec);
@@ -140,9 +138,8 @@ public class RSAUtil {
      * @return 私钥
      * @throws NoSuchAlgorithmException NoSuchAlgorithmException
      * @throws InvalidKeySpecException  InvalidKeySpecException
-     * @throws IOException              IOException
      */
-    public static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+    public static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
         //通过PKCS#8编码的Key指令获得私钥对象
         KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
         PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey));
@@ -238,9 +235,6 @@ public class RSAUtil {
             byte[] decryptedData = out.toByteArray();
             out.close();
             return new String(decryptedData, CHARSET);
-
-            // return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, new BASE64Decoder().decodeBuffer(data),1024), CHARSET);
-
         } catch (Exception e) {
             throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
         }
@@ -254,11 +248,10 @@ public class RSAUtil {
         } else {
             maxBlock = keySize / 8 - 11;
         }
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int offSet = 0;
-        byte[] buff;
-        int i = 0;
-        try {
+        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            int offSet = 0;
+            byte[] buff;
+            int i = 0;
             while (datas.length > offSet) {
                 if (datas.length - offSet > maxBlock) {
                     buff = cipher.doFinal(datas, offSet, maxBlock);
@@ -269,12 +262,10 @@ public class RSAUtil {
                 i++;
                 offSet = i * maxBlock;
             }
+            return out.toByteArray();
         } catch (Exception e) {
             throw new RuntimeException("加解密阀值为[" + maxBlock + "]的数据时发生异常", e);
         }
-        byte[] resultData = out.toByteArray();
-        IOUtils.closeQuietly(out);
-        return resultData;
     }
 
 

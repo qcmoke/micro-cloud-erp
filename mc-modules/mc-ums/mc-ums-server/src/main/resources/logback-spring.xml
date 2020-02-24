@@ -6,17 +6,17 @@
 
     <!--开发环境日志文件输出路径-->
     <springProfile name="dev">
-        <property name="LOG_PATH" value="logs/mc-zuul-server/dev/"/>
+        <property name="LOG_PATH" value="logs/mc-ums-server/dev/"/>
     </springProfile>
 
     <!--测试环境日志文件输出路径-->
     <springProfile name="test">
-        <property name="LOG_PATH" value="/tmp/logs/mc-zuul-server/test/"/>
+        <property name="LOG_PATH" value="/tmp/logs/mc-ums-server/test/"/>
     </springProfile>
 
     <!--生成环境日志文件输出路径-->
     <springProfile name="prod">
-        <property name="LOG_PATH" value="/tmp/logs/mc-zuul-server/prod/"/>
+        <property name="LOG_PATH" value="/tmp/logs/mc-ums-server/prod/"/>
     </springProfile>
 
 

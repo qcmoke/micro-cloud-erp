@@ -1,5 +1,8 @@
 package com.qcmoke.auth.common.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qcmoke.auth.common.dto.AuthUserDetails;
 import com.qcmoke.auth.common.dto.CurrentUser;
@@ -76,9 +79,11 @@ public class OauthSecurityRedisUtil extends OauthSecurityUtil {
         return (OAuth2Authentication) authentication;
     }
 
-    @SuppressWarnings("all")
+
     private static LinkedHashMap<String, Object> getAuthenticationDetails() {
-        return (LinkedHashMap<String, Object>) getOAuth2Authentication().getUserAuthentication().getDetails();
+        Object details = getOAuth2Authentication().getUserAuthentication().getDetails();
+        return JSON.parseObject(JSON.toJSONString(details, SerializerFeature.WriteMapNullValue), new TypeReference<LinkedHashMap<String, Object>>() {
+        });
     }
 
 }

@@ -9,6 +9,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
+        ip: 129.204.185.161
   datasource:
     #整合p6spy作sql性能，引入p6spy依赖后,需要修改driver和url即可，并在resources下添加spy.properties，在配置里可以自定义日志输出，实现MessageFormattingStrategy接口即可（P6spySqlFormatConfig）
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
@@ -41,6 +42,6 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
 
-logging:
-  level:
-    com.qcmoke: debug
+#logging:
+#  level:
+#    com.qcmoke: debug

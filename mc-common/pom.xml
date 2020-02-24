@@ -21,12 +21,6 @@
     </properties>
 
     <dependencies>
-        <!--cloud升级版本到Finchley.SR4后需要加reactive-streams这个依赖-->
-        <dependency>
-            <groupId>org.reactivestreams</groupId>
-            <artifactId>reactive-streams</artifactId>
-        </dependency>
-
         <!-- springboot web-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

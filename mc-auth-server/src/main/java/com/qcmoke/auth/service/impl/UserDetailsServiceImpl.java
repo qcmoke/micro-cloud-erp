@@ -55,7 +55,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         return new AuthUserDetails(user.getUsername(), password, user.getUid(), user.getStatus(), true, true, true, accountNonLocked,
-                AuthorityUtils.createAuthorityList(permissions));
+                AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
     }
 
 }
