@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.filter;
 
-import com.qcmoke.common.dto.CurrentUser;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.CurrentUser;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.common.service.PublicKeyService;
 import com.qcmoke.common.utils.JwtRsaUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;

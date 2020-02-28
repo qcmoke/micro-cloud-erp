@@ -1,7 +1,7 @@
 package com.qcmoke.gateway.authorization;
 
 
-import com.qcmoke.common.dto.CurrentUser;
+import com.qcmoke.common.vo.CurrentUser;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;

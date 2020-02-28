@@ -1,4 +1,4 @@
-package com.qcmoke.common.dto;
+package com.qcmoke.common.vo;
 
 import lombok.Data;
 

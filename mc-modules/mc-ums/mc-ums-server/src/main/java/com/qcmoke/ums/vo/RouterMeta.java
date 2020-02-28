@@ -1,4 +1,4 @@
-package com.qcmoke.ums.dto;
+package com.qcmoke.ums.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

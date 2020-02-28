@@ -1,9 +1,9 @@
 package com.qcmoke.ums.controller;
 
 
-import com.qcmoke.common.dto.Result;
-import com.qcmoke.common.vo.PageQuery;
-import com.qcmoke.ums.dto.PageResult;
+import com.qcmoke.common.vo.Result;
+import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.entity.Dept;
 import com.qcmoke.ums.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,11 @@ public class DeptController {
     private DeptService deptService;
 
     @GetMapping
-    public Result<Object> deptList(PageQuery pageQuery, Dept dept) {
+    public Result<PageResult> deptList(PageQuery pageQuery, Dept dept) {
         PageResult pageResult = deptService.queryDeptList(pageQuery, dept);
         return Result.ok(pageResult);
     }
+
+
 }
 

@@ -1,6 +1,6 @@
 package com.qcmoke.gateway.filter;
 
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.common.utils.security.RSAUtil;
 import com.qcmoke.gateway.utils.ResponseWriterUtil;
 import lombok.extern.slf4j.Slf4j;

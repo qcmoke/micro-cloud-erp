@@ -1,6 +1,5 @@
-package com.qcmoke.ums.dto;
+package com.qcmoke.ums.vo;
 
-import com.qcmoke.ums.dto.Tree;
 import com.qcmoke.ums.entity.Menu;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

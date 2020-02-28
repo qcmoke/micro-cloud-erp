@@ -1,8 +1,8 @@
 package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcmoke.common.vo.PageQuery;
-import com.qcmoke.ums.dto.PageResult;
+import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.entity.Dept;
 import org.springframework.stereotype.Repository;
 

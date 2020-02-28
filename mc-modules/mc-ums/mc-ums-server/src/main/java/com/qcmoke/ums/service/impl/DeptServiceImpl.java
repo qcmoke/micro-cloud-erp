@@ -2,10 +2,10 @@ package com.qcmoke.ums.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qcmoke.common.vo.PageQuery;
-import com.qcmoke.ums.dto.DeptTree;
-import com.qcmoke.ums.dto.PageResult;
-import com.qcmoke.ums.dto.Tree;
+import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.ums.vo.DeptTree;
+import com.qcmoke.ums.vo.PageResult;
+import com.qcmoke.ums.vo.Tree;
 import com.qcmoke.ums.entity.Dept;
 import com.qcmoke.ums.mapper.DeptMapper;
 import com.qcmoke.ums.service.DeptService;

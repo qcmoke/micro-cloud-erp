@@ -1,7 +1,7 @@
 package com.qcmoke.auth.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcmoke.auth.dto.UserDetailDto;
+import com.qcmoke.auth.vo.UserDetailVo;
 import com.qcmoke.auth.entity.User;
 
 
@@ -21,5 +21,5 @@ public interface UserService extends IService<User> {
      * @param username 用户名
      * @return 用户详细信息
      */
-    UserDetailDto getUserDetailByUsername(String username);
+    UserDetailVo getUserDetailByUsername(String username);
 }

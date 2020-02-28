@@ -1,4 +1,4 @@
-package com.qcmoke.common.vo;
+package com.qcmoke.common.dto;
 
 import lombok.Data;
 import lombok.ToString;

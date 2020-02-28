@@ -7,27 +7,27 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 39.106.195.202:8848
-        ip: 39.106.195.202 #如果在vps上部署，那么需要考虑注册到注册中心时的ip选择问题（默认选择的是内网ip，这里为了方便本地测试，可以指定为公网ip）
+        server-addr: 129.204.185.161:8848
+        ip: 129.204.185.161 #如果在vps上部署，那么需要考虑注册到注册中心时的ip选择问题（默认选择的是内网ip，这里为了方便本地测试，可以指定为公网ip）
   datasource:
     auth:
       #spring.datasource.url为默认JDBC连接属性。如果用多数据源，那么需要重写这个属性为spring.datasource.jdbc-url
-      jdbc-url: jdbc:mysql://39.106.195.202:3306/mc-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      jdbc-url: jdbc:mysql://129.204.185.161:3306/mc-auth?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
       username: root
-      password: qcmoke123456
+      password: qcmoke)[good](boy
       driver-class-name: com.mysql.jdbc.Driver
     system:
-      jdbc-url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+      jdbc-url: jdbc:mysql://129.204.185.161:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
       username: root
-      password: qcmoke123456
+      password: qcmoke)[good](boy
       driver-class-name: com.mysql.jdbc.Driver
 
   #redis配置
   redis:
     database: 0
-    host: 39.106.195.202
+    host: 129.204.185.161
     port: 6379
-    password: qcmoke123456
+    password: qcmoke)[good](boy
     jedis:
       pool:
         min-idle: 8

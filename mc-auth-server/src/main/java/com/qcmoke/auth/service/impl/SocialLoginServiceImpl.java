@@ -15,7 +15,7 @@ import com.qcmoke.auth.mapper.UserRoleMapper;
 import com.qcmoke.auth.properties.Oauth2SocialProperties;
 import com.qcmoke.auth.service.SocialLoginService;
 import com.qcmoke.auth.service.UserConnectionService;
-import com.qcmoke.auth.vo.BindUserVo;
+import com.qcmoke.auth.dto.BindUserDto;
 import com.qcmoke.common.utils.SpringContextUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -140,9 +140,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
     @Override
-    public OAuth2AccessToken bindLogin(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
-        User systemUser = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, bindUserVo.getBindUsername()));
-        if (systemUser == null || !passwordEncoder.matches(bindUserVo.getBindPassword(), systemUser.getPassword())) {
+    public OAuth2AccessToken bindLogin(BindUserDto bindUserDto, AuthUser authUser) throws SocialException {
+        User systemUser = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, bindUserDto.getBindUsername()));
+        if (systemUser == null || !passwordEncoder.matches(bindUserDto.getBindPassword(), systemUser.getPassword())) {
             throw new SocialException("绑定系统账号失败，用户名或密码错误！");
         }
         this.createConnection(systemUser, authUser);
@@ -151,7 +151,7 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
     @Override
-    public OAuth2AccessToken signLogin(BindUserVo registerUser, AuthUser authUser) throws SocialException {
+    public OAuth2AccessToken signLogin(BindUserDto registerUser, AuthUser authUser) throws SocialException {
         User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, registerUser.getBindUsername()));
         if (user != null) {
             throw new SocialException("该用户名已存在！");
@@ -195,8 +195,8 @@ public class SocialLoginServiceImpl implements SocialLoginService {
 
 
     @Override
-    public void bind(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
-        String username = bindUserVo.getBindUsername();
+    public void bind(BindUserDto bindUserDto, AuthUser authUser) throws SocialException {
+        String username = bindUserDto.getBindUsername();
         if (isCurrentUser(username)) {
             UserConnection userConnection = userConnectionService.selectByCondition(authUser.getSource().toString(), authUser.getUuid());
             if (userConnection != null) {
@@ -211,8 +211,8 @@ public class SocialLoginServiceImpl implements SocialLoginService {
     }
 
     @Override
-    public void unbind(BindUserVo bindUserVo, String oauthType) throws SocialException {
-        String username = bindUserVo.getBindUsername();
+    public void unbind(BindUserDto bindUserDto, String oauthType) throws SocialException {
+        String username = bindUserDto.getBindUsername();
         if (isCurrentUser(username)) {
             userConnectionService.remove(new LambdaQueryWrapper<UserConnection>().eq(UserConnection::getUsername, username).eq(UserConnection::getProviderName, oauthType));
         } else {

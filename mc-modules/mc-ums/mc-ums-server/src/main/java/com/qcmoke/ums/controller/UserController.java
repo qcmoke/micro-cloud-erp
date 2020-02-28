@@ -1,11 +1,13 @@
 package com.qcmoke.ums.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qcmoke.common.dto.CurrentUser;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
+import com.qcmoke.common.vo.CurrentUser;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.ums.entity.User;
 import com.qcmoke.ums.service.UserService;
+import com.qcmoke.ums.vo.PageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author qcmoke
@@ -33,6 +32,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
+    @GetMapping
+    public Result<PageResult> getPage(PageQuery pageQuery) {
+        CurrentUser currentUser = OauthSecurityJwtUtil.getCurrentUser();
+        PageResult dataTable = userService.getPage(currentUser, pageQuery);
+        return Result.ok(dataTable);
+    }
 
     @GetMapping("/success")
     public Result<Object> success(HttpServletRequest request) {

@@ -1,7 +1,7 @@
 package com.qcmoke.ums.utils;
 
-import com.qcmoke.ums.dto.VueRouter;
-import com.qcmoke.ums.dto.Tree;
+import com.qcmoke.ums.vo.VueRouter;
+import com.qcmoke.ums.vo.Tree;
 
 import java.util.ArrayList;
 import java.util.List;

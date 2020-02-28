@@ -7,19 +7,19 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 39.106.195.202:8848
+        server-addr: 129.204.185.161:8848
         ip: 129.204.185.161
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://129.204.185.161:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-    password: qcmoke123456
+    password: qcmoke)[good](boy
   #redis配置
   redis:
     database: 0
-    host: 39.106.195.202
+    host: 129.204.185.161
     port: 6379
-    password: qcmoke123456
+    password: qcmoke)[good](boy
     jedis:
       pool:
         min-idle: 8
@@ -95,7 +95,7 @@ security:
       client-secret: 123456
     resource:
       jwt:
-        key-uri: http://39.106.195.202:9090/oauth/token_key
+        key-uri: http://129.204.185.161:9090/oauth/token_key
 
 
 ###（2）这种方式直接通过公钥进行token认证（写死公钥的方式）,只需要配置jwt.key-value即可（此外这种方式也可以在ResourceServerConfig类里通过jwtAccessTokenConverter.setVerifierKey(publicKey)进行灵活配置）

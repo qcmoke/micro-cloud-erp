@@ -1,9 +1,11 @@
 package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcmoke.common.dto.CurrentUser;
-import com.qcmoke.ums.dto.UserDetailVo;
+import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.ums.entity.User;
+import com.qcmoke.ums.vo.PageResult;
+import com.qcmoke.ums.vo.UserDetailVo;
 
 /**
  * <p>
@@ -26,4 +28,6 @@ public interface UserService extends IService<User> {
     boolean updateAvatar(CurrentUser currentUser, String avatar);
 
     boolean updateUserInfo(User user);
+
+    PageResult getPage(CurrentUser currentUser, PageQuery pageQuery);
 }

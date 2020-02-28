@@ -1,4 +1,4 @@
-package com.qcmoke.auth.dto;
+package com.qcmoke.auth.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetailDto implements Serializable {
+public class UserDetailVo implements Serializable {
 
     /**
      * 用户ID

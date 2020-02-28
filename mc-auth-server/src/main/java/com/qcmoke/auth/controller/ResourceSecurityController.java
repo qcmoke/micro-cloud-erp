@@ -1,12 +1,12 @@
 package com.qcmoke.auth.controller;
 
 import com.qcmoke.auth.common.utils.OauthSecurityRedisUtil;
-import com.qcmoke.auth.dto.UserDetailDto;
+import com.qcmoke.auth.vo.UserDetailVo;
 import com.qcmoke.auth.exception.ValidateCodeException;
 import com.qcmoke.auth.properties.Oauth2SecurityProperties;
 import com.qcmoke.auth.service.UserService;
 import com.qcmoke.auth.service.ValidateCodeService;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -55,8 +55,8 @@ public class ResourceSecurityController {
     @GetMapping("/user/detail")
     public Result<Object> getUserDetail(HttpServletRequest request) {
         String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
-        UserDetailDto userDetailDto = userService.getUserDetailByUsername(currentUsername);
-        return Result.ok(userDetailDto);
+        UserDetailVo userDetailVo = userService.getUserDetailByUsername(currentUsername);
+        return Result.ok(userDetailVo);
     }
 
 

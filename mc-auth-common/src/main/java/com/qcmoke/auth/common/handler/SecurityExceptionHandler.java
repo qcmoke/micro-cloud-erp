@@ -1,7 +1,7 @@
 package com.qcmoke.auth.common.handler;
 
 import com.qcmoke.auth.common.exception.NotAllowedAnonymousUserException;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.common.handler.GlobalExceptionHandler;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

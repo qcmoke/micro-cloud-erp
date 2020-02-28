@@ -43,7 +43,6 @@ public class PublicKeyServiceImpl implements PublicKeyService {
             throw new Exception("无法从认证服务器获取公钥");
         }
         publicKey = RSAUtil.getPublicKeyFromPemEncoded(publicPemKey);
-        log.info("get publicKey from auth server!,publicPemKey={}", publicPemKey);
     }
 
     /**

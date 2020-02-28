@@ -2,7 +2,7 @@ package com.qcmoke.auth.handler;
 
 import com.qcmoke.auth.common.handler.SecurityExceptionHandler;
 import com.qcmoke.auth.exception.SocialException;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;

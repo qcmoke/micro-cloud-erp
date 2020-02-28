@@ -62,7 +62,7 @@ public class JwtRsaUtil {
         } catch (ExpiredJwtException e) {
             return e.getClaims().getExpiration();
         } catch (Exception e) {
-            logger.info("e={}", e);
+            logger.error("e={}", e);
         }
         return null;
     }
@@ -81,7 +81,7 @@ public class JwtRsaUtil {
         } catch (ExpiredJwtException e) {
             return e.getClaims().getExpiration().before(new Date());
         } catch (Exception e) {
-            logger.info("e={}", e);
+            logger.error("e={}", e);
         }
         return false;
     }
@@ -100,7 +100,7 @@ public class JwtRsaUtil {
         } catch (ExpiredJwtException e) {
             return e.getClaims();
         } catch (Exception e) {
-            logger.info("e={}", e);
+            logger.error("e={}", e);
         }
         return null;
     }

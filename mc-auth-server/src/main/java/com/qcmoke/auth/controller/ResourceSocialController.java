@@ -6,8 +6,8 @@ import com.qcmoke.auth.entity.UserConnection;
 import com.qcmoke.auth.exception.SocialException;
 import com.qcmoke.auth.properties.Oauth2SocialProperties;
 import com.qcmoke.auth.service.SocialLoginService;
-import com.qcmoke.auth.vo.BindUserVo;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.auth.dto.BindUserDto;
+import com.qcmoke.common.vo.Result;
 import lombok.extern.slf4j.Slf4j;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthUser;
@@ -101,14 +101,14 @@ public class ResourceSocialController {
     /**
      * 绑定并登录
      *
-     * @param bindUserVo bindUser
+     * @param bindUserDto bindUser
      * @param authUser authUser
      * @return FebsResponse
      */
     @ResponseBody
     @PostMapping("/bind/login")
-    public Result<Object> bindLogin(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
-        OAuth2AccessToken oAuth2AccessToken = socialLoginService.bindLogin(bindUserVo, authUser);
+    public Result<Object> bindLogin(BindUserDto bindUserDto, AuthUser authUser) throws SocialException {
+        OAuth2AccessToken oAuth2AccessToken = socialLoginService.bindLogin(bindUserDto, authUser);
         return Result.ok(oAuth2AccessToken);
     }
 
@@ -122,7 +122,7 @@ public class ResourceSocialController {
      */
     @ResponseBody
     @PostMapping("/sign/login")
-    public Result<Object> signLogin(@Valid BindUserVo registerUser, AuthUser authUser) throws SocialException {
+    public Result<Object> signLogin(@Valid BindUserDto registerUser, AuthUser authUser) throws SocialException {
         OAuth2AccessToken oAuth2AccessToken = socialLoginService.signLogin(registerUser, authUser);
         return Result.ok(oAuth2AccessToken);
     }
@@ -131,25 +131,25 @@ public class ResourceSocialController {
     /**
      * 绑定
      *
-     * @param bindUserVo bindUser
+     * @param bindUserDto bindUser
      * @param authUser authUser
      */
     @ResponseBody
     @PostMapping("/bind")
-    public void bind(BindUserVo bindUserVo, AuthUser authUser) throws SocialException {
-        this.socialLoginService.bind(bindUserVo, authUser);
+    public void bind(BindUserDto bindUserDto, AuthUser authUser) throws SocialException {
+        this.socialLoginService.bind(bindUserDto, authUser);
     }
 
     /**
      * 解绑
      *
-     * @param bindUserVo  bindUser
+     * @param bindUserDto  bindUser
      * @param oauthType oauthType
      */
     @ResponseBody
     @DeleteMapping("/unbind")
-    public void unbind(BindUserVo bindUserVo, String oauthType) throws SocialException {
-        this.socialLoginService.unbind(bindUserVo, oauthType);
+    public void unbind(BindUserDto bindUserDto, String oauthType) throws SocialException {
+        this.socialLoginService.unbind(bindUserDto, oauthType);
     }
 
 }

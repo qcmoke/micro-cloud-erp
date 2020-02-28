@@ -3,7 +3,8 @@ package com.qcmoke.common.utils.oauth;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.qcmoke.common.dto.CurrentUser;
+import com.qcmoke.common.vo.CurrentUser;
+import com.qcmoke.common.utils.SpringContextUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +29,16 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
      */
     public static CurrentUser getCurrentUser(HttpServletRequest request) {
         JSONObject jwtJson = getJwtJson(request);
+        return getCurrentUser(jwtJson);
+    }
+
+    /**
+     * 获取当前用户信息
+     *
+     * @return CurrentUser 当前用户信息
+     */
+    public static CurrentUser getCurrentUser() {
+        JSONObject jwtJson = getJwtJson(SpringContextUtil.getHttpServletRequest());
         return getCurrentUser(jwtJson);
     }
 

@@ -1,13 +1,19 @@
 package com.qcmoke.ums.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qcmoke.common.dto.CurrentUser;
-import com.qcmoke.ums.dto.UserDetailVo;
+import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.common.utils.BeanCopyUtil;
+import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.ums.entity.User;
 import com.qcmoke.ums.mapper.MenuMapper;
 import com.qcmoke.ums.mapper.UserMapper;
 import com.qcmoke.ums.service.UserService;
+import com.qcmoke.ums.utils.SqlUtil;
+import com.qcmoke.ums.vo.PageResult;
+import com.qcmoke.ums.vo.UserDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -65,4 +72,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         int update = this.baseMapper.updateById(updateUser);
         return update > 0;
     }
+
+
+    @Override
+    public PageResult getPage(CurrentUser currentUser, PageQuery pageQuery) {
+        User user = BeanCopyUtil.copy(currentUser, User.class);
+        Page<?> page = SqlUtil.handlePageSort(pageQuery, "userId", PageQuery.ORDER_ASC, false);
+        IPage<Map<String, Object>> iPage = this.baseMapper.getPage(page, user);
+        PageResult pageResult = new PageResult();
+        pageResult.setRows(iPage.getRecords());
+        pageResult.setTotal(iPage.getTotal());
+        return pageResult;
+    }
+
 }

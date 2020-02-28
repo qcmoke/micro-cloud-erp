@@ -2,7 +2,7 @@ package com.qcmoke.auth.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcmoke.auth.dto.UserDetailDto;
+import com.qcmoke.auth.vo.UserDetailVo;
 import com.qcmoke.auth.entity.User;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -35,6 +35,6 @@ public interface UserMapper extends BaseMapper<User> {
             "       u.username = #{username}" +
             "   GROUP BY " +
             "       u.username,u.uid,u.email,u.mobile,u.password, u.status,u.create_time,u.sex,u.dept_id,u.last_login_time,u.modify_time,u.description,u.avatar")
-    UserDetailDto selectUserDetailByUsername(@Param("username") String username);
+    UserDetailVo selectUserDetailByUsername(@Param("username") String username);
 
 }

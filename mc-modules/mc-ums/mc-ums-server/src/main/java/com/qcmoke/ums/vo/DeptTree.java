@@ -1,4 +1,4 @@
-package com.qcmoke.ums.dto;
+package com.qcmoke.ums.vo;
 
 import com.qcmoke.ums.entity.Dept;
 import lombok.Data;

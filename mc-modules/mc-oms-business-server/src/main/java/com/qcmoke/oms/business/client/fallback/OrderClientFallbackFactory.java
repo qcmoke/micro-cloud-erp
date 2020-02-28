@@ -1,6 +1,6 @@
 package com.qcmoke.oms.business.client.fallback;
 
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.business.client.OrderClient;
 import com.qcmoke.oms.dto.OrderDto;
 import feign.hystrix.FallbackFactory;

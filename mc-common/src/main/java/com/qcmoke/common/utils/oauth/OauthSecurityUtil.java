@@ -140,7 +140,7 @@ public class OauthSecurityUtil {
             return (String) body.get("value");
         } catch (Exception e) {
             String errorMsg = "从认证服务器获取公钥异常,e=" + e.getMessage();
-            logger.debug(errorMsg);
+            logger.error(errorMsg);
             return null;
         }
     }

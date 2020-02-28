@@ -1,6 +1,6 @@
 package com.qcmoke.oms.api;
 
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.dto.OrderDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

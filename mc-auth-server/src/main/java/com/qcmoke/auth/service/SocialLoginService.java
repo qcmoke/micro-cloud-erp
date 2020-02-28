@@ -3,7 +3,7 @@ package com.qcmoke.auth.service;
 import com.alibaba.fastjson.JSONObject;
 import com.qcmoke.auth.entity.UserConnection;
 import com.qcmoke.auth.exception.SocialException;
-import com.qcmoke.auth.vo.BindUserVo;
+import com.qcmoke.auth.dto.BindUserDto;
 import me.zhyd.oauth.model.AuthCallback;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthRequest;
@@ -23,11 +23,11 @@ public interface SocialLoginService {
 
     JSONObject resolveBind(String source, AuthCallback callback) throws SocialException;
 
-    OAuth2AccessToken bindLogin(BindUserVo bindUserVo, AuthUser authUser) throws SocialException;
+    OAuth2AccessToken bindLogin(BindUserDto bindUserDto, AuthUser authUser) throws SocialException;
 
-    OAuth2AccessToken signLogin(BindUserVo registerUser, AuthUser authUser) throws SocialException;
+    OAuth2AccessToken signLogin(BindUserDto registerUser, AuthUser authUser) throws SocialException;
 
-    void bind(BindUserVo bindUserVo, AuthUser authUser) throws SocialException;
+    void bind(BindUserDto bindUserDto, AuthUser authUser) throws SocialException;
 
-    void unbind(BindUserVo bindUserVo, String oauthType) throws SocialException;
+    void unbind(BindUserDto bindUserDto, String oauthType) throws SocialException;
 }

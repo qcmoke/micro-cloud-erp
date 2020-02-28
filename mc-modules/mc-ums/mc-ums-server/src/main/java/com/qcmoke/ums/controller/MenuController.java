@@ -1,10 +1,10 @@
 package com.qcmoke.ums.controller;
 
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.ums.entity.Menu;
 import com.qcmoke.ums.service.MenuService;
-import com.qcmoke.ums.dto.VueRouter;
+import com.qcmoke.ums.vo.VueRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class MenuController {
     @GetMapping("/getCurrentUserRouters")
     public Result<Object> getUserRouters(HttpServletRequest request) {
         String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>(2);
         List<VueRouter<Menu>> userRouters = this.menuService.getUserRouters(currentUsername);
         String userPermissions = this.menuService.findUserPermissions(currentUsername);
         String[] permissionArray = new String[0];

@@ -1,7 +1,7 @@
 package com.qcmoke.zuul.filter;
 
 import com.netflix.zuul.context.RequestContext;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import com.qcmoke.common.utils.ResponseWriterUtil;
 import com.qcmoke.zuul.util.ZuulUtil;
 import lombok.extern.slf4j.Slf4j;

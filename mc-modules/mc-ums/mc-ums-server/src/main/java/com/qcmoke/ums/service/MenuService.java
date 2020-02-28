@@ -2,7 +2,7 @@ package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.ums.entity.Menu;
-import com.qcmoke.ums.dto.VueRouter;
+import com.qcmoke.ums.vo.VueRouter;
 
 import java.util.List;
 

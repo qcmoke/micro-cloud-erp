@@ -1,11 +1,15 @@
 package com.qcmoke.ums.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.ums.vo.UserDetailVo;
 import com.qcmoke.ums.entity.User;
-import com.qcmoke.ums.dto.UserDetailVo;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -34,4 +38,30 @@ public interface UserMapper extends BaseMapper<User> {
             "   GROUP BY " +
             "       u.username,u.uid,u.email,u.mobile,u.password, u.status,u.create_time,u.sex,u.dept_id,u.last_login_time,u.modify_time,u.description,u.avatar")
     UserDetailVo selectUserDetailByUsername(@Param("username") String username);
+
+
+    @Select("<script>" +
+            "   SELECT " +
+            "       u.uid userId," +
+            "       u.username," +
+            "       u.email," +
+            "       u.mobile," +
+            "       u.status," +
+            "       u.create_time createTime," +
+            "       u.sex sex," +
+            "       u.dept_id deptId," +
+            "       u.last_login_time lastLoginTime," +
+            "       u.modify_time modifyTime," +
+            "       u.description," +
+            "       u.avatar," +
+            "       d.dept_name deptName," +
+            "       GROUP_CONCAT(r.rid) roleId," +
+            "       GROUP_CONCAT(r.rname) roleName" +
+            "   FROM t_user u" +
+            "   LEFT JOIN t_dept d ON (u.dept_id = d.dept_id)" +
+            "   LEFT JOIN t_user_role ur ON (u.uid = ur.uid)" +
+            "   LEFT JOIN t_role r ON r.rid = ur.rid" +
+            "   GROUP BY u.username,u.uid,u.email,u.mobile,u.status,u.create_time,u.sex,u.dept_id,u.last_login_time,u.modify_time,u.description,u.avatar" +
+            "</script>")
+    IPage<Map<String, Object>> getPage(Page<?> page, User user);
 }

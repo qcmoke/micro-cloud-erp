@@ -2,7 +2,7 @@ package com.qcmoke.zuul.util;
 
 import com.netflix.client.ClientException;
 import com.netflix.hystrix.exception.HystrixTimeoutException;
-import com.qcmoke.common.dto.Result;
+import com.qcmoke.common.vo.Result;
 import org.springframework.http.HttpStatus;
 
 import java.net.ConnectException;

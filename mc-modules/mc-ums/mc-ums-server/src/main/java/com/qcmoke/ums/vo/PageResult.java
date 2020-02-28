@@ -1,4 +1,4 @@
-package com.qcmoke.ums.dto;
+package com.qcmoke.ums.vo;
 
 import lombok.Data;
 
@@ -10,5 +10,5 @@ import java.util.List;
 @Data
 public class PageResult {
     private List<?> rows;
-    private Integer total;
+    private Number total;
 }

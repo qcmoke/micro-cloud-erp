@@ -1,4 +1,4 @@
-package com.qcmoke.auth.vo;
+package com.qcmoke.auth.dto;
 
 import lombok.Data;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @author qcmoke
  */
 @Data
-public class BindUserVo implements Serializable {
+public class BindUserDto implements Serializable {
 
     private static final long serialVersionUID = -3890998115990166651L;
 

@@ -8,21 +8,21 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 39.106.195.202:8848
+        server-addr: 129.204.185.161:8848
         ip: 129.204.185.161
   datasource:
     #整合p6spy作sql性能，引入p6spy依赖后,需要修改driver和url即可，并在resources下添加spy.properties，在配置里可以自定义日志输出，实现MessageFormattingStrategy接口即可（P6spySqlFormatConfig）
     driver-class-name: com.p6spy.engine.spy.P6SpyDriver
-    url: jdbc:p6spy:mysql://39.106.195.202:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:p6spy:mysql://129.204.185.161:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-    password: qcmoke123456
+    password: qcmoke)[good](boy
 
   #redis配置
   redis:
     database: 0
-    host: 39.106.195.202
+    host: 129.204.185.161
     port: 6379
-    password: qcmoke123456
+    password: qcmoke)[good](boy
     jedis:
       pool:
         min-idle: 8
@@ -42,6 +42,6 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
 
-#logging:
-#  level:
-#    com.qcmoke: debug
+logging:
+  level:
+    com.qcmoke: info
