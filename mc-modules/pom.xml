@@ -16,13 +16,11 @@
 
 
     <modules>
-        <module>mc-crm</module>
         <module>mc-fms</module>
         <module>mc-oms</module>
-        <module>mc-scm</module>
         <module>mc-wms</module>
         <module>mc-ums</module>
-        <module>mc-oms-business-server</module>
+        <module>mc-pms</module>
     </modules>
 
 

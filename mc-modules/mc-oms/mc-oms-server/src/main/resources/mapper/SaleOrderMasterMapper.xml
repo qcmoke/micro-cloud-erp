@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcmoke.oms.mapper.SaleOrderMasterMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qcmoke.oms.entity.SaleOrderMaster">
+        <id column="master_id" property="masterId" />
+        <result column="customer_id" property="customerId" />
+        <result column="sale_date" property="saleDate" />
+        <result column="total_amount" property="totalAmount" />
+        <result column="freight_amount" property="freightAmount" />
+        <result column="pay_type" property="payType" />
+        <result column="status" property="status" />
+        <result column="delivery_time" property="deliveryTime" />
+        <result column="receive_time" property="receiveTime" />
+        <result column="receiver_name" property="receiverName" />
+        <result column="receiver_phone" property="receiverPhone" />
+        <result column="receiver_post_code" property="receiverPostCode" />
+        <result column="receiver_province" property="receiverProvince" />
+        <result column="receiver_city" property="receiverCity" />
+        <result column="receiver_region" property="receiverRegion" />
+        <result column="receiver_detail_address" property="receiverDetailAddress" />
+        <result column="delivery_sn" property="deliverySn" />
+        <result column="bill_type" property="billType" />
+        <result column="bill_content" property="billContent" />
+        <result column="bill_header" property="billHeader" />
+        <result column="bill_receiver_phone" property="billReceiverPhone" />
+        <result column="bill_receiver_email" property="billReceiverEmail" />
+        <result column="payment_time" property="paymentTime" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="delete_status" property="deleteStatus" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        master_id, customer_id, sale_date, total_amount, freight_amount, pay_type, status, delivery_time, receive_time, receiver_name, receiver_phone, receiver_post_code, receiver_province, receiver_city, receiver_region, receiver_detail_address, delivery_sn, bill_type, bill_content, bill_header, bill_receiver_phone, bill_receiver_email, payment_time, create_time, modify_time, delete_status, note
+    </sql>
+
+</mapper>

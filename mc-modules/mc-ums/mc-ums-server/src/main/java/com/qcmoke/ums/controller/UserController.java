@@ -5,6 +5,7 @@ import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.ums.dto.UserDto;
 import com.qcmoke.ums.entity.User;
 import com.qcmoke.ums.service.UserService;
 import com.qcmoke.ums.vo.PageResult;
@@ -45,6 +46,11 @@ public class UserController {
         String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
         log.info("记录登录成功日志,currentUsername={}", currentUsername);
         return Result.ok();
+    }
+
+    @PutMapping
+    public void updateUser(@Valid UserDto userDto) {
+        this.userService.updateUser(userDto);
     }
 
 

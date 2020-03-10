@@ -1,6 +1,7 @@
 package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.ums.dto.RoleDto;
 import com.qcmoke.ums.entity.Role;
 
 import java.util.List;
@@ -17,4 +18,5 @@ public interface RoleService extends IService<Role> {
 
     List<Role> findAllRoles();
 
+    void updateRole(RoleDto roleDto);
 }

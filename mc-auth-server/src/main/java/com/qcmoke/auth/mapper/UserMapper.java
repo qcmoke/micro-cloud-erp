@@ -27,8 +27,9 @@ public interface UserMapper extends BaseMapper<User> {
      * @return 用户详细信息
      */
     @Select("   SELECT" +
-            "       u.*,GROUP_CONCAT(r.rname) roleNames" +
+            "       u.*,d.*,GROUP_CONCAT(r.rname_zh) roleNames" +
             "   FROM t_user u" +
+            "   LEFT JOIN t_dept d ON (u.dept_id = d.dept_id)" +
             "   LEFT JOIN t_user_role ur ON (u.uid = ur.uid)" +
             "   LEFT JOIN t_role r ON r.rid = ur.rid" +
             "   WHERE  " +

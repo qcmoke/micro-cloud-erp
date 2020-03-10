@@ -1,0 +1,50 @@
+server:
+  port: 8030
+
+
+## 数据源
+spring:
+  ##热部署
+  devtools:
+    restart:
+      enabled: true
+
+  application:
+    name: mc-pms-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 129.204.185.161:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://129.204.185.161:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    username: root
+    password: qcmoke)[good](boy
+  #redis配置
+  redis:
+    database: 0
+    host: 129.204.185.161
+    port: 6379
+    password: qcmoke)[good](boy
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 10000
+    timeout: 5000
+
+##配置mybatis plus
+mybatis-plus:
+  type-aliases-package: com.qcmoke.pms.entity
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto                                         #MySql主键自增策略
+      table-prefix: t_                                      #全局表前缀
+  configuration:
+    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+
+logging:
+  level:
+    com.qcmoke: debug

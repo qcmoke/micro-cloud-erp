@@ -1,0 +1,73 @@
+server:
+  port: 8040
+
+
+## 数据源
+spring:
+  ##热部署
+  devtools:
+    restart:
+      enabled: true
+
+  application:
+    name: mc-wms-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 129.204.185.161:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://129.204.185.161:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    username: root
+    password: qcmoke)[good](boy
+  #redis配置
+  redis:
+    database: 0
+    host: 129.204.185.161
+    port: 6379
+    password: qcmoke)[good](boy
+    jedis:
+      pool:
+        min-idle: 8
+        max-idle: 500
+        max-active: 2000
+        max-wait: 10000
+    timeout: 5000
+
+
+
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:7001/eureka
+#  #个性化定制
+#  instance:
+#    #服务实例id（application.name可以对应多个instance）
+#    instance-id: mc-wms-server-8082
+#    #显示前缀ip
+#    prefer-ip-address: true
+
+security:
+  oauth2:
+    client:
+      client-id: gateway
+      client-secret: 123456
+    resource:
+      jwt:
+        key-uri: http://127.0.0.1:9070/auth/oauth/token_key #让网关负载均衡到认证服务器获取公钥
+
+
+##配置mybatis plus
+mybatis-plus:
+  type-aliases-package: com.qcmoke.wms.entity
+  mapper-locations: classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto                                         #MySql主键自增策略
+      table-prefix: t_                                      #全局表前缀
+  configuration:
+    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+
+logging:
+  level:
+    com.qcmoke: debug

@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : aliyun-mysql
+ Source Server         : tenxunyun
  Source Server Type    : MySQL
- Source Server Version : 50564
- Source Host           : 39.106.195.202:3306
+ Source Server Version : 50724
+ Source Host           : 129.204.185.161:3306
  Source Schema         : mc-ums
 
  Target Server Type    : MySQL
- Target Server Version : 50564
+ Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 13/02/2020 17:39:04
+ Date: 02/03/2020 10:44:29
 */
 
 SET NAMES utf8mb4;
@@ -26,10 +26,10 @@ CREATE TABLE `t_dept`  (
   `parent_id` bigint(20) NOT NULL COMMENT '上级部门ID',
   `dept_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '部门名称',
   `order_num` int(20) NULL DEFAULT NULL COMMENT '排序',
-  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
-  `modify_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`dept_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_dept
@@ -56,10 +56,10 @@ CREATE TABLE `t_menu`  (
   `icon` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图标',
   `type` char(2) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型 0菜单 1按钮',
   `order_num` double(20, 0) NULL DEFAULT NULL COMMENT '排序',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `modify_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`mid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 181 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_menu
@@ -103,10 +103,10 @@ INSERT INTO `t_menu` VALUES (165, 163, '修改', NULL, NULL, NULL, 'client:updat
 INSERT INTO `t_menu` VALUES (166, 163, '删除', NULL, NULL, NULL, 'client:delete', NULL, '1', NULL, '2019-09-26 22:58:55', NULL);
 INSERT INTO `t_menu` VALUES (167, 163, '解密', NULL, NULL, NULL, 'client:decrypt', NULL, '1', NULL, '2019-09-26 22:59:08', NULL);
 INSERT INTO `t_menu` VALUES (168, 0, '静态组件', NULL, '/components', 'Layout', '', 'el-icon-present', '0', 6, '2019-12-02 16:41:28', '2020-01-16 13:59:55');
-INSERT INTO `t_menu` VALUES (169, 168, '二级菜单', NULL, '/two', 'demos/two/Index', '', '', '0', 1, '2019-12-02 16:41:51', NULL);
-INSERT INTO `t_menu` VALUES (170, 169, '三级菜单', NULL, '/three', 'demos/two/three/Index', '', '', '0', 1, '2019-12-02 16:42:09', NULL);
-INSERT INTO `t_menu` VALUES (171, 168, 'MarkDown', NULL, '/components/markdown', 'demos/markdown', '', '', '0', 2, '2019-12-02 16:42:34', NULL);
-INSERT INTO `t_menu` VALUES (172, 168, '富文本编辑器', NULL, '/components/tinymce', 'demos/tinymce', '', '', '0', 3, '2019-12-02 16:42:50', NULL);
+INSERT INTO `t_menu` VALUES (169, 168, '二级菜单', NULL, '/two', 'async/demos/two/Index', '', '', '0', 1, '2019-12-02 16:41:51', NULL);
+INSERT INTO `t_menu` VALUES (170, 169, '三级菜单', NULL, '/three', 'async/demos/two/three/Index', '', '', '0', 1, '2019-12-02 16:42:09', NULL);
+INSERT INTO `t_menu` VALUES (171, 168, 'MarkDown', NULL, '/components/markdown', 'async/demos/markdown', '', '', '0', 2, '2019-12-02 16:42:34', NULL);
+INSERT INTO `t_menu` VALUES (172, 168, '富文本编辑器', NULL, '/components/tinymce', 'async/demos/tinymce', '', '', '0', 3, '2019-12-02 16:42:50', NULL);
 INSERT INTO `t_menu` VALUES (180, 1, '测试菜单', NULL, '/test', 'async/system/test/Index', 'test:view', '', '0', 6, '2020-01-27 00:39:39', '2020-01-28 17:30:55');
 
 -- ----------------------------
@@ -118,10 +118,10 @@ CREATE TABLE `t_role`  (
   `rname` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
   `rname_zh` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色中文名称',
   `remark` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色描述',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `modify_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`rid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_role
@@ -138,7 +138,7 @@ DROP TABLE IF EXISTS `t_role_menu`;
 CREATE TABLE `t_role_menu`  (
   `rid` bigint(20) NOT NULL,
   `mid` bigint(20) NOT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关联表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色菜单关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_role_menu
@@ -312,16 +312,16 @@ CREATE TABLE `t_user`  (
   `email` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
   `mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
   `status` int(1) NOT NULL COMMENT '状态 0锁定 1有效',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `modify_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
-  `last_login_time` datetime NULL DEFAULT NULL COMMENT '最近访问时间',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  `last_login_time` datetime(0) NULL DEFAULT NULL COMMENT '最近访问时间',
   `sex` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '性别 0男 1女 2保密',
   `is_tab` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否开启tab，0关闭 1开启',
   `theme` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '主题',
   `avatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '头像',
   `description` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user
@@ -329,7 +329,7 @@ CREATE TABLE `t_user`  (
 INSERT INTO `t_user` VALUES (1, 'MrBird', '$2a$10$gzhiUb1ldc1Rf3lka4k/WOoFKKGPepHSzJxzcPSN5/65SzkMdc.SK', 2, 'mrbird@qq.com', '17788888888', 1, '2019-06-14 20:39:22', '2019-07-19 10:18:36', '2020-01-28 16:18:09', '0', '1', 'white', 'gaOngJwsRYRaVAuXXcmB.png', '我是帅比作者。');
 INSERT INTO `t_user` VALUES (15, 'scott', '$2a$10$7tATi2STciLHnEgO/RfIxOYf2MQBu/SDVMRDs54rlSYVj2VmwwCHC', 5, 'scott@hotmail.com', '17720888888', 1, '2019-07-20 19:00:32', '2019-07-31 10:14:29', '2020-01-26 22:34:00', '2', NULL, NULL, 'BiazfanxmamNRoxxVxka.png', NULL);
 INSERT INTO `t_user` VALUES (16, 'Jane', '$2a$10$ECkfipOPY7hORVdlSzIOX.8hnig0shAZQPG8pQ7D5iVP.uVogmmHy', 4, 'Jane@hotmail.com', '13489898989', 1, '2019-09-01 10:31:21', '2019-09-01 10:32:10', '2019-09-01 10:32:27', '1', NULL, NULL, '2dd7a2d09fa94bf8b5c52e5318868b4d9.jpg', NULL);
-INSERT INTO `t_user` VALUES (17, 'qcmoke', '$2a$10$IYGlOaQYfpu0JMDPuxY.HO1IV2yyy5ZBg08A5fhx1lseJYRNdLxp.', 1, 'qcmoke@gmail.com', '13885566777', 1, '2020-01-26 23:24:09', '2020-02-13 17:31:32', '2020-01-28 18:43:48', '0', NULL, 'white', 'BiazfanxmamNRoxxVxka.png', '一个非常帅气的good boy! Peace & Love ! ');
+INSERT INTO `t_user` VALUES (17, 'qcmoke', '$2a$10$IYGlOaQYfpu0JMDPuxY.HO1IV2yyy5ZBg08A5fhx1lseJYRNdLxp.', 1, 'qcmoke@gmail.com', '13885566777', 1, '2020-01-26 23:24:09', '2020-03-02 08:33:55', '2020-01-28 18:43:48', '0', NULL, 'white', 'BiazfanxmamNRoxxVxka.png', '一个非常帅气的good boy! Peace & Love ！');
 INSERT INTO `t_user` VALUES (18, 'zhangsan', '$2a$10$i5LI/oQvkUUHQeEZwflhT..EOuUhvwm1R81LuP6zBjg7oGQivSqb2', NULL, NULL, NULL, 1, '2020-02-13 16:45:44', NULL, NULL, '2', NULL, NULL, 'default.jpg', '注册用户');
 
 -- ----------------------------
@@ -347,12 +347,12 @@ CREATE TABLE `t_user_connection`  (
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`username`, `provider_name`, `provider_user_id`) USING BTREE,
   UNIQUE INDEX `UserConnectionRank`(`username`, `provider_name`, `provider_user_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user_connection
 -- ----------------------------
-INSERT INTO `t_user_connection` VALUES ('qcmoke', 'GITHUB', '30585066', 'qcmoke', 'qcmoke', 'https://avatars1.githubusercontent.com/u/30585066?v=4', NULL, NULL);
+INSERT INTO `t_user_connection` VALUES ('qcmoke', 'GITEE', '2001429', 'qcmoke', 'qcmoke', 'https://gitee.com/assets/no_portrait.png', '', NULL);
 
 -- ----------------------------
 -- Table structure for t_user_role
@@ -361,7 +361,7 @@ DROP TABLE IF EXISTS `t_user_role`;
 CREATE TABLE `t_user_role`  (
   `uid` bigint(20) NOT NULL COMMENT '用户ID',
   `rid` bigint(20) NOT NULL COMMENT '角色ID'
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关联表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户角色关联表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_user_role

@@ -87,14 +87,6 @@ public class TreeUtil {
                 }
             }
         });
-
-        //添加404路由
-        VueRouter<T> router404 = new VueRouter<>();
-        router404.setName("404");
-        router404.setComponent("error-page/404");
-        router404.setPath("*");
-        topRoutes.add(router404);
-
         return topRoutes;
     }
 }

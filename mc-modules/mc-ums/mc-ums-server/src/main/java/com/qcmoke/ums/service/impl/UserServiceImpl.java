@@ -2,14 +2,18 @@ package com.qcmoke.ums.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.vo.CurrentUser;
+import com.qcmoke.ums.dto.UserDto;
 import com.qcmoke.ums.entity.User;
+import com.qcmoke.ums.entity.UserRole;
 import com.qcmoke.ums.mapper.MenuMapper;
 import com.qcmoke.ums.mapper.UserMapper;
+import com.qcmoke.ums.service.UserRoleService;
 import com.qcmoke.ums.service.UserService;
 import com.qcmoke.ums.utils.SqlUtil;
 import com.qcmoke.ums.vo.PageResult;
@@ -20,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * <p>
@@ -38,9 +39,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
-
     @Autowired
     private MenuMapper menuMapper;
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Override
     public UserDetailVo getUserDetailByUsername(String username) {
@@ -85,4 +87,30 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return pageResult;
     }
 
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateUser(UserDto userDto) {
+        // 更新用户
+        User user = new User();
+        user.setUid(userDto.getUserId().longValue());
+        user.setModifyTime(new Date());
+        user.setSex(userDto.getSex());
+        user.setEmail(userDto.getEmail());
+        user.setStatus(userDto.getStatus());
+        user.setMobile(userDto.getMobile());
+        updateById(user);
+
+        //替换用户角色
+        userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUid, user.getUid()));
+        String[] roleNames = userDto.getRoleId().split(StringPool.COMMA);
+        List<UserRole> userRoles = new ArrayList<>();
+        Arrays.stream(roleNames).forEach(roleId -> {
+            UserRole userRole = new UserRole();
+            userRole.setUid(user.getUid());
+            userRole.setRid(Long.valueOf(roleId));
+            userRoles.add(userRole);
+        });
+        userRoleService.saveBatch(userRoles);
+    }
 }

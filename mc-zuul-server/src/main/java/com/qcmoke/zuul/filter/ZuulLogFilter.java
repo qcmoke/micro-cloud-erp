@@ -30,12 +30,6 @@ public class ZuulLogFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
         String requestUri = request.getRequestURI();
 
-        String authorization = request.getHeader("Authorization");
-        String authorization2 = request.getHeader("authorization");
-
-        log.debug("requestUri={},authorization={},authorization2={}", requestUri, authorization, authorization2);
-
-
         if (antPathMatcher.match(RouteConstant.OAUTH_GATEWAY_ROUTE_URL, requestUri)) {
             log("用户对认证服务器访问,requestURI:" + requestUri);
             chain.doFilter(request, response);

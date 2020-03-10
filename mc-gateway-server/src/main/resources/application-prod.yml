@@ -20,14 +20,14 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://129.204.185.161:3306/mc-ums?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
-    password: qcmoke123456
+    password: qcmoke)[good](boy
 
   #redis配置
   redis:
     database: 0
     host: 129.204.185.161
     port: 6379
-    password: qcmoke123456
+    password: qcmoke)[good](boy
     jedis:
       pool:
         min-idle: 8

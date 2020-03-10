@@ -2,13 +2,16 @@ package com.qcmoke.ums.controller;
 
 
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.ums.dto.RoleDto;
 import com.qcmoke.ums.entity.Role;
 import com.qcmoke.ums.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -28,10 +31,15 @@ public class RoleController {
     private RoleService roleService;
 
 
-    @GetMapping("options")
+    @GetMapping("/options")
     public Result<Object> roles() {
         List<Role> allRoles = roleService.findAllRoles();
         return Result.ok(allRoles);
+    }
+
+    @PutMapping
+    public void updateRole(@Valid RoleDto roleDto) {
+        this.roleService.updateRole(roleDto);
     }
 }
 

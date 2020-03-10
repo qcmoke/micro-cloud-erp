@@ -3,6 +3,7 @@ package com.qcmoke.ums.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.vo.CurrentUser;
+import com.qcmoke.ums.dto.UserDto;
 import com.qcmoke.ums.entity.User;
 import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.vo.UserDetailVo;
@@ -30,4 +31,6 @@ public interface UserService extends IService<User> {
     boolean updateUserInfo(User user);
 
     PageResult getPage(CurrentUser currentUser, PageQuery pageQuery);
+
+    void updateUser(UserDto userDto);
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qcmoke.fms.mapper.AccountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.qcmoke.fms.entity.Account">
+        <id column="account_id" property="accountId" />
+        <result column="account_name" property="accountName" />
+        <result column="bank_name" property="bankName" />
+        <result column="bank_num" property="bankNum" />
+        <result column="amount" property="amount" />
+        <result column="is_default" property="isDefault" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+        <result column="delete_status" property="deleteStatus" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        account_id, account_name, bank_name, bank_num, amount, is_default, create_time, modify_time, delete_status
+    </sql>
+
+</mapper>
