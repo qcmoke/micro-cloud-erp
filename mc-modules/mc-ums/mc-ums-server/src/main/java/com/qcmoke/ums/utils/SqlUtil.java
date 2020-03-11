@@ -16,20 +16,6 @@ import java.util.stream.IntStream;
  */
 public class SqlUtil {
 
-
-    /**
-     * 封装前端分页表格所需数据
-     *
-     * @param pageInfo pageInfo
-     * @return Map<String, Object>
-     */
-    public static Map<String, Object> getDataTable(IPage<?> pageInfo) {
-        Map<String, Object> data = new HashMap<>(2);
-        data.put("rows", pageInfo.getRecords());
-        data.put("total", pageInfo.getTotal());
-        return data;
-    }
-
     /**
      * 处理排序（分页情况下） for mybatis-plus
      *
@@ -177,7 +163,7 @@ public class SqlUtil {
      */
     public static String underscoreToCamel(String value) {
         StringBuilder result = new StringBuilder();
-        String[] arr = value.split("_");
+        String[] arr = "_".split(value);
         for (String s : arr) {
             result.append((String.valueOf(s.charAt(0))).toUpperCase()).append(s.substring(1));
         }

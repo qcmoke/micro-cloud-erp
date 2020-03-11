@@ -169,9 +169,9 @@ public class SocialLoginServiceImpl implements SocialLoginService {
         userMapper.insert(systemUser);
 
         UserRole userRole = new UserRole();
-        userRole.setUid(systemUser.getUid());
+        userRole.setUserId(systemUser.getUserId());
         // 注册用户角色 ID
-        userRole.setRid(2L);
+        userRole.setRoleId(2L);
         userRoleMapper.insert(userRole);
 
         this.createConnection(systemUser, authUser);

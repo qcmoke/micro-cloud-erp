@@ -3,14 +3,16 @@ package com.qcmoke.ums.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.dto.PageQuery;
-import com.qcmoke.ums.vo.DeptTree;
-import com.qcmoke.ums.vo.PageResult;
-import com.qcmoke.ums.vo.Tree;
+import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.ums.entity.Dept;
+import com.qcmoke.ums.export.DeptExport;
 import com.qcmoke.ums.mapper.DeptMapper;
 import com.qcmoke.ums.service.DeptService;
 import com.qcmoke.ums.utils.SqlUtil;
 import com.qcmoke.ums.utils.TreeUtil;
+import com.qcmoke.ums.vo.DeptTree;
+import com.qcmoke.ums.vo.PageResult;
+import com.qcmoke.ums.vo.Tree;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -29,11 +31,26 @@ import java.util.List;
 public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements DeptService {
 
     @Override
+    public List<DeptExport> findDepts(Dept dept, PageQuery pageQuery) {
+        QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.isNotBlank(dept.getDeptName())) {
+            queryWrapper.lambda().like(Dept::getDeptName, dept.getDeptName());
+        }
+        if (StringUtils.isNotBlank(dept.getCreateTimeFrom()) && StringUtils.isNotBlank(dept.getCreateTimeTo())) {
+            queryWrapper.lambda()
+                    .ge(Dept::getCreateTime, dept.getCreateTimeFrom())
+                    .le(Dept::getCreateTime, dept.getCreateTimeTo());
+        }
+        SqlUtil.handleWrapperSort(pageQuery, queryWrapper, "orderNum", PageQuery.ORDER_ASC, true);
+        List<Dept> deptList = this.baseMapper.selectList(queryWrapper);
+        return BeanCopyUtil.copy(deptList, DeptExport.class);
+    }
+
+    @Override
     public PageResult queryDeptList(PageQuery pageQuery, Dept dept) {
         PageResult pageResult = new PageResult();
         try {
             QueryWrapper<Dept> queryWrapper = new QueryWrapper<>();
-
             if (StringUtils.isNotBlank(dept.getDeptName())) {
                 queryWrapper.lambda().like(Dept::getDeptName, dept.getDeptName());
             }

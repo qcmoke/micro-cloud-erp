@@ -133,7 +133,7 @@ public class Oauth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 AuthUserDetails authUserDetails = (AuthUserDetails) authentication.getPrincipal();
                 //设置附加信息
                 ((DefaultOAuth2AccessToken) oAuth2AccessToken).setAdditionalInformation(new HashMap<String, Object>(1) {{
-                    put("uid", authUserDetails.getUid());
+                    put("userId", authUserDetails.getUserId());
                 }});
                 return super.enhance(oAuth2AccessToken, authentication);
             }

@@ -2,9 +2,12 @@ package com.qcmoke.ums.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.ums.export.DeptExport;
 import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.entity.Dept;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,4 +21,6 @@ import org.springframework.stereotype.Repository;
 public interface DeptService extends IService<Dept> {
 
     PageResult queryDeptList(PageQuery pageQuery, Dept dept);
+
+    List<DeptExport> findDepts(Dept dept, PageQuery pageQuery);
 }

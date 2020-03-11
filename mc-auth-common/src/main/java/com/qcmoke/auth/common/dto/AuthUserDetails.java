@@ -18,12 +18,12 @@ import java.util.Collection;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class AuthUserDetails extends User {
-    private Long uid;
+    private Long userId;
     private Integer status;
 
-    public AuthUserDetails(String username, String password, Long uid, Integer status, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUserDetails(String username, String password, Long userId, Integer status, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-        this.uid = uid;
+        this.userId = userId;
         this.status = status;
     }
 }

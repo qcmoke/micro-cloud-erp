@@ -62,7 +62,7 @@ public class UserController {
     @PutMapping("/profile")
     public Result<Object> updateUserInfo(@Valid User user, HttpServletRequest request) {
         Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId(request);
-        user.setUid(currentUserId);
+        user.setUserId(currentUserId);
         user.setModifyTime(new Date());
         boolean isUpdated = this.userService.updateUserInfo(user);
         if (!isUpdated) {

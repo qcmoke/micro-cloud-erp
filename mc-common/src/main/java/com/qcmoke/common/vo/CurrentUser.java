@@ -10,7 +10,7 @@ import java.util.Set;
  */
 @Data
 public class CurrentUser implements Serializable {
-    private Long uid;
+    private Long userId;
     private String username;
     private Set<String> authorities;
 }

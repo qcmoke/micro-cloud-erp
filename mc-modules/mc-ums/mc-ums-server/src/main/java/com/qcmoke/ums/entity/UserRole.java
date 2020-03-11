@@ -26,12 +26,12 @@ private static final long serialVersionUID=1L;
     /**
      * 用户ID
      */
-    private Long uid;
+    private Long userId;
 
     /**
      * 角色ID
      */
-    private Long rid;
+    private Long roleId;
 
 
 }

@@ -20,12 +20,12 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param username 用户名
      * @return 用户权限
      */
-    @Select("   SELECT DISTINCT r.rname" +
+    @Select("   SELECT DISTINCT r.role_name" +
             "   FROM t_role r" +
-            "            LEFT JOIN t_user_role ur ON (r.rid = ur.rid)" +
-            "            LEFT JOIN t_user u ON (u.uid = ur.uid)" +
-            "            LEFT JOIN t_role_menu rm ON (rm.rid = r.rid)" +
-            "            LEFT JOIN t_menu m ON (m.mid = rm.mid)" +
+            "            LEFT JOIN t_user_role ur ON (r.role_id = ur.role_id)" +
+            "            LEFT JOIN t_user u ON (u.user_id = ur.user_id)" +
+            "            LEFT JOIN t_role_menu rm ON (rm.role_id = r.role_id)" +
+            "            LEFT JOIN t_menu m ON (m.menu_id = rm.menu_id)" +
             "   WHERE u.username = #{username}" +
             "   AND m.perms IS NOT NULL" +
             "   AND m.perms <> ''")
@@ -40,10 +40,10 @@ public interface MenuMapper extends BaseMapper<Menu> {
      */
     @Select("   select distinct m.perms" +
             "   from t_role r" +
-            "            left join t_user_role ur on (r.rid = ur.rid)" +
-            "            left join t_user u on (u.uid = ur.uid)" +
-            "            left join t_role_menu rm on (rm.rid = r.rid)" +
-            "            left join t_menu m on (m.mid = rm.mid)" +
+            "            left join t_user_role ur on (r.role_id = ur.role_id)" +
+            "            left join t_user u on (u.user_id = ur.user_id)" +
+            "            left join t_role_menu rm on (rm.role_id = r.role_id)" +
+            "            left join t_menu m on (m.menu_id = rm.menu_id)" +
             "   where u.username = #{username}" +
             "     and m.perms is not null" +
             "     and m.perms <> ''")

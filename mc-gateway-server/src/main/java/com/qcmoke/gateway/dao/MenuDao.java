@@ -18,10 +18,10 @@ public class MenuDao {
 
     public List<Map<String, Object>> selectAllApiRolesArrays() {
         String sql = "" +
-                "   SELECT DISTINCT m.api as api,r.rname as roleName" +
+                "   SELECT DISTINCT m.api as api,r.role_name as roleName" +
                 "	FROM t_menu m" +
-                "	LEFT JOIN t_role_menu rm ON ( rm.mid = m.mid )" +
-                "	LEFT JOIN t_role r ON ( r.rid = rm.rid ) " +
+                "	LEFT JOIN t_role_menu rm ON ( rm.menu_id = m.menu_id )" +
+                "	LEFT JOIN t_role r ON ( r.role_id = rm.role_id ) " +
                 "	WHERE" +
                 "	m.api IS NOT NULL" +
                 "	AND m.api <> ''";

@@ -24,13 +24,13 @@ import java.util.Date;
 @TableName("t_menu")
 public class Menu implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 菜单/按钮ID
      */
-    @TableId(value = "mid", type = IdType.AUTO)
-    private Long mid;
+    @TableId(value = "menu_id", type = IdType.AUTO)
+    private Long menuId;
 
     /**
      * 上级菜单ID
@@ -40,7 +40,7 @@ private static final long serialVersionUID=1L;
     /**
      * 菜单/按钮名称
      */
-    private String mname;
+    private String menuName;
 
     /**
      * 后端网关对应api
@@ -75,7 +75,7 @@ private static final long serialVersionUID=1L;
     /**
      * 排序
      */
-    private Double orderNum;
+    private Integer orderNum;
 
     /**
      * 创建时间

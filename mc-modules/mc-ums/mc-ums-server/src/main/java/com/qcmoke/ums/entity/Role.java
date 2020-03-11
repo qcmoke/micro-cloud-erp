@@ -29,18 +29,18 @@ private static final long serialVersionUID=1L;
     /**
      * 角色ID
      */
-    @TableId(value = "rid", type = IdType.AUTO)
-    private Long rid;
+    @TableId(value = "role_id", type = IdType.AUTO)
+    private Long roleId;
 
     /**
      * 角色名称
      */
-    private String rname;
+    private String roleName;
 
     /**
      * 角色中文名称
      */
-    private String rnameZh;
+    private String roleNameZh;
 
     /**
      * 角色描述

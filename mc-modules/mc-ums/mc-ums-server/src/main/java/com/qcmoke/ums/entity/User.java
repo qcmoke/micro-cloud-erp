@@ -29,8 +29,8 @@ private static final long serialVersionUID=1L;
     /**
      * 用户ID
      */
-    @TableId(value = "uid", type = IdType.AUTO)
-    private Long uid;
+    @TableId(value = "user_id", type = IdType.AUTO)
+    private Long userId;
 
     /**
      * 用户名

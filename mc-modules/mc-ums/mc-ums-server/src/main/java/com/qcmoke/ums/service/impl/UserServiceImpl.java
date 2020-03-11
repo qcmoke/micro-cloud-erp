@@ -93,22 +93,23 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void updateUser(UserDto userDto) {
         // 更新用户
         User user = new User();
-        user.setUid(userDto.getUserId().longValue());
+        user.setUserId(userDto.getUserId().longValue());
         user.setModifyTime(new Date());
         user.setSex(userDto.getSex());
         user.setEmail(userDto.getEmail());
         user.setStatus(userDto.getStatus());
         user.setMobile(userDto.getMobile());
+        user.setDeptId(userDto.getDeptId());
         updateById(user);
 
         //替换用户角色
-        userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUid, user.getUid()));
+        userRoleService.remove(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, user.getUserId()));
         String[] roleNames = userDto.getRoleId().split(StringPool.COMMA);
         List<UserRole> userRoles = new ArrayList<>();
         Arrays.stream(roleNames).forEach(roleId -> {
             UserRole userRole = new UserRole();
-            userRole.setUid(user.getUid());
-            userRole.setRid(Long.valueOf(roleId));
+            userRole.setUserId(user.getUserId());
+            userRole.setRoleId(Long.valueOf(roleId));
             userRoles.add(userRole);
         });
         userRoleService.saveBatch(userRoles);

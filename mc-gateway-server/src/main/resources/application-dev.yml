@@ -4,7 +4,7 @@ server:
 #获取公钥配置
 jwt-oauth-service-public-key:
   #认证服务器的ip
-  oauth-service-ip: 129.204.185.161
+  oauth-service-ip: 127.0.0.1
   #认证服务器端口
   oauth-service-port: 9090
   #clientId

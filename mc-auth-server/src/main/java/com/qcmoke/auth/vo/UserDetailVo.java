@@ -20,7 +20,7 @@ public class UserDetailVo implements Serializable {
     /**
      * 用户ID
      */
-    private Long uid;
+    private Long userId;
 
     /**
      * 用户名
@@ -90,6 +90,8 @@ public class UserDetailVo implements Serializable {
 
 
     private String roleNames;
+
+    private String rolePermissions;
 
     private Set<String> authorities;
 

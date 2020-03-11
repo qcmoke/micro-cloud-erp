@@ -1,11 +1,11 @@
 package com.qcmoke.auth.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.qcmoke.auth.vo.UserDetailVo;
 import com.qcmoke.auth.entity.User;
 import com.qcmoke.auth.mapper.MenuMapper;
 import com.qcmoke.auth.mapper.UserMapper;
 import com.qcmoke.auth.service.UserService;
+import com.qcmoke.auth.vo.UserDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +37,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (userDetailVo == null) {
             return null;
         }
-        String roleNames = userDetailVo.getRoleNames();
-        String[] authorities = StringUtils.split(roleNames, ",");
+        String rolePermissions = userDetailVo.getRolePermissions();
+        String[] authorities = StringUtils.split(rolePermissions, ",");
         userDetailVo.setAuthorities(new HashSet<>(Arrays.asList(authorities)));
         Set<String> permissions = menuMapper.findUserPermissions(username);
         userDetailVo.setPermissions(permissions);

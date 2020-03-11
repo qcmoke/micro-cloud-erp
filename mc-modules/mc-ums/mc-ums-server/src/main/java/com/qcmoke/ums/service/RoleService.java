@@ -1,8 +1,12 @@
 package com.qcmoke.ums.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.ums.dto.RoleDto;
 import com.qcmoke.ums.entity.Role;
+import com.qcmoke.ums.export.RoleExport;
+import com.qcmoke.ums.vo.PageResult;
 
 import java.util.List;
 
@@ -19,4 +23,12 @@ public interface RoleService extends IService<Role> {
     List<Role> findAllRoles();
 
     void updateRole(RoleDto roleDto);
+
+    PageResult getPage(PageQuery pageQuery, Role role);
+
+    void createRole(RoleDto roleDto);
+
+    void deleteRoles(String[] ids);
+
+    IPage<RoleExport> findRoles(RoleDto roleDto, PageQuery pageQuery);
 }

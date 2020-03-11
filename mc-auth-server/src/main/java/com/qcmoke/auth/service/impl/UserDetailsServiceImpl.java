@@ -54,7 +54,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             password = passwordEncoder.encode(SocialConstant.SOCIAL_USER_PASSWORD);
         }
 
-        return new AuthUserDetails(user.getUsername(), password, user.getUid(), user.getStatus(), true, true, true, accountNonLocked,
+        return new AuthUserDetails(user.getUsername(), password, user.getUserId(), user.getStatus(), true, true, true, accountNonLocked,
                 AuthorityUtils.commaSeparatedStringToAuthorityList(permissions));
     }
 

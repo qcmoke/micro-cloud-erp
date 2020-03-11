@@ -20,7 +20,7 @@ public class UserDetailVo implements Serializable {
     /**
      * 用户ID
      */
-    private Long uid;
+    private Long userId;
 
     /**
      * 用户名
