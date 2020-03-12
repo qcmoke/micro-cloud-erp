@@ -1,7 +1,7 @@
 package com.qcmoke.pms.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.qcmoke.pms.entity.MaterielRefund;
+import com.qcmoke.pms.entity.Material;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.qcmoke.pms.entity.MaterielRefund;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
-public interface MaterielRefundMapper extends BaseMapper<MaterielRefund> {
+public interface MaterialMapper extends BaseMapper<Material> {
 
 }

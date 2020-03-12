@@ -1,7 +1,7 @@
 package com.qcmoke.pms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.qcmoke.pms.entity.MaterielRefund;
+import com.qcmoke.pms.entity.Material;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.qcmoke.pms.entity.MaterielRefund;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
-public interface MaterielRefundService extends IService<MaterielRefund> {
+public interface MaterialService extends IService<Material> {
 
 }

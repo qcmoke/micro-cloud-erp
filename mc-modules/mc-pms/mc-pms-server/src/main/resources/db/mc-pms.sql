@@ -11,42 +11,42 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 11/03/2020 00:17:20
+ Date: 12/03/2020 18:18:01
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for t_materiel
+-- Table structure for t_material
 -- ----------------------------
-DROP TABLE IF EXISTS `t_materiel`;
-CREATE TABLE `t_materiel`  (
-  `materiel_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '物料编号',
-  `materiel_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '物料名称',
+DROP TABLE IF EXISTS `t_material`;
+CREATE TABLE `t_material`  (
+  `material_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '物料编号',
+  `material_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '物料名称',
   `img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片',
   `unit` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '单位',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
-  PRIMARY KEY (`materiel_id`) USING BTREE
+  PRIMARY KEY (`material_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of t_materiel
+-- Records of t_material
 -- ----------------------------
-INSERT INTO `t_materiel` VALUES (1, '骁龙850', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_materiel` VALUES (2, '麒麟960', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_materiel` VALUES (3, '联发科x30', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_materiel` VALUES (4, '英特尔酷睿i5-4210m', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_materiel` VALUES (5, '夏普2k-3100屏', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `t_materiel` VALUES (6, '索尼2000万光学后置摄像头', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (1, '骁龙850', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (2, '麒麟960', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (3, '联发科x30', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (4, '英特尔酷睿i5-4210m', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (5, '夏普2k-3100屏', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `t_material` VALUES (6, '索尼2000万光学后置摄像头', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
--- Table structure for t_materiel_refund
+-- Table structure for t_material_refund
 -- ----------------------------
-DROP TABLE IF EXISTS `t_materiel_refund`;
-CREATE TABLE `t_materiel_refund`  (
+DROP TABLE IF EXISTS `t_material_refund`;
+CREATE TABLE `t_material_refund`  (
   `refund_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '采购退货单主表编号',
   `purchase_order_master_id` bigint(11) NULL DEFAULT NULL COMMENT '采购订单主表编号',
   `refund_channel` tinyint(4) NULL DEFAULT NULL COMMENT '退款渠道[1-支付宝，2-微信，3-银联，4-汇款]',
@@ -59,7 +59,7 @@ CREATE TABLE `t_materiel_refund`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
   PRIMARY KEY (`refund_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_purchase_order_detail
@@ -67,7 +67,7 @@ CREATE TABLE `t_materiel_refund`  (
 DROP TABLE IF EXISTS `t_purchase_order_detail`;
 CREATE TABLE `t_purchase_order_detail`  (
   `detail_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '采购订单明细表编号',
-  `materiel_id` bigint(20) NULL DEFAULT NULL COMMENT '物料编号',
+  `material_id` bigint(20) NULL DEFAULT NULL COMMENT '物料编号',
   `master_id` bigint(20) NULL DEFAULT NULL COMMENT '采购主表编号',
   `price` double NULL DEFAULT NULL COMMENT '单价',
   `count` bigint(20) NULL DEFAULT NULL COMMENT '数量',
@@ -75,7 +75,7 @@ CREATE TABLE `t_purchase_order_detail`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
   PRIMARY KEY (`detail_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_purchase_order_master
@@ -92,7 +92,7 @@ CREATE TABLE `t_purchase_order_master`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
   PRIMARY KEY (`master_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for t_supplier
@@ -113,6 +113,6 @@ CREATE TABLE `t_supplier`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
   PRIMARY KEY (`supplier_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

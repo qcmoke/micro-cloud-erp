@@ -17,9 +17,9 @@
 
     <modules>
         <module>mc-ums</module>
-        <module>mc-fms</module>
-        <module>mc-oms</module>
-        <module>mc-wms</module>
+<!--        <module>mc-fms</module>-->
+<!--        <module>mc-oms</module>-->
+<!--        <module>mc-wms</module>-->
         <module>mc-pms</module>
     </modules>
 

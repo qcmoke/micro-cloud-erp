@@ -1,7 +1,7 @@
 package com.qcmoke.wms.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.wms.entity.ProductStock;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.qcmoke.wms.entity.ProductStock;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
 public interface ProductStockService extends IService<ProductStock> {
 

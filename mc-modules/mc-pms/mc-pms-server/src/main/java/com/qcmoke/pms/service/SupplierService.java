@@ -9,7 +9,7 @@ import com.qcmoke.pms.entity.Supplier;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
 public interface SupplierService extends IService<Supplier> {
 

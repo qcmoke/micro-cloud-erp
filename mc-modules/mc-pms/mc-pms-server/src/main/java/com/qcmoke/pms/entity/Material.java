@@ -1,4 +1,4 @@
-package com.qcmoke.wms.entity;
+package com.qcmoke.pms.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -16,36 +16,36 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_materiel_stock")
-public class MaterielStock implements Serializable {
+@TableName("t_material")
+public class Material implements Serializable {
 
 private static final long serialVersionUID=1L;
 
     /**
-     * 物料库存编号
-     */
-    @TableId(value = "materiel_stock_id", type = IdType.AUTO)
-    private Long materielStockId;
-
-    /**
      * 物料编号
      */
-    private Long materielId;
+    @TableId(value = "material_id", type = IdType.AUTO)
+    private Long materialId;
 
     /**
-     * 存放地点
+     * 物料名称
      */
-    private String area;
+    private String materialName;
 
     /**
-     * 库存量
+     * 图片
      */
-    private Long count;
+    private String img;
+
+    /**
+     * 单位
+     */
+    private String unit;
 
     /**
      * 创建时间

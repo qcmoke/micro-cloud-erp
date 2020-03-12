@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -35,7 +35,7 @@ private static final long serialVersionUID=1L;
     /**
      * 物料编号
      */
-    private Long materielId;
+    private Long materialId;
 
     /**
      * 采购主表编号

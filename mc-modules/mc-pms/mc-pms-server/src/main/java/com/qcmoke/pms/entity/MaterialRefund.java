@@ -16,36 +16,56 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-12
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_materiel")
-public class Materiel implements Serializable {
+@TableName("t_material_refund")
+public class MaterialRefund implements Serializable {
 
 private static final long serialVersionUID=1L;
 
     /**
-     * 物料编号
+     * 采购退货单主表编号
      */
-    @TableId(value = "materiel_id", type = IdType.AUTO)
-    private Long materielId;
+    @TableId(value = "refund_id", type = IdType.AUTO)
+    private Long refundId;
 
     /**
-     * 物料名称
+     * 采购订单主表编号
      */
-    private String materielName;
+    private Long purchaseOrderMasterId;
 
     /**
-     * 图片
+     * 退款渠道[1-支付宝，2-微信，3-银联，4-汇款]
      */
-    private String img;
+    private Integer refundChannel;
 
     /**
-     * 单位
+     * 总金额
      */
-    private String unit;
+    private Double totalAmount;
+
+    /**
+     * 退货状态（1:退货中；2:退货成功；3:退货失败）
+     */
+    private Integer status;
+
+    /**
+     * 退货原因
+     */
+    private String reason;
+
+    /**
+     * 退货日期
+     */
+    private Date returnDate;
+
+    /**
+     * 完成时间
+     */
+    private Date finishedTime;
 
     /**
      * 创建时间

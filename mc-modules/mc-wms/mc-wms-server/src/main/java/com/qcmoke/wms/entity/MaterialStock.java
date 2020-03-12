@@ -20,26 +20,26 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_product_stock")
-public class ProductStock implements Serializable {
+@TableName("t_material_stock")
+public class MaterialStock implements Serializable {
 
 private static final long serialVersionUID=1L;
 
     /**
-     * 产品库存编号
+     * 原料库存编号
      */
-    @TableId(value = "product_stock_id", type = IdType.AUTO)
-    private Long productStockId;
+    @TableId(value = "materiel_stock_id", type = IdType.AUTO)
+    private Long materielStockId;
 
     /**
-     * 产品编号
+     * 原料编号
      */
-    private Long productId;
+    private Long materialId;
 
     /**
-     * 产品名称
+     * 原料名称
      */
-    private String productName;
+    private String materialName;
 
     /**
      * 存放地点

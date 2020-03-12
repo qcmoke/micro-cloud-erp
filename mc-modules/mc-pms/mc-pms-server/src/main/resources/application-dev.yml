@@ -14,16 +14,16 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 129.204.185.161:8848
+        server-addr: 39.106.195.202:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://129.204.185.161:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://39.106.195.202:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
   #redis配置
   redis:
     database: 0
-    host: 129.204.185.161
+    host: 39.106.195.202
     port: 6379
     password: qcmoke)[good](boy
     jedis:
@@ -38,12 +38,15 @@ spring:
 mybatis-plus:
   type-aliases-package: com.qcmoke.pms.entity
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
   global-config:
     db-config:
       id-type: auto                                         #MySql主键自增策略
       table-prefix: t_                                      #全局表前缀
-  configuration:
-    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+      logic-delete-field: delete_status  #全局逻辑删除字段值 3.3.0开始支持，详情看下面。
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 logging:
   level:

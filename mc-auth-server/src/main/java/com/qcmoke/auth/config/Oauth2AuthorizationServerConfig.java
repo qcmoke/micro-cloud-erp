@@ -72,8 +72,10 @@ public class Oauth2AuthorizationServerConfig extends AuthorizationServerConfigur
                 .authenticationManager(authenticationManager);
         //.exceptionTranslator(new UserOAuth2WebResponseExceptionTranslator());//错误处理翻译器
         if (oauth2SecurityProperties.getEnableJwt()) {
-            //endpoints.accessTokenConverter(jwtAccessTokenConverter());
+            /*endpoints.accessTokenConverter(jwtAccessTokenConverter());*/
             endpoints.tokenEnhancer(jwtAccessTokenConverter());
+            //refreshToken是否重复使用，设置不复用，设置为false解决“刷新token后新的refreshToken还会一直使用第一次的过期时间，以至于不能成功刷新的问题”。参考：https://www.jianshu.com/p/0c4ba7200b54
+            endpoints.reuseRefreshTokens(false);
         }
     }
 
@@ -120,9 +122,6 @@ public class Oauth2AuthorizationServerConfig extends AuthorizationServerConfigur
     }
 
 
-    /**
-     * @return
-     */
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
 

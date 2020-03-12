@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.qcmoke.pms.mapper.PurchaseOrderDetailMapper">
+<mapper namespace="com.qcmoke.wms.mapper.MaterialStockMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.qcmoke.pms.entity.PurchaseOrderDetail">
-        <id column="detail_id" property="detailId" />
-        <result column="materiel_id" property="materielId" />
-        <result column="master_id" property="masterId" />
-        <result column="price" property="price" />
+    <resultMap id="BaseResultMap" type="com.qcmoke.wms.entity.MaterialStock">
+        <id column="materiel_stock_id" property="materielStockId" />
+        <result column="material_id" property="materialId" />
+        <result column="material_name" property="materialName" />
+        <result column="area" property="area" />
         <result column="count" property="count" />
         <result column="create_time" property="createTime" />
         <result column="modify_time" property="modifyTime" />
@@ -16,7 +16,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        detail_id, materiel_id, master_id, price, count, create_time, modify_time, delete_status
+        materiel_stock_id, material_id, material_name, area, count, create_time, modify_time, delete_status
     </sql>
 
 </mapper>

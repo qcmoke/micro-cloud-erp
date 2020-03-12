@@ -343,6 +343,7 @@ public class CustomRedisTokenStore implements TokenStore {
         }
     }
 
+    @Override
     public Collection<OAuth2AccessToken> findTokensByClientIdAndUserName(String clientId, String userName) {
         byte[] approvalKey = serializeKey(UNAME_TO_ACCESS + getApprovalKey(clientId, userName));
         List<byte[]> byteList = null;
