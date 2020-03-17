@@ -9,7 +9,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
-        ip: 39.106.195.202
+        ip: 129.204.185.161
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://39.106.195.202:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
@@ -30,6 +30,10 @@ spring:
         max-wait: 10000
     timeout: 5000
 
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
 ##配置mybatis plus
 mybatis-plus:
   type-aliases-package: com.qcmoke.pms.entity
@@ -40,9 +44,34 @@ mybatis-plus:
     db-config:
       id-type: auto                                         #MySql主键自增策略
       table-prefix: t_                                      #全局表前缀
-      logic-delete-field: delete_status  #全局逻辑删除字段值 3.3.0开始支持，详情看下面。
+      logic-delete-field: deleteStatus  #全局逻辑删除字段值(实体类的属性，而不是表的属性) 3.3.0开始支持(使用mp自带方法删除和查找都会附带逻辑删除功能 ,自己写的sql不会，但@result调动mybatisplus的函数，那么这个子函数也会加上,),统一了全局都是delete_status为逻辑删除字段,但如果实体类上有 @TableLogic 则以实体上的为准，忽略全局
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+
+#feign注解支持hystrix服务降级处理
+feign:
+  hystrix:
+    enabled: true
+
+#网关超时时间配置(对于路由使用serviceId时生效)
+ribbon:
+  #请务器请求超时时间,设置为2秒
+  ConnectTimeout: 2000
+  #请求处理超时时间(服务器响应超时时间),设置为30秒
+  ReadTimeout: 30000
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          ##线程隔离策略配置，官方推荐使用THREAD，即下游依赖的请求在一个单独的线程中隔离，这里为了解决feign转发时需要携带head信息,所以讲策略设置为SEMAPHORE，即下游依赖请求在当前调用线程中执行
+          strategy: SEMAPHORE
+          #建议配置Hystrix的超时时间要大于ribbon的超时时间，否则会在接口调用还未完成的时候直接进入回调方法
+          thread:
+            #hystrix超时时间，默认是1秒，设置为64秒。hystrix.default.timeoutInMilliseconds >= ribbon.ConnectTimeout +ribbon.ReadTimeout
+            timeoutInMilliseconds: 32000
+
 
 logging:
   level:

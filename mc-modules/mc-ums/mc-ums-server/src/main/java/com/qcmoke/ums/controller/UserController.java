@@ -1,14 +1,18 @@
 package com.qcmoke.ums.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.ums.api.UserApi;
 import com.qcmoke.ums.dto.UserDto;
 import com.qcmoke.ums.entity.User;
 import com.qcmoke.ums.service.UserService;
 import com.qcmoke.ums.vo.PageResult;
+import com.qcmoke.ums.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author qcmoke
@@ -28,11 +34,25 @@ import java.util.Date;
 @Slf4j
 @RequestMapping("/user")
 @RestController
-public class UserController {
+public class UserController implements UserApi {
 
     @Autowired
     private UserService userService;
 
+    @Override
+    public Result<List<UserVo>> getUserByIds(String[] userIds) {
+        List<String> userIdList = Arrays.asList(userIds);
+        List<User> userList = this.userService.list(new LambdaQueryWrapper<User>().in(User::getUserId, userIdList));
+        List<UserVo> userVoList = BeanCopyUtil.copy(userList, UserVo.class);
+        return Result.ok(userVoList);
+    }
+
+    @Override
+    public Result<UserVo> getUserById(Long userId) {
+        User user = userService.getById(userId);
+        UserVo userVo = BeanCopyUtil.copy(user, UserVo.class);
+        return Result.ok(userVo);
+    }
 
     @GetMapping
     public Result<PageResult> getPage(PageQuery pageQuery) {

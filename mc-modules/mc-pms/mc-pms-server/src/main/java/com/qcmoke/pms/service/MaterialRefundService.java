@@ -1,7 +1,10 @@
 package com.qcmoke.pms.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.pms.entity.MaterialRefund;
+import com.qcmoke.pms.vo.MaterialRefundVo;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.qcmoke.pms.entity.MaterialRefund;
  */
 public interface MaterialRefundService extends IService<MaterialRefund> {
 
+    PageResult<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefund materialDto);
 }

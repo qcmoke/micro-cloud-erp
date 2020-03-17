@@ -1,6 +1,7 @@
 server:
   port: 8040
 
+
 ## 数据源
 spring:
   application:
@@ -8,18 +9,16 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 129.204.185.161:8848
-        ip: 129.204.185.161
+        server-addr: qcmoke.club:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://129.204.185.161:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://qcmoke.club:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
-
   #redis配置
   redis:
     database: 0
-    host: 129.204.185.161
+    host: qcmoke.club
     port: 6379
     password: qcmoke)[good](boy
     jedis:
@@ -29,6 +28,12 @@ spring:
         max-active: 2000
         max-wait: 10000
     timeout: 5000
+
+  ##热部署
+  devtools:
+    restart:
+      enabled: true
+
 
 ##配置mybatis plus
 mybatis-plus:
@@ -43,4 +48,4 @@ mybatis-plus:
 
 logging:
   level:
-    com.qcmoke: info
+    com.qcmoke: debug

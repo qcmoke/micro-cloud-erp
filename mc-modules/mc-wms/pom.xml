@@ -14,6 +14,7 @@
 
     <modules>
         <module>mc-wms-server</module>
+        <module>mc-wms-api</module>
     </modules>
 
 </project>

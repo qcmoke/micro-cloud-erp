@@ -4,26 +4,21 @@ server:
 
 ## 数据源
 spring:
-  ##热部署
-  devtools:
-    restart:
-      enabled: true
-
   application:
     name: mc-wms-server
   cloud:
     nacos:
       discovery:
-        server-addr: 129.204.185.161:8848
+        server-addr: qcmoke.club:8848
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://129.204.185.161:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://qcmoke.club:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
   #redis配置
   redis:
     database: 0
-    host: 129.204.185.161
+    host: qcmoke.club
     port: 6379
     password: qcmoke)[good](boy
     jedis:
@@ -34,27 +29,10 @@ spring:
         max-wait: 10000
     timeout: 5000
 
-
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: http://localhost:7001/eureka
-#  #个性化定制
-#  instance:
-#    #服务实例id（application.name可以对应多个instance）
-#    instance-id: mc-wms-server-8082
-#    #显示前缀ip
-#    prefer-ip-address: true
-
-security:
-  oauth2:
-    client:
-      client-id: gateway
-      client-secret: 123456
-    resource:
-      jwt:
-        key-uri: http://127.0.0.1:9070/auth/oauth/token_key #让网关负载均衡到认证服务器获取公钥
+  ##热部署
+  devtools:
+    restart:
+      enabled: true
 
 
 ##配置mybatis plus

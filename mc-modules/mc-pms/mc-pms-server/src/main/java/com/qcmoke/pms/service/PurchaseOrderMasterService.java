@@ -1,11 +1,15 @@
 package com.qcmoke.pms.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.common.vo.PageResult;
+import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
+import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author qcmoke
@@ -13,4 +17,15 @@ import com.qcmoke.pms.entity.PurchaseOrderMaster;
  */
 public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster> {
 
+    PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
+
+    void addMaterialToStock(Long masterId);
+
+    boolean updateStatus(PurchaseOrderMaster purchaseOrderMasterDto);
+
+    PageResult<PurchaseOrderMasterVo> pageForAddStock(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
+
+    void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId);
+
+    void removeByIds(String ids);
 }

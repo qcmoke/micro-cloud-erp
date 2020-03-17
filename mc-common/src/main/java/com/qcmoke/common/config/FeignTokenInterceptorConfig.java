@@ -12,6 +12,7 @@ import java.util.Enumeration;
 
 /**
  * Feign调用时添加http head请求头
+ *
  * @author qcmoke
  */
 @Slf4j
@@ -31,7 +32,7 @@ public class FeignTokenInterceptorConfig {
                     Enumeration<String> values = request.getHeaders(name);
                     while (values.hasMoreElements()) {
                         String value = values.nextElement();
-                        log.info(name + " : " + value);
+                        //log.debug(name + " : " + value);
                         requestTemplate.header(name, value);
                     }
                 }

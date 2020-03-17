@@ -9,7 +9,7 @@ import com.qcmoke.oms.entity.Product;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-15
  */
 public interface ProductMapper extends BaseMapper<Product> {
 

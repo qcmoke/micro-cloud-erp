@@ -3,8 +3,8 @@ package com.qcmoke.common.utils.oauth;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.common.utils.SpringContextUtil;
+import com.qcmoke.common.vo.CurrentUser;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +31,7 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         JSONObject jwtJson = getJwtJson(request);
         return getCurrentUser(jwtJson);
     }
+
 
     /**
      * 获取当前用户信息
@@ -69,6 +70,15 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return currentUser.getUsername();
     }
 
+    public static Long getCurrentUsername() {
+        return getCurrentUserId(SpringContextUtil.getHttpServletRequest());
+    }
+
+
+    public static Long getCurrentUserId() {
+        return getCurrentUserId(SpringContextUtil.getHttpServletRequest());
+    }
+
     /**
      * @param request
      * @return
@@ -80,6 +90,7 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         }
         return currentUser.getUserId();
     }
+
 
     private static CurrentUser getCurrentUser(JSONObject jwtJson) {
         try {

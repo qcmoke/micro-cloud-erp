@@ -41,6 +41,8 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
+        ip: 129.204.185.161
+
     #网关配置
     gateway:
       routes:
@@ -54,6 +56,14 @@ spring:
           uri: lb://mc-ums-server
           predicates:
             - Path=/ums/**
+        - id: mc-pms-server
+          uri: lb://mc-pms-server
+          predicates:
+            - Path=/pms/**
+        - id: mc-fms-server
+          uri: lb://mc-fms-server
+          predicates:
+            - Path=/fms/**
         - id: mc-oms-server
           uri: lb://mc-oms-server
           predicates:
@@ -68,6 +78,8 @@ spring:
             - Path=/wms/**
       default-filters:
         - StripPrefix=1
+
+
 
 
 

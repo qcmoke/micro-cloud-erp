@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,7 +48,7 @@ private static final long serialVersionUID=1L;
     private String batchId;
 
     /**
-     * 单价
+     * 销售单价(零售价)
      */
     private Double price;
 
@@ -66,6 +66,11 @@ private static final long serialVersionUID=1L;
      * 单位
      */
     private String unit;
+
+    /**
+     * 规格
+     */
+    private String standard;
 
     /**
      * 创建时间

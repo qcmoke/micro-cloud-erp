@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_material_refund")
 public class MaterialRefund implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 采购退货单主表编号
@@ -58,9 +58,9 @@ private static final long serialVersionUID=1L;
     private String reason;
 
     /**
-     * 退货日期
+     * 发货日期
      */
-    private Date returnDate;
+    private Date outDate;
 
     /**
      * 完成时间
@@ -82,5 +82,19 @@ private static final long serialVersionUID=1L;
      */
     private Integer deleteStatus;
 
+    /**
+     * 创建退单的用户id
+     */
+    private Long createUserId;
 
+
+    /**
+     * 审核状态（1:未审核；2:审核不通；3:审核通过）
+     */
+    private Integer checkStatus;
+
+    /**
+     * 最后一次审核的用户id
+     */
+    private Long checkUserId;
 }

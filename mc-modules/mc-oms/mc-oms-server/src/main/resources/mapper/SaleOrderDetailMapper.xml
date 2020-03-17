@@ -8,8 +8,8 @@
         <result column="master_id" property="masterId" />
         <result column="product_id" property="productId" />
         <result column="customer_id" property="customerId" />
-        <result column="price" property="price" />
         <result column="count" property="count" />
+        <result column="vip_price" property="vipPrice" />
         <result column="create_time" property="createTime" />
         <result column="modify_time" property="modifyTime" />
         <result column="delete_status" property="deleteStatus" />
@@ -17,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        detail_id, master_id, product_id, customer_id, price, count, create_time, modify_time, delete_status
+        detail_id, master_id, product_id, customer_id, count, vip_price, create_time, modify_time, delete_status
     </sql>
 
 </mapper>

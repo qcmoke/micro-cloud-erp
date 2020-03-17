@@ -1,5 +1,7 @@
 package com.qcmoke.common.utils;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -10,6 +12,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class WebUtil {
@@ -87,4 +91,15 @@ public class WebUtil {
         return buffer.toString();
     }
 
+
+    public static List<String> parseIdStr2List(String ids) {
+        if ((StringUtils.isBlank(ids))) {
+            return null;
+        }
+        List<String> idList = Arrays.asList(ids.split(","));
+        if (CollectionUtils.isEmpty(idList)) {
+            return null;
+        }
+        return idList;
+    }
 }

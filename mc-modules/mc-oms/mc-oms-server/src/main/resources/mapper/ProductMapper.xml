@@ -12,6 +12,7 @@
         <result column="space" property="space" />
         <result column="supplier_id" property="supplierId" />
         <result column="unit" property="unit" />
+        <result column="standard" property="standard" />
         <result column="create_time" property="createTime" />
         <result column="modify_time" property="modifyTime" />
         <result column="delete_status" property="deleteStatus" />
@@ -19,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        product_id, product_name, approve_id, batch_id, price, space, supplier_id, unit, create_time, modify_time, delete_status
+        product_id, product_name, approve_id, batch_id, price, space, supplier_id, unit, standard, create_time, modify_time, delete_status
     </sql>
 
 </mapper>

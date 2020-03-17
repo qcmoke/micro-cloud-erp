@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : tenxunyun
+ Source Server         : aliyun-mysql
  Source Server Type    : MySQL
  Source Server Version : 50724
- Source Host           : 129.204.185.161:3306
+ Source Host           : 39.106.195.202:3306
  Source Schema         : mc-auth
 
  Target Server Type    : MySQL
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 02/03/2020 10:43:45
+ Date: 17/03/2020 14:41:11
 */
 
 SET NAMES utf8mb4;
@@ -71,7 +71,7 @@ INSERT INTO `oauth_client_details` VALUES ('admin', '', '$2a$10$Jh7dVwn/X86L89DI
 INSERT INTO `oauth_client_details` VALUES ('gateway', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('social', '', '$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,refresh_token', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('swagger', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,refresh_token', NULL, NULL, 3600, NULL, NULL, NULL);
-INSERT INTO `oauth_client_details` VALUES ('webApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,refresh_token', NULL, NULL, 3600, 3000, NULL, NULL);
+INSERT INTO `oauth_client_details` VALUES ('webApp', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,refresh_token', NULL, NULL, 3600, 5000, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for oauth_client_token

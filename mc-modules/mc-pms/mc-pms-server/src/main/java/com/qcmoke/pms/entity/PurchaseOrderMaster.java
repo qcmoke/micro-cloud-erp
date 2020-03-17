@@ -12,11 +12,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_purchase_order_master")
 public class PurchaseOrderMaster implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 采购订单主表id
@@ -48,14 +48,39 @@ private static final long serialVersionUID=1L;
     private Integer payType;
 
     /**
-     * 总金额(元)
+     * 支付状态【1:未支付；2:已支付】
+     */
+    private Integer payStatus;
+
+    /**
+     * 操作员id
+     */
+    private Long operatorId;
+
+    /**
+     * 运费
+     */
+    private Double freight;
+
+    /**
+     * 采购总金额(元)
      */
     private Double totalAmount;
 
     /**
-     * 入库状态(1:未入库；2:已入库)
+     * 《入库状态》
+     * 0:未提交入库申请；
+     * 1:已提交申请未审核，
+     * 2:审核不通过
+     * 3:审核通过但未入库；
+     * 4:审核通过并已入库
      */
     private Integer status;
+
+    /**
+     * 备注
+     */
+    private String remark;
 
     /**
      * 创建时间
@@ -72,5 +97,10 @@ private static final long serialVersionUID=1L;
      */
     private Integer deleteStatus;
 
+
+    /**
+     * 运费支付状态
+     */
+    private Integer freightPayStatus;
 
 }

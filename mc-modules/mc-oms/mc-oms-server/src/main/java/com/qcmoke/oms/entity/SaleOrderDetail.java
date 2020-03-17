@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -16,7 +17,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-15
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -48,14 +49,14 @@ private static final long serialVersionUID=1L;
     private Long customerId;
 
     /**
-     * 单价
-     */
-    private Double price;
-
-    /**
      * 数量
      */
     private Long count;
+
+    /**
+     * 特价（如果没有指定则使用默认的产品默认你的销售价格）
+     */
+    private BigDecimal vipPrice;
 
     /**
      * 创建时间

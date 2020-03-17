@@ -9,7 +9,7 @@ import com.qcmoke.oms.entity.SaleOrderMaster;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-10
+ * @since 2020-03-15
  */
 public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
 
