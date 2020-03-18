@@ -12,45 +12,40 @@ import java.util.Date;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_material_stock")
-public class MaterialStock implements Serializable {
+@TableName("t_stock_item_detail")
+public class StockItemDetail implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
-    /**
-     * 原料库存编号
-     */
-    @TableId(value = "materiel_stock_id", type = IdType.AUTO)
-    private Long materielStockId;
+private static final long serialVersionUID=1L;
 
     /**
-     * 原料编号
+     * 出入库明细单编号
      */
-    private Long materialId;
+    @TableId(value = "stock_item_detail_id", type = IdType.AUTO)
+    private Long stockItemDetailId;
 
     /**
-     * 原料名称
+     * 出入库单编号
      */
-    private String materialName;
+    private Long stockItemId;
 
     /**
-     * 存放地点
+     * 货物编号
      */
-    private String area;
+    private Long itemId;
 
     /**
-     * 库存量
+     * 数量
      */
-    private Double count;
+    private Double itemNum;
 
     /**
      * 创建时间

@@ -69,7 +69,7 @@ public class SupplierController {
     @DeleteMapping("/{ids}")
     @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> delete(@PathVariable String ids) {
-        List<String> idList = WebUtil.parseIdStr2List(ids);
+        List<Long> idList = WebUtil.parseIdStrToLongList(ids);
         if (CollectionUtils.isEmpty(idList)) {
             throw new GlobalCommonException("ids is required");
         }

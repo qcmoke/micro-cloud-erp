@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -92,14 +93,25 @@ public class WebUtil {
     }
 
 
-    public static List<String> parseIdStr2List(String ids) {
-        if ((StringUtils.isBlank(ids))) {
+    public static List<Long> parseIdStrToLongList(String ids) {
+        try {
+            if ((StringUtils.isBlank(ids))) {
+                return null;
+            }
+            List<String> idList = Arrays.asList(ids.split(","));
+            if (CollectionUtils.isEmpty(idList)) {
+                return null;
+            }
+            List<Long> longList = new ArrayList<>();
+
+            idList.forEach(s -> {
+                long l = Long.parseLong(s);
+                longList.add(l);
+            });
+
+            return longList;
+        } catch (Exception e) {
             return null;
         }
-        List<String> idList = Arrays.asList(ids.split(","));
-        if (CollectionUtils.isEmpty(idList)) {
-            return null;
-        }
-        return idList;
     }
 }

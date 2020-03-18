@@ -12,45 +12,55 @@ import java.util.Date;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_product_stock")
-public class ProductStock implements Serializable {
+@TableName("t_stock")
+public class Stock implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID=1L;
 
     /**
-     * 产品库存编号
+     * 库存编号
      */
-    @TableId(value = "product_stock_id", type = IdType.AUTO)
-    private Long productStockId;
+    @TableId(value = "stock_id", type = IdType.AUTO)
+    private Long stockId;
+
+    /**
+     * 货物类型（1:物料；2:产品）
+     */
+    private Integer itemType;
 
     /**
      * 产品编号
      */
-    private Long productId;
+    private Long itemId;
 
     /**
-     * 产品名称
+     * 库存数量
      */
-    private String productName;
+    private Double itemCount;
+
+    /**
+     * 库存最大值
+     */
+    private Integer sMax;
+
+    /**
+     * 库存最小值
+     */
+    private Integer sMin;
 
     /**
      * 存放地点
      */
     private String area;
-
-    /**
-     * 库存量
-     */
-    private Double count;
 
     /**
      * 创建时间

@@ -34,6 +34,10 @@ public class Result<T> implements Serializable {
         return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, null);
     }
 
+    public static <T> Result<T> error(String message, T data) {
+        return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), message, data);
+    }
+
     public static <T> Result<T> error() {
         return new Result<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), null, null);
     }
@@ -50,7 +54,6 @@ public class Result<T> implements Serializable {
 
     private Result() {
     }
-
 
 
     private Result(Integer status, String message, T data) {

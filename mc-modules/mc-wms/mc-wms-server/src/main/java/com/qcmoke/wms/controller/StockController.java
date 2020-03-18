@@ -2,7 +2,6 @@ package com.qcmoke.wms.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -11,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-17
  */
 @RestController
-@RequestMapping("/productStock")
-public class ProductStockController {
+@RequestMapping("/stock")
+public class StockController {
 
 }
 

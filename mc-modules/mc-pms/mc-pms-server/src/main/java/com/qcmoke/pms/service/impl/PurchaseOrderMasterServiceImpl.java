@@ -5,12 +5,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.exception.GlobalCommonException;
-import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.pms.client.MaterialStockClient;
 import com.qcmoke.pms.client.UserClient;
-import com.qcmoke.pms.constant.WarehouseStatusEnum;
+import com.qcmoke.pms.constant.CheckStatusEnum;
+import com.qcmoke.pms.constant.TransferStockStatusEnum;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.Material;
 import com.qcmoke.pms.entity.PurchaseOrderDetail;
@@ -20,10 +20,10 @@ import com.qcmoke.pms.service.MaterialService;
 import com.qcmoke.pms.service.PurchaseOrderDetailService;
 import com.qcmoke.pms.service.PurchaseOrderMasterService;
 import com.qcmoke.pms.utils.UserClientUtil;
-import com.qcmoke.pms.vo.PurchaseOrderDetailVo;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
 import com.qcmoke.ums.vo.UserVo;
-import com.qcmoke.wms.dto.MaterialStockDto;
+import com.qcmoke.wms.dto.StockItemDetailDto;
+import com.qcmoke.wms.dto.StockItemDto;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -61,21 +61,17 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void removeByIds(String masterIds) {
-        List<String> idList = WebUtil.parseIdStr2List(masterIds);
-        if (CollectionUtils.isEmpty(idList)) {
-            throw new GlobalCommonException("ids is required");
-        }
+    public void deleteByIdList(List<Long> idList) {
         List<PurchaseOrderMaster> masterList = this.list(new LambdaQueryWrapper<PurchaseOrderMaster>().in(PurchaseOrderMaster::getMasterId, idList));
-        boolean flag = masterList.stream().anyMatch(master -> WarehouseStatusEnum.PASS_AND_STOCKED.getStatus() == master.getStatus());
+        boolean flag = masterList.stream().anyMatch(master -> master.getTransferStockStatus() != null && master.getTransferStockStatus() >= TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
         if (flag) {
-            throw new GlobalCommonException("包含已入库的订单，不允许删除已入库的订单！");
+            throw new GlobalCommonException("订单包含已移交仓库的物料，不允许删除！");
         }
         flag = this.removeByIds(idList);
         if (!flag) {
             throw new GlobalCommonException("订单删除失败");
         }
-        flag = purchaseOrderDetailService.remove(new LambdaQueryWrapper<PurchaseOrderDetail>().in(PurchaseOrderDetail::getMasterId, masterIds));
+        flag = purchaseOrderDetailService.remove(new LambdaQueryWrapper<PurchaseOrderDetail>().in(PurchaseOrderDetail::getMasterId, idList));
         if (!flag) {
             throw new GlobalCommonException("订单明细删除失败");
         }
@@ -85,7 +81,6 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     @Override
     public void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId) {
         List<PurchaseOrderDetail> detailDtoList = purchaseOrderMasterDto.getPurchaseOrderDetailList();
-
         /*计算订单总金额（从明细里获取物料id集合，并从物料表中获取物料的价格进行计算得到订单总能金额）*/
         List<Long> materialIds = detailDtoList.stream().map(PurchaseOrderDetail::getMaterialId).collect(Collectors.toList());
         List<Material> materialList = materialService.listByIds(materialIds);
@@ -104,6 +99,12 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         Long masterId = purchaseOrderMasterDto.getMasterId();
         if (masterId != null) {
             master = this.getById(masterId);
+            if (master.getStatus() == CheckStatusEnum.PASS.getStatus()) {
+                throw new GlobalCommonException("该订单已被审核通过，不允许修改！");
+            }
+            if (master.getTransferStockStatus() == TransferStockStatusEnum.ALREADY_TRANSFER.getStatus()) {
+                throw new GlobalCommonException("订单包含已移交仓库的物料，不允许修改！");
+            }
         }
         if (master == null) {
             master = new PurchaseOrderMaster();
@@ -163,20 +164,6 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     }
 
 
-    public static void main(String[] args) {
-        List<UserVo> userVos = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            UserVo userVo = new UserVo();
-            userVo.setUserId(Integer.toUnsignedLong(i));
-            userVos.add(userVo);
-        }
-        UserVo user = (UserVo) CollectionUtils.find(userVos, object -> {
-            UserVo userVo = (UserVo) object;
-            return userVo.getUserId() == 1L;
-        });
-        System.out.println(user);
-    }
-
     private PageResult<PurchaseOrderMasterVo> buildPageResult(List<PurchaseOrderMasterVo> records, Long total) {
         Set<Long> idSet = records.stream().map(PurchaseOrderMasterVo::getOperatorId).filter(Objects::nonNull).collect(Collectors.toSet());
         List<UserVo> userVoList = UserClientUtil.getUserVoList(idSet, userClient);
@@ -206,38 +193,51 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     }
 
     /**
-     * 原料入库
-     *
-     * @param masterId
+     * 原料转交仓库审核
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void addMaterialToStock(Long masterId) {
-        //修改订单为已审核已入库
-        PurchaseOrderMaster purchaseOrderMaster = new PurchaseOrderMaster();
-        purchaseOrderMaster.setMasterId(masterId);
-        purchaseOrderMaster.setStatus(WarehouseStatusEnum.PASS_AND_STOCKED.getStatus());
-        purchaseOrderMaster.setModifyTime(new Date());
-        this.updateStatus(purchaseOrderMaster);
+    public void transferToStock(Long masterId, Long currentUserId) {
+        PurchaseOrderMaster master = this.getById(masterId);
+        if (master == null) {
+            throw new GlobalCommonException("为找到对应的订单！");
+        }
+        if (master.getStatus() == null || master.getStatus() < CheckStatusEnum.PASS.getStatus()) {
+            throw new GlobalCommonException("审核未通过不能移交！");
+        }
+        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == master.getTransferStockStatus()) {
+            throw new GlobalCommonException("改订单已经移交仓库，不能重复！");
+        }
 
-
-        //将采购订单对应的明细物料加入库存中
-        List<PurchaseOrderDetailVo> details = purchaseOrderDetailService.getListByMasterId(masterId);
-        List<MaterialStockDto> materialStockDtoList = new ArrayList<>();
+        //将采购订单对应的明细物料加到移交明细单里
+        List<PurchaseOrderDetail> details = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, master.getMasterId()));
+        List<StockItemDetailDto> stockItemDetailDtoList = new ArrayList<>();
         details.forEach(detail -> {
-            MaterialStockDto stockDto = new MaterialStockDto();
-            stockDto.setMaterialId(detail.getMaterialId());
-            stockDto.setCount(detail.getCount());
-            stockDto.setMaterialName(detail.getMaterialName());
-            materialStockDtoList.add(stockDto);
+            StockItemDetailDto stockDto = new StockItemDetailDto();
+            stockDto.setItemId(detail.getMaterialId());
+            stockDto.setItemNum(detail.getCount());
+            stockItemDetailDtoList.add(stockDto);
         });
 
-        if (CollectionUtils.isEmpty(materialStockDtoList)) {
-            throw new GlobalCommonException("该订单没有可入库的原料！请注意审核订单明细！");
+        if (CollectionUtils.isEmpty(stockItemDetailDtoList)) {
+            throw new GlobalCommonException("该订单没有可移交的物料！请注意审核订单明细！");
         }
-        Result<?> result = materialStockClient.batchAddMaterialToStock(materialStockDtoList);
+        StockItemDto stockItemDto = new StockItemDto();
+        stockItemDto.setOrderId(masterId);
+        stockItemDto.setStockItemDetailDtoList(stockItemDetailDtoList);
+        Result<?> result = materialStockClient.transferToStock(stockItemDto);
         if (HttpStatus.OK.value() != result.getStatus()) {
-            throw new GlobalCommonException("入库失败！");
+            throw new GlobalCommonException("移交失败！");
+        }
+
+        //修改订单为已移交
+        master.setMasterId(masterId);
+        master.setOperatorId(currentUserId);
+        master.setTransferStockStatus(TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
+        master.setModifyTime(new Date());
+        boolean flag = this.updateById(master);
+        if (!flag) {
+            throw new GlobalCommonException("修改订单状态失败");
         }
     }
 
@@ -254,31 +254,30 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         Integer status = purchaseOrderMasterDto.getStatus();
         verifyBusiness(orderMaster, status);
         orderMaster.setStatus(status);
+        orderMaster.setTransferStockStatus(TransferStockStatusEnum.NO_TRANSFER.getStatus());
         return this.updateById(orderMaster);
     }
 
 
-    private void verifyRequest(PurchaseOrderMaster orderMaster) {
-        WarehouseStatusEnum[] values = WarehouseStatusEnum.values();
-        List<WarehouseStatusEnum> enumList = Arrays.asList(values);
-        boolean flag = enumList.stream().anyMatch(item -> item.getStatus() == orderMaster.getStatus());
+    private void verifyRequest(PurchaseOrderMaster orderMasterDto) {
+        Integer status = orderMasterDto.getStatus();
+        if (status == null) {
+            throw new GlobalCommonException("状态码不符");
+        }
+        List<CheckStatusEnum> enumList = Arrays.asList(CheckStatusEnum.values());
+        boolean flag = enumList.stream().anyMatch(item -> item.getStatus() == status);
         if (!flag) {
             throw new GlobalCommonException("状态码不符");
         }
     }
 
     private void verifyBusiness(PurchaseOrderMaster orderMaster, Integer status) {
-        //已经入库的订单不能再改为之前的状态
-        if (WarehouseStatusEnum.PASS_AND_STOCKED.getStatus() == orderMaster.getStatus()) {
-            throw new GlobalCommonException("改订单已经入库，无需再审核！");
-        }
         //如果是申请状态，那么状态只能改为不通过或者通过两个状态,而不能越级
-        if (WarehouseStatusEnum.NO_APPLY.getStatus() == orderMaster.getStatus() && status > WarehouseStatusEnum.PASS_BUT_NO_STOCKED.getStatus()) {
+        if (CheckStatusEnum.NO_APPLY.getStatus() == orderMaster.getStatus() && status > CheckStatusEnum.PASS.getStatus()) {
             throw new GlobalCommonException("操作越级，非法！");
         }
-        //审核不通过，不能入库
-        if (WarehouseStatusEnum.NO_PASS.getStatus() == orderMaster.getStatus() && status == WarehouseStatusEnum.PASS_AND_STOCKED.getStatus()) {
-            throw new GlobalCommonException("审核不通过，不能入库！");
+        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == orderMaster.getTransferStockStatus()) {
+            throw new GlobalCommonException("改订单已经移交仓库，不能再进行修改！");
         }
     }
 

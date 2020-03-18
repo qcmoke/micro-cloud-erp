@@ -22,7 +22,7 @@ public interface MaterialStockClient extends MaterialStockApi {
         @Override
         public MaterialStockClient create(Throwable throwable) {
             log.error("触发降级处理,e={}", throwable.getMessage());
-            return materialStockDtoList -> Result.error();
+            return (materialStockDtoList) -> Result.error();
         }
     }
 }

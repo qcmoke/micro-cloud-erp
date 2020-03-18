@@ -1,3 +1,3 @@
 spring:
   profiles:
-    active: dev  #dev、test、prod
+    active: prod  #dev、test、prod

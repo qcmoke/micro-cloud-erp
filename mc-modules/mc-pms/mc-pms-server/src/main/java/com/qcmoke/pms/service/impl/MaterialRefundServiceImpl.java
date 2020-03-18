@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.pms.client.UserClient;
 import com.qcmoke.pms.entity.MaterialRefund;
+import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.mapper.MaterialRefundMapper;
 import com.qcmoke.pms.service.MaterialRefundService;
 import com.qcmoke.pms.utils.UserClientUtil;
@@ -62,7 +63,11 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
                     }
                     //如果退单没有设置金额，那么总金额设置为订单主表的总金额
                     if (vo.getTotalAmount() == null || vo.getTotalAmount() == 0) {
-                        vo.setTotalAmount(vo.getPurchaseOrderMaster().getTotalAmount());
+                        PurchaseOrderMaster master = vo.getPurchaseOrderMaster();
+                        if (master != null) {
+                            vo.setTotalAmount(master.getTotalAmount());
+                        }
+
                     }
                 });
             }

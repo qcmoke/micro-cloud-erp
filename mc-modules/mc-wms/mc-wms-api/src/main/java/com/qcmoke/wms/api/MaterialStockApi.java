@@ -2,12 +2,10 @@ package com.qcmoke.wms.api;
 
 
 import com.qcmoke.common.vo.Result;
-import com.qcmoke.wms.dto.MaterialStockDto;
-import org.springframework.web.bind.annotation.PostMapping;
+import com.qcmoke.wms.dto.StockItemDto;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author qcmoke
@@ -16,7 +14,6 @@ import java.util.List;
 @RequestMapping("/materialStock")
 public interface MaterialStockApi {
 
-    @PostMapping
-    Result<?> batchAddMaterialToStock(@RequestBody List<MaterialStockDto> materialStockDtoList);
+    @RequestMapping(value = "/transferToStock", method = RequestMethod.POST)
+    Result<?> transferToStock(@RequestBody StockItemDto stockItemDto);
 }
-

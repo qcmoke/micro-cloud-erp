@@ -68,14 +68,19 @@ public class PurchaseOrderMaster implements Serializable {
     private Double totalAmount;
 
     /**
-     * 《入库状态》
+     * 《审核状态》
      * 0:未提交入库申请；
      * 1:已提交申请未审核，
      * 2:审核不通过
-     * 3:审核通过但未入库；
-     * 4:审核通过并已入库
+     * 3:审核通过
      */
     private Integer status;
+
+
+    /**
+     * 移交库存状态(1:未移交；2:已移交申请；3:移交失败；4:已完成移交；)
+     */
+    private Integer transferStockStatus;
 
     /**
      * 备注

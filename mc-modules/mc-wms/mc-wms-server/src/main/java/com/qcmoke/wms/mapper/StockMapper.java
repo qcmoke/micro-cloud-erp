@@ -1,7 +1,7 @@
 package com.qcmoke.wms.mapper;
 
-import com.qcmoke.wms.entity.MaterialStock;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.qcmoke.wms.entity.Stock;
 
 /**
  * <p>
@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-18
  */
-public interface MaterialStockMapper extends BaseMapper<MaterialStock> {
+public interface StockMapper extends BaseMapper<Stock> {
 
 }

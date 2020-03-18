@@ -7,6 +7,8 @@ import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务类
@@ -19,7 +21,7 @@ public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster
 
     PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
 
-    void addMaterialToStock(Long masterId);
+    void transferToStock(Long masterId, Long currentUserId);
 
     boolean updateStatus(PurchaseOrderMaster purchaseOrderMasterDto);
 
@@ -27,5 +29,5 @@ public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster
 
     void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId);
 
-    void removeByIds(String ids);
+    void deleteByIdList(List<Long> idList);
 }
