@@ -38,12 +38,16 @@ spring:
 mybatis-plus:
   type-aliases-package: com.qcmoke.oms.entity
   mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
   global-config:
     db-config:
       id-type: auto                                         #MySql主键自增策略
       table-prefix: t_                                      #全局表前缀
-  configuration:
-    map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+      logic-delete-field: deleteStatus  #全局逻辑删除字段值(实体类的属性，而不是表的属性) 3.3.0开始支持(使用mp自带方法删除和查找都会附带逻辑删除功能 ,自己写的sql不会，但@result调动mybatisplus的函数，那么这个子函数也会加上,),统一了全局都是delete_status为逻辑删除字段,但如果实体类上有 @TableLogic 则以实体上的为准，忽略全局
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
 
 logging:
   level:

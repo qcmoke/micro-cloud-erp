@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2020-03-10
  */
 @RestController
-@RequestMapping("/oms/product")
+@RequestMapping("/product")
 public class ProductController {
 
 }

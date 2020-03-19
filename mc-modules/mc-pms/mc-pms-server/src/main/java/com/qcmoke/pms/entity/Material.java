@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_material")
 public class Material implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 物料编号
@@ -75,7 +75,7 @@ private static final long serialVersionUID=1L;
     /**
      * 安全库存
      */
-    private String safetyStock;
+    private Double safetyStock;
 
     /**
      * 备注

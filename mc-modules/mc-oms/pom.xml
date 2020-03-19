@@ -17,7 +17,6 @@
     <modules>
         <module>mc-oms-server</module>
         <module>mc-oms-api</module>
-        <module>mc-oms-business-server</module>
     </modules>
 
 </project>

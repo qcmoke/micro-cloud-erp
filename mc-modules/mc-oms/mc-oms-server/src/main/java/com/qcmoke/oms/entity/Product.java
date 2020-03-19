@@ -88,4 +88,9 @@ private static final long serialVersionUID=1L;
     private Integer deleteStatus;
 
 
+    /**
+     * 安全库存
+     */
+    private Double safetyStock;
+
 }

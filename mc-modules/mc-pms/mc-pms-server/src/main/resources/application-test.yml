@@ -30,9 +30,14 @@ spring:
         max-wait: 10000
     timeout: 5000
 
+  #json时间转换全局格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  ##热部署
+  devtools:
+    restart:
+      enabled: false
 
 ##配置mybatis plus
 mybatis-plus:
@@ -69,8 +74,8 @@ hystrix:
           strategy: SEMAPHORE
           #建议配置Hystrix的超时时间要大于ribbon的超时时间，否则会在接口调用还未完成的时候直接进入回调方法
           thread:
-            #hystrix超时时间，默认是1秒，设置为64秒。hystrix.default.timeoutInMilliseconds >= ribbon.ConnectTimeout +ribbon.ReadTimeout
-            timeoutInMilliseconds: 32000
+            #hystrix超时时间，默认是1秒，设置为64秒。hystrix.default.timeoutInMilliseconds >= (host.connectTimeoutMillis + host.socketTimeoutMillis) + (ribbon.ConnectTimeout +ribbon.ReadTimeout)
+            timeoutInMilliseconds: 64000
 
 
 logging:
