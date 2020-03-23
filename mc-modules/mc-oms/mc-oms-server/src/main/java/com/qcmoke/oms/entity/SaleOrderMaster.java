@@ -12,11 +12,11 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-15
+ * @since 2020-03-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_sale_order_master")
 public class SaleOrderMaster implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 销售订单主表编号
@@ -58,7 +58,7 @@ private static final long serialVersionUID=1L;
     private Integer payType;
 
     /**
-     * 订单状态【0->待付款；1->待发货；2->已发货；3->未确认收货；4->已确认收货；5->已完成；6->已关闭；7->无效订单】
+     * 订单状态【1->待付款；2->待发货；3->已发货；4->未确认收货；5->已确认收货；6->已完成；7->已关闭；8->无效订单】
      */
     private Integer status;
 
@@ -83,29 +83,16 @@ private static final long serialVersionUID=1L;
     private String receiverPhone;
 
     /**
-     * 收货人邮编
-     */
-    private String receiverPostCode;
-
-    /**
-     * 收货人所在省
-     */
-    private String receiverProvince;
-
-    /**
-     * 收货人所在城市
-     */
-    private String receiverCity;
-
-    /**
-     * 收货人所在区
-     */
-    private String receiverRegion;
-
-    /**
      * 收货人所在详细地址
      */
     private String receiverDetailAddress;
+
+
+
+    /**
+     * 运输渠道（物流公司）
+     */
+    private String deliveryChannel;
 
     /**
      * 物流单号
@@ -113,7 +100,7 @@ private static final long serialVersionUID=1L;
     private String deliverySn;
 
     /**
-     * 发票类型[0->不开发票；1->电子发票；2->纸质发票]
+     * 发票类型[1->不开发票；2->电子发票；3->纸质发票]
      */
     private Integer billType;
 
@@ -123,24 +110,14 @@ private static final long serialVersionUID=1L;
     private String billContent;
 
     /**
-     * 发票抬头
-     */
-    private String billHeader;
-
-    /**
-     * 收票人电话
-     */
-    private String billReceiverPhone;
-
-    /**
-     * 收票人邮箱
-     */
-    private String billReceiverEmail;
-
-    /**
      * 支付时间
      */
     private Date paymentTime;
+
+    /**
+     * 订单备注
+     */
+    private String remark;
 
     /**
      * 创建时间
@@ -158,9 +135,8 @@ private static final long serialVersionUID=1L;
     private Integer deleteStatus;
 
     /**
-     * 订单备注
+     * 发货申请状态(1:未移交申请；2:已移交申请；3:移交失败；4:已完成移交；)
      */
-    private String note;
-
+    private Integer transferStockStatus;
 
 }

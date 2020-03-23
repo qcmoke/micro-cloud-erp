@@ -20,45 +20,47 @@ import org.springframework.stereotype.Repository;
 public interface StockItemMapper extends BaseMapper<StockItem> {
 
 
-    @Select("   SELECT" +
-            "     it.*," +
-            "     it.stock_item_id AS stock_item_id2," +
-            "     u.username AS applyUserName," +
-            "     u2.username adminName," +
-            "   CASE" +
-            "          it.stock_type " +
-            "          WHEN 1 THEN" +
-            "          '入库' " +
-            "          WHEN 2 THEN" +
-            "          '出库' ELSE NULL " +
-            "     END stockTypeInfo," +
-            "   CASE" +
-            "          it.check_status " +
-            "          WHEN 1 THEN" +
-            "          '未审核' " +
-            "          WHEN 2 THEN" +
-            "          '审核不通过' " +
-            "          WHEN 3 THEN" +
-            "          '审核通过' ELSE NULL " +
-            "     END checkStatusInfo," +
-            "   CASE" +
-            "          it.finish_status " +
-            "          WHEN 1 THEN" +
-            "          '未完成' " +
-            "          WHEN 2 THEN" +
-            "          '已完成' ELSE NULL " +
-            "     END finishStatusInfo," +
-            "   CASE" +
-            "          it.item_type " +
-            "          WHEN 1 THEN" +
-            "          '物料' " +
-            "          WHEN 2 THEN" +
-            "          '产品' ELSE NULL " +
-            "     END itemTypeInfo " +
-            "   FROM" +
-            "     `t_stock_item` it" +
-            "     LEFT JOIN `mc-ums`.t_user u ON ( it.apply_user_id = u.user_id )" +
-            "     LEFT JOIN `mc-ums`.t_user u2 ON ( it.admin_id = u2.user_id )")
+    @Select("   SELECT  " +
+            "     it.*,  " +
+            "     it.stock_item_id AS stock_item_id2,  " +
+            "     u.username AS applyUserName,  " +
+            "     u2.username adminName,  " +
+            "   CASE  " +
+            "          it.stock_type   " +
+            "          WHEN 1 THEN  " +
+            "          '入库'   " +
+            "          WHEN 2 THEN  " +
+            "          '出库' ELSE NULL   " +
+            "     END stockTypeInfo,  " +
+            "   CASE  " +
+            "          it.check_status   " +
+            "          WHEN 1 THEN  " +
+            "          '未审核'   " +
+            "          WHEN 2 THEN  " +
+            "          '审核不通过'   " +
+            "          WHEN 3 THEN  " +
+            "          '审核通过' ELSE NULL   " +
+            "     END checkStatusInfo,  " +
+            "   CASE  " +
+            "          it.finish_status   " +
+            "          WHEN 1 THEN  " +
+            "          '未完成'   " +
+            "          WHEN 2 THEN  " +
+            "          '已完成' ELSE NULL   " +
+            "     END finishStatusInfo,  " +
+            "   CASE  " +
+            "          it.item_type   " +
+            "          WHEN 1 THEN  " +
+            "          '物料'   " +
+            "          WHEN 2 THEN  " +
+            "          '产品' ELSE NULL   " +
+            "     END itemTypeInfo   " +
+            "   FROM  " +
+            "     `t_stock_item` it  " +
+            "     LEFT JOIN `mc-ums`.t_user u ON ( it.apply_user_id = u.user_id )  " +
+            "     LEFT JOIN `mc-ums`.t_user u2 ON ( it.admin_id = u2.user_id )  " +
+            "   WHERE    " +
+            "     it.delete_status = 0")
     @Results({
             @Result(property = "stockItemDetailVos", column = "stock_item_id2", many = @Many(select = "com.qcmoke.wms.mapper.StockItemDetailMapper.getListByStockItemId"))
     })

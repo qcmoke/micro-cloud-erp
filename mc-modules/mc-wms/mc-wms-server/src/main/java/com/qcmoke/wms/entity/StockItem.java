@@ -33,7 +33,7 @@ private static final long serialVersionUID=1L;
     private Long stockItemId;
 
     /**
-     * 出入库类型(1:入库；2:出库)
+     * 出入库类型(1:采购入库；2:销售出库；3:采购退货出库；4:销售退货入库)
      */
     private Integer stockType;
 

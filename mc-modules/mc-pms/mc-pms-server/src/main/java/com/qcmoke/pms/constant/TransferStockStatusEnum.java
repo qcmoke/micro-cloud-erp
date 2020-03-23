@@ -8,6 +8,7 @@ import lombok.Getter;
 @Getter
 public enum TransferStockStatusEnum {
     /**
+     *
      * 移交库存状态(1:未移交；2:已移交申请；3:移交失败；3:已完成移交；)
      */
     NO_TRANSFER(1, "未移交"),

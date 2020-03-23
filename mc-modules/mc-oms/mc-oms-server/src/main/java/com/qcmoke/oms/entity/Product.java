@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-15
+ * @since 2020-03-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -36,6 +36,11 @@ private static final long serialVersionUID=1L;
      * 产品名称
      */
     private String productName;
+
+    /**
+     * 图片
+     */
+    private String img;
 
     /**
      * 批准文号
@@ -58,11 +63,6 @@ private static final long serialVersionUID=1L;
     private String space;
 
     /**
-     * 供应商编号
-     */
-    private Long supplierId;
-
-    /**
      * 单位
      */
     private String unit;
@@ -71,6 +71,11 @@ private static final long serialVersionUID=1L;
      * 规格
      */
     private String standard;
+
+    /**
+     * 安全库存
+     */
+    private Double safetyStock;
 
     /**
      * 创建时间
@@ -87,10 +92,5 @@ private static final long serialVersionUID=1L;
      */
     private Integer deleteStatus;
 
-
-    /**
-     * 安全库存
-     */
-    private Double safetyStock;
 
 }

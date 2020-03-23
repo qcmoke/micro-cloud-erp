@@ -13,11 +13,15 @@ public enum CheckStatusEnum {
      * 2:已提交申请但未审核
      * 3:审核不通过
      * 4:审核通过
+     * 5.未入库
+     * 6.已入库
      */
     NO_APPLY(1, "未提交入库申请"),
     APPLY_BUT_NO_CHECK(2, "已提交申请但未审核"),
     NO_PASS(3, "审核不通过"),
-    PASS(4, "审核通过");
+    PASS(4, "审核通过"),
+    NOT_STOCKED(5, "未入库"),
+    STOCKED(6, "已入库");
 
 
     private final int status;

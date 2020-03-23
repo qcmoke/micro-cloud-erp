@@ -89,4 +89,13 @@ public class Result<T> implements Serializable {
         this.data = data;
         return this;
     }
+
+    public boolean isOk() {
+        int okValue = HttpStatus.OK.value();
+        return this.getStatus() == okValue;
+    }
+
+    public boolean isError() {
+        return !isOk();
+    }
 }

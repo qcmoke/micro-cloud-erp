@@ -55,6 +55,11 @@ mybatis-plus:
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 
+#feign注解支持hystrix服务降级处理
+feign:
+  hystrix:
+    enabled: true
+
 #网关超时时间配置(对于路由使用serviceId时生效)
 ribbon:
   #请务器请求超时时间,设置为2秒

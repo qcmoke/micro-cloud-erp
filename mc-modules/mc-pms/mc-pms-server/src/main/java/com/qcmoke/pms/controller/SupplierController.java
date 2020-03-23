@@ -6,18 +6,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.exception.GlobalCommonException;
+import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.pms.dto.SupplierDto;
 import com.qcmoke.pms.entity.Supplier;
 import com.qcmoke.pms.service.SupplierService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -58,32 +58,29 @@ public class SupplierController {
         return Result.ok(materielVo);
     }
 
-    @PostMapping
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> add(Supplier supplier) {
-        supplier.setCreateTime(new Date());
-        boolean save = supplierService.save(supplier);
-        return Result.ok(save);
+    @PostMapping("/saveOrUpdate")
+    public Result<Boolean> saveOrUpdate(@RequestBody SupplierDto supplierDto) {
+        if (supplierDto == null
+                || supplierDto.getSupplierName() == null
+                || supplierDto.getBank() == null
+                || supplierDto.getLinkMan() == null
+                || supplierDto.getLinkTel() == null) {
+            throw new GlobalCommonException("参数不足！");
+        }
+        Supplier supplier = BeanCopyUtil.copy(supplierDto, Supplier.class);
+        List<Long> materialIds = supplierDto.getMaterialIds();
+        supplierService.saveOrUpdate(supplier, materialIds);
+        return Result.ok();
     }
 
     @DeleteMapping("/{ids}")
-    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> delete(@PathVariable String ids) {
         List<Long> idList = WebUtil.parseIdStrToLongList(ids);
         if (CollectionUtils.isEmpty(idList)) {
             throw new GlobalCommonException("ids is required");
         }
-        boolean status = supplierService.removeByIds(idList);
-        return status ? Result.ok() : Result.error();
-    }
-
-
-    @PutMapping
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> update(Supplier material) {
-        material.setModifyTime(new Date());
-        boolean flag = supplierService.updateById(material);
-        return flag ? Result.ok() : Result.error();
+        supplierService.remove(idList);
+        return Result.ok();
     }
 
 }

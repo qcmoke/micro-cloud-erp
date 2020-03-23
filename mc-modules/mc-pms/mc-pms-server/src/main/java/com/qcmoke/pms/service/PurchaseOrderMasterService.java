@@ -23,11 +23,20 @@ public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster
 
     void transferToStock(Long masterId, Long currentUserId);
 
-    boolean updateStatus(PurchaseOrderMaster purchaseOrderMasterDto);
 
     PageResult<PurchaseOrderMasterVo> pageForAddStock(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
 
     void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId);
 
     void deleteByIdList(List<Long> idList);
+
+    void successForInItemToStock(List<Long> masterIdList);
+
+    void checkCallBackForCreateStockPreReview(Long orderId, boolean isOk);
+
+    boolean checkPass(Long masterId);
+
+    boolean checkFail(Long masterId);
+
+    boolean toApplyCheck(Long masterId);
 }

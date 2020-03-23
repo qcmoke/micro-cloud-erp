@@ -5,7 +5,7 @@ import com.qcmoke.oms.entity.Product;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author qcmoke

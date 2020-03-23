@@ -3,8 +3,11 @@ package com.qcmoke.wms.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.wms.dto.OutItemFromStockDto;
 import com.qcmoke.wms.entity.Stock;
 import com.qcmoke.wms.vo.StockVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -18,8 +21,9 @@ public interface StockService extends IService<com.qcmoke.wms.entity.Stock> {
 
     void checkInitStock();
 
-    void addItemToStock(String stockItemIds);
+    void addItemToStock(List<Long> stockItemIdList);
 
     IPage<StockVo> getPage(Page<Stock> page, Stock stockDto);
 
+    void outItemFromStock(OutItemFromStockDto outItemFromStockDto);
 }

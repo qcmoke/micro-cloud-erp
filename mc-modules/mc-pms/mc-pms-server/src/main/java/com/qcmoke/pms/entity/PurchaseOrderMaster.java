@@ -63,16 +63,18 @@ public class PurchaseOrderMaster implements Serializable {
     private Double freight;
 
     /**
-     * 采购总金额(元)
+     * 采购金额(元)
      */
     private Double totalAmount;
 
     /**
-     * 《审核状态》
-     * 0:未提交入库申请；
-     * 1:已提交申请未审核，
-     * 2:审核不通过
-     * 3:审核通过
+     * 《入库申请状态》
+     * 1:未提交入库申请
+     * 2:已提交申请但未审核
+     * 3:审核不通过
+     * 4:审核通过
+     * 5.未入库
+     * 6.已入库
      */
     private Integer status;
 
@@ -101,11 +103,5 @@ public class PurchaseOrderMaster implements Serializable {
      * 删除状态【0->未删除；1->已删除】
      */
     private Integer deleteStatus;
-
-
-    /**
-     * 运费支付状态
-     */
-    private Integer freightPayStatus;
 
 }

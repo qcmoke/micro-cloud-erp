@@ -43,6 +43,15 @@ public class MaterialController {
     }
 
 
+    @GetMapping("/getAll/{supplierId}")
+    public Result<List<Material>> getAllBySupplierId(@PathVariable Long supplierId) {
+        if (supplierId == null) {
+            throw new GlobalCommonException("supplierId is required");
+        }
+        List<Material> all = materielService.getAllBySupplierId(supplierId);
+        return Result.ok(all);
+    }
+
     @GetMapping
     public Result<PageResult<Material>> page(PageQuery pageQuery, Material materialDto) {
         IPage<Material> pageInfo = materielService.page(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()), new QueryWrapper<>(materialDto));

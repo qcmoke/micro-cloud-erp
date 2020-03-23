@@ -3,8 +3,14 @@ package com.qcmoke.wms.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.wms.client.PurchaseOrderMasterClient;
+import com.qcmoke.wms.client.SaleOrderMasterClient;
+import com.qcmoke.wms.constant.CheckStatusEnum;
+import com.qcmoke.wms.constant.FinishStatusEnum;
+import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.mapper.StockItemMapper;
 import com.qcmoke.wms.service.StockItemService;
@@ -28,7 +34,10 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
 
     @Autowired
     private StockItemMapper stockItemMapper;
-
+    @Autowired
+    private SaleOrderMasterClient saleOrderMasterClient;
+    @Autowired
+    private PurchaseOrderMasterClient purchaseOrderMasterClient;
 
     @Override
     public IPage<StockItemVo> getPage(Page<StockItem> page, StockItem stockItemDto) {
@@ -38,14 +47,73 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public Result<Boolean> updateStatus(Long stockItemId, int status) {
-        StockItem stockItem = new StockItem();
-        stockItem.setStockItemId(stockItemId);
-        stockItem.setCheckStatus(status);
-        stockItem.setModifyTime(new Date());
-        stockItem.setAdminId(OauthSecurityJwtUtil.getCurrentUserId());
-        stockItem.setFinishStatus(1);
+    public void checkPass(Long stockItemId) {
+        StockItem stockItem = stockItemMapper.selectById(stockItemId);
+        if (FinishStatusEnum.FINISHED.value() == stockItem.getFinishStatus()) {
+            throw new GlobalCommonException("该订单的货物已经完成出入库！");
+        }
+        stockItem.setStockItemId(stockItemId)
+                .setCheckStatus(CheckStatusEnum.PASS.value())
+                .setModifyTime(new Date())
+                .setAdminId(OauthSecurityJwtUtil.getCurrentUserId());
         boolean flag = this.updateById(stockItem);
-        return flag ? Result.ok() : Result.error();
+        if (!flag) {
+            throw new GlobalCommonException("更新出入单失败");
+        }
+        StockType stockType = StockType.valueOf(stockItem.getStockType());
+        Result<?> result;
+        switch (stockType) {
+            case SALE_IN:
+            case SALE_OUT:
+                result = saleOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), true);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知oms失败");
+                }
+                break;
+            case PURCHASE_IN:
+            case PURCHASE_OUT:
+                result = purchaseOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), true);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知pms失败");
+                }
+                break;
+            default:
+                throw new GlobalCommonException("暂不支持此操作！");
+        }
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void checkFail(Long stockItemId) {
+        StockItem stockItem = stockItemMapper.selectById(stockItemId);
+        stockItem.setStockItemId(stockItemId)
+                .setCheckStatus(CheckStatusEnum.NO_PASS.value())
+                .setModifyTime(new Date())
+                .setAdminId(OauthSecurityJwtUtil.getCurrentUserId());
+        boolean flag = this.updateById(stockItem);
+        if (!flag) {
+            throw new GlobalCommonException("更新出入单失败");
+        }
+        StockType stockType = StockType.valueOf(stockItem.getStockType());
+        Result<?> result;
+        switch (stockType) {
+            case SALE_IN:
+            case SALE_OUT:
+                result = saleOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), false);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知oms失败");
+                }
+                break;
+            case PURCHASE_IN:
+            case PURCHASE_OUT:
+                result = purchaseOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), false);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知pms失败");
+                }
+                break;
+            default:
+                throw new GlobalCommonException("暂不支持此操作！");
+        }
     }
 }

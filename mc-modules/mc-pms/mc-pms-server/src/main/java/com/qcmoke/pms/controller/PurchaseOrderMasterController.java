@@ -8,10 +8,13 @@ import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.pms.api.PurchaseOrderMasterApi;
+import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.service.PurchaseOrderMasterService;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +30,55 @@ import java.util.List;
  * @author qcmoke
  * @since 2020-03-12
  */
+@Slf4j
 @RestController
 @RequestMapping("/purchaseOrderMaster")
-public class PurchaseOrderMasterController {
+public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
     @Autowired
     private PurchaseOrderMasterService purchaseOrderMasterService;
+
+
+    /**
+     * 出库成功回调
+     */
+    @RequestMapping("/successForOutItemFromStock")
+    @Override
+    public Result<?> successForOutItemFromStock(PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
+        log.info("出库成功回调,purchaseOrderMasterApiDto={}", purchaseOrderMasterApiDto);
+        /*
+         * TODO
+         * 待开发
+         */
+        return null;
+    }
+
+    /**
+     * 入库成功回调
+     */
+    @Override
+    @RequestMapping("/successForInItemToStock")
+    public Result<?> successForInItemToStock(@RequestBody List<Long> masterIdList) {
+        log.info("入库成功回调,masterIdList={}", masterIdList);
+        if (CollectionUtils.isEmpty(masterIdList)) {
+            throw new GlobalCommonException("masterIdList is required");
+        }
+        purchaseOrderMasterService.successForInItemToStock(masterIdList);
+        return Result.ok();
+    }
+
+    /**
+     * 审核结果回调
+     */
+    @Override
+    @RequestMapping("/checkCallBackForCreateStockPreReview")
+    public Result<?> checkCallBackForCreateStockPreReview(@RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
+        log.info("审核结果回调,orderId={},isOk={}", orderId, isOk);
+        if (orderId == null) {
+            throw new GlobalCommonException("orderId is required");
+        }
+        purchaseOrderMasterService.checkCallBackForCreateStockPreReview(orderId, isOk);
+        return Result.ok();
+    }
 
     @GetMapping
     public Result<PageResult<PurchaseOrderMasterVo>> page(PageQuery pageQuery, PurchaseOrderMaster purchaseOrderMaster) {
@@ -48,8 +95,11 @@ public class PurchaseOrderMasterController {
     }
 
 
+    /**
+     * 通过id查询
+     */
     @GetMapping("/{id}")
-    public Result<PurchaseOrderMaster> one(@PathVariable String id) {
+    public Result<PurchaseOrderMaster> getById(@PathVariable String id) {
         if (StringUtils.isBlank(id)) {
             throw new GlobalCommonException("id is required");
         }
@@ -58,7 +108,7 @@ public class PurchaseOrderMasterController {
     }
 
     /**
-     * 添加订单
+     * 创建或修改采购订单
      */
     @PostMapping("/createOrUpdatePurchaseOrder")
     public Result<Boolean> createOrUpdatePurchaseOrder(@RequestBody PurchaseOrderMasterDto purchaseOrderMasterDto) {
@@ -70,6 +120,9 @@ public class PurchaseOrderMasterController {
         return Result.ok("操作成功");
     }
 
+    /**
+     * 通过id批量删除
+     */
     @DeleteMapping("/{ids}")
     public Result<Boolean> delete(@PathVariable String ids) {
         List<Long> idList = WebUtil.parseIdStrToLongList(ids);
@@ -81,13 +134,37 @@ public class PurchaseOrderMasterController {
     }
 
 
-    @PutMapping("/updateStatus")
-    public Result<Boolean> updateStatus(PurchaseOrderMaster purchaseOrderMasterDto) {
-        boolean flag = purchaseOrderMasterService.updateStatus(purchaseOrderMasterDto);
+    /**
+     * 提交审核申请
+     */
+    @PutMapping("/toApplyCheck/{masterId}")
+    public Result<Boolean> toApplyCheck(@PathVariable Long masterId){
+        boolean flag = purchaseOrderMasterService.toApplyCheck(masterId);
+        return flag ? Result.ok() : Result.error();
+    }
+
+    /**
+     * 审核通过
+     */
+    @PutMapping("/checkPass/{masterId}")
+    public Result<Boolean> checkPass(@PathVariable Long masterId) {
+        boolean flag = purchaseOrderMasterService.checkPass(masterId);
+        return flag ? Result.ok() : Result.error();
+    }
+
+    /**
+     * 审核不通过
+     */
+    @PutMapping("/checkFail/{masterId}")
+    public Result<Boolean> checkFail(@PathVariable Long masterId) {
+        boolean flag = purchaseOrderMasterService.checkFail(masterId);
         return flag ? Result.ok() : Result.error();
     }
 
 
+    /**
+     * 生成出入库单
+     */
     @PutMapping("/transferToStock/{masterId}")
     public void transferToStock(@PathVariable Long masterId) {
         if (masterId == null) {

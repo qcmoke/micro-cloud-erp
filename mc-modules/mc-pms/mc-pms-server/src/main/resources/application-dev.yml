@@ -36,7 +36,7 @@ spring:
   ##热部署
   devtools:
     restart:
-      enabled: false
+      enabled: true
 
 ##配置mybatis plus
 mybatis-plus:

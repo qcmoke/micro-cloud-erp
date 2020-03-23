@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-15
+ * @since 2020-03-20
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -73,7 +73,7 @@ private static final long serialVersionUID=1L;
     private String telPhone;
 
     /**
-     * 邮
+     * 邮编
      */
     private String postcode;
 

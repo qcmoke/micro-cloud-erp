@@ -23,10 +23,14 @@ public class PurchaseOrderMasterVo extends PurchaseOrderMaster {
      */
     private Set<PurchaseOrderDetailVo> purchaseOrderDetailVoSet;
 
-
     /**
      * 操作员id
      */
     private String operator;
-    
+
+    private String payTypeInfo;
+
+    private String statusInfo;
+
+    private String transferStockStatusInfo;
 }

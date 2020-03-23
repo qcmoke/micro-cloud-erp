@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>mc-pms-server</module>
+        <module>mc-pms-api</module>
     </modules>
 
 

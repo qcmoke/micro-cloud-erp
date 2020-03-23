@@ -11,9 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author qcmoke
  * @since 2020-03-12
  */
-@RequestMapping("/materialStock")
-public interface MaterialStockApi {
+@RequestMapping("/stockItem")
+public interface StockItemApi {
 
-    @RequestMapping(value = "/transferToStock", method = RequestMethod.POST)
-    Result<?> transferToStock(@RequestBody StockItemDto stockItemDto);
+    /**
+     * 生成库存出入预审核表
+     *
+     * @param stockItemDto
+     * @return
+     */
+    @RequestMapping(value = "/createStockPreReview", method = RequestMethod.POST)
+    Result<?> createStockPreReview(@RequestBody StockItemDto stockItemDto);
 }

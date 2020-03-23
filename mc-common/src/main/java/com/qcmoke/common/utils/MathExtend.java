@@ -133,18 +133,18 @@ public class MathExtend {
 	 * @param v2
 	 * @param scale
 	 *            表示需要精确到小数点以后几位
-	 * @param round_mode
+	 * @param roundMode
 	 *            表示用户指定的舍入模式
 	 * @return 两个参数的商
 	 */
-	public static double divide(double v1, double v2, int scale, int round_mode) {
+	public static double divide(double v1, double v2, int scale, int roundMode) {
 		if (scale < 0) {
 			throw new IllegalArgumentException(
 					"The scale must be a positive integer or zero");
 		}
 		BigDecimal b1 = new BigDecimal(Double.toString(v1));
 		BigDecimal b2 = new BigDecimal(Double.toString(v2));
-		return b1.divide(b2, scale, round_mode).doubleValue();
+		return b1.divide(b2, scale, roundMode).doubleValue();
 	}
 
 	/**
@@ -178,18 +178,18 @@ public class MathExtend {
 	 * @param v2
 	 * @param scale
 	 *            表示需要精确到小数点以后几位
-	 * @param round_mode
+	 * @param roundMode
 	 *            表示用户指定的舍入模式
 	 * @return 两个参数的商，以字符串格式返回
 	 */
-	public static String divide(String v1, String v2, int scale, int round_mode) {
+	public static String divide(String v1, String v2, int scale, int roundMode) {
 		if (scale < 0) {
 			throw new IllegalArgumentException(
 					"The scale must be a positive integer or zero");
 		}
 		BigDecimal b1 = new BigDecimal(v1);
 		BigDecimal b2 = new BigDecimal(v2);
-		return b1.divide(b2, scale, round_mode).toString();
+		return b1.divide(b2, scale, roundMode).toString();
 	}
 
 	/**
@@ -212,17 +212,17 @@ public class MathExtend {
 	 *            需要舍入的数字
 	 * @param scale
 	 *            小数点后保留几位
-	 * @param round_mode
+	 * @param roundMode
 	 *            指定的舍入模式
 	 * @return 舍入后的结果
 	 */
-	public static double round(double v, int scale, int round_mode) {
+	public static double round(double v, int scale, int roundMode) {
 		if (scale < 0) {
 			throw new IllegalArgumentException(
 					"The scale must be a positive integer or zero");
 		}
 		BigDecimal b = new BigDecimal(Double.toString(v));
-		return b.setScale(scale, round_mode).doubleValue();
+		return b.setScale(scale, roundMode).doubleValue();
 	}
 
 	/**
@@ -245,17 +245,17 @@ public class MathExtend {
 	 *            需要四舍五入的数字
 	 * @param scale
 	 *            小数点后保留几位
-	 * @param round_mode
+	 * @param roundMode
 	 *            指定的舍入模式
 	 * @return 四舍五入后的结果，以字符串格式返回
 	 */
-	public static String round(String v, int scale, int round_mode) {
+	public static String round(String v, int scale, int roundMode) {
 		if (scale < 0) {
 			throw new IllegalArgumentException(
 					"The scale must be a positive integer or zero");
 		}
 		BigDecimal b = new BigDecimal(v);
-		return b.setScale(scale, round_mode).toString();
+		return b.setScale(scale, roundMode).toString();
 	}
 	
 	/**
@@ -273,8 +273,6 @@ public class MathExtend {
 	
 	/**
 	 * 显示两位小数处理
-	 * @param value
-	 * @return
 	 */
 	public static String quickDecimalFormat(float value) {
 		DecimalFormat df = new DecimalFormat("0.00");//格式化小数  
