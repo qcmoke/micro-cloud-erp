@@ -97,7 +97,11 @@ public class StockItemController implements StockItemApi {
             return Result.error("参数有误");
         }
 
-        StockItem dbStockItem = stockItemService.getOne(new LambdaQueryWrapper<StockItem>().eq(StockItem::getOrderId, orderId).eq(StockItem::getItemType, itemType.value()));
+        StockItem dbStockItem = stockItemService.getOne(
+                new LambdaQueryWrapper<StockItem>()
+                        .eq(StockItem::getOrderId, orderId)
+                        .eq(StockItem::getItemType, itemType.value())
+                        .eq(StockItem::getStockType,stockType.value()));
         if (dbStockItem != null) {
             return Result.error("库存出入单已存在！");
         }

@@ -28,7 +28,7 @@ public interface SaleOrderMasterService extends IService<SaleOrderMaster> {
 
     void deleteByIdList(List<Long> idList);
 
-    void updateUserDelivery(SaleOrderMaster orderMaster, Boolean isReceived);
+    void confirmUserReceipt(SaleOrderMaster orderMaster, Boolean isReceived);
 
     void applyForDelivery(ApplyForDeliveryDto applyForDeliveryDto);
 

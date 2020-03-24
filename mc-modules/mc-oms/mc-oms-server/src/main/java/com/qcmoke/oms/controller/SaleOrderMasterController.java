@@ -137,10 +137,10 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
 
 
     /**
-     * 修改用户物流信息
+     * 收货确认处理
      */
     @PutMapping("/updateUserDelivery")
-    public Result<?> updateUserDelivery(@RequestBody UpdateDeliveryDto updateDeliveryDto) {
+    public Result<?> confirmUserReceipt(@RequestBody UpdateDeliveryDto updateDeliveryDto) {
         if (updateDeliveryDto == null) {
             throw new GlobalCommonException("illegal");
         }
@@ -159,9 +159,8 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
         if (!CheckVariableUtil.isMobile(receiverPhone)) {
             throw new GlobalCommonException("receiverPhone illegal");
         }
-
         SaleOrderMaster orderMaster = BeanCopyUtil.copy(updateDeliveryDto, SaleOrderMaster.class);
-        saleOrderMasterService.updateUserDelivery(orderMaster, isReceived);
+        saleOrderMasterService.confirmUserReceipt(orderMaster, isReceived);
         return Result.ok();
     }
 

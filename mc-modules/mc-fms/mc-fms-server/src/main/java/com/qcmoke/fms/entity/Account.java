@@ -12,7 +12,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
@@ -24,13 +24,13 @@ import java.util.Date;
 @TableName("t_account")
 public class Account implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 账户id
      */
     @TableId(value = "account_id", type = IdType.AUTO)
-    private Integer accountId;
+    private Long accountId;
 
     /**
      * 账户名称
@@ -45,12 +45,12 @@ private static final long serialVersionUID=1L;
     /**
      * 交易平台账号或者银行卡号
      */
-    private Integer bankNum;
+    private String bankNum;
 
     /**
      * 余额
      */
-    private String amount;
+    private Double amount;
 
     /**
      * 是否默认(1:是；2:否)

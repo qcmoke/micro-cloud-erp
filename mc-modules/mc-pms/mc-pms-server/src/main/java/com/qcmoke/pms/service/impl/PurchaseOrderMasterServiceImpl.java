@@ -9,9 +9,13 @@ import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.fms.constant.DealType;
+import com.qcmoke.fms.constant.PayType;
+import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.pms.client.BillClient;
 import com.qcmoke.pms.client.MaterialStockClient;
 import com.qcmoke.pms.client.UserClient;
-import com.qcmoke.pms.constant.CheckStatusEnum;
+import com.qcmoke.pms.constant.OrderStatusEnum;
 import com.qcmoke.pms.constant.PayStatusEnum;
 import com.qcmoke.pms.constant.PayTypeEnum;
 import com.qcmoke.pms.constant.TransferStockStatusEnum;
@@ -62,11 +66,14 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     @Autowired
     private MaterialStockClient materialStockClient;
     @Autowired
-    private UserClient userClient;
-    @Autowired
     private MaterialService materialService;
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private UserClient userClient;
+    @Autowired
+    private BillClient billClient;
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -77,7 +84,7 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         }
         masterList.forEach(master -> {
             master.setModifyTime(new Date());
-            master.setStatus(CheckStatusEnum.STOCKED.getStatus());
+            master.setStatus(OrderStatusEnum.STOCKED.getStatus());
         });
         boolean flag = this.updateBatchById(masterList);
         if (!flag) {
@@ -162,8 +169,8 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
             if (orderMaster == null) {
                 throw new GlobalCommonException("不存在修改的订单");
             }
-            if (orderMaster.getStatus() == CheckStatusEnum.PASS.getStatus()) {
-                throw new GlobalCommonException("该订单已支审核通过，不允许修改！");
+            if (orderMaster.getStatus() >= OrderStatusEnum.PASS.getStatus()) {
+                throw new GlobalCommonException("该订单已审核通过，不允许修改！");
             }
         }
 
@@ -204,7 +211,7 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         detailDtoList.forEach(detail -> {
             Long masterId = purchaseOrderMaster.getMasterId();
             detail.setCreateTime(new Date()).setMasterId(masterId);
-            detail.setModifyTime(new Date()).setMasterId(masterDtoId);
+            detail.setModifyTime(new Date()).setMasterId(purchaseOrderMaster.getMasterId());
         });
         flag = purchaseOrderDetailService.saveBatch(detailDtoList);
         if (!flag) {
@@ -242,24 +249,40 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     }
 
     /**
-     * 生成出入库单
+     * 生成出入库单和财务账单
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void transferToStock(Long masterId, Long currentUserId) {
-        PurchaseOrderMaster master = this.getById(masterId);
-        if (master == null) {
+        PurchaseOrderMaster orderMaster = this.getById(masterId);
+        if (orderMaster == null) {
             throw new GlobalCommonException("不存在对应的订单！");
         }
-        if (master.getStatus() == null || master.getStatus() < CheckStatusEnum.PASS.getStatus()) {
+        if (orderMaster.getStatus() == null || orderMaster.getStatus() < OrderStatusEnum.PASS.getStatus()) {
             throw new GlobalCommonException("审核未通过不能移交仓库生成出入库单！");
         }
-        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == master.getTransferStockStatus()) {
+        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == orderMaster.getTransferStockStatus()) {
             throw new GlobalCommonException("改订单已经移交仓库，不能重复！");
         }
 
+
+        //将支出记录到财务账单
+        Double orderAmountTotalValue = orderMaster.getTotalAmount();
+        Double freight = orderMaster.getFreight();
+        Double billAmountTotal = orderAmountTotalValue + orderAmountTotalValue + freight;
+        BillApiDto billApiDto = new BillApiDto()
+                .setDealNum(orderMaster.getMasterId())
+                .setDealType(DealType.PURCHASE_OUT)
+                .setPayType(PayType.valueOf(orderMaster.getPayType()))
+                .setTotalAmount(billAmountTotal);
+        Result<?> billResult = billClient.addBill(billApiDto);
+        if (billResult.isError()) {
+            throw new GlobalCommonException("支出记录到财务账单失败");
+        }
+
+
         //将采购订单对应的明细物料加到移交明细单里
-        List<PurchaseOrderDetail> details = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, master.getMasterId()));
+        List<PurchaseOrderDetail> details = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, orderMaster.getMasterId()));
         List<StockItemDetailDto> stockItemDetailDtoList = new ArrayList<>();
         details.forEach(detail -> {
             StockItemDetailDto stockDto = new StockItemDetailDto();
@@ -282,14 +305,23 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         }
 
         //修改订单为已移交
-        master.setMasterId(masterId);
-        master.setOperatorId(currentUserId);
-        master.setTransferStockStatus(TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
-        master.setStatus(CheckStatusEnum.NOT_STOCKED.getStatus());
-        master.setModifyTime(new Date());
-        boolean flag = this.updateById(master);
+        orderMaster.setMasterId(masterId);
+        orderMaster.setOperatorId(currentUserId);
+        orderMaster.setTransferStockStatus(TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
+        orderMaster.setStatus(OrderStatusEnum.NOT_STOCKED.getStatus());
+        orderMaster.setModifyTime(new Date());
+        boolean flag = this.updateById(orderMaster);
         if (!flag) {
             throw new GlobalCommonException("修改订单状态失败");
+        }
+    }
+
+
+    private void checkPaid(PurchaseOrderMaster orderMaster) {
+        if (orderMaster.getPayStatus() != PayStatusEnum.PAID.value()
+                || orderMaster.getTotalAmount() == null
+                || orderMaster.getFreight() == null) {
+            throw new GlobalCommonException("该订单未支付完成！");
         }
     }
 
@@ -300,10 +332,8 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         if (orderMaster == null) {
             throw new GlobalCommonException("没有对应的记录");
         }
-        if (orderMaster.getPayStatus() != PayStatusEnum.PAID.value()) {
-            throw new GlobalCommonException("该订单未支付！");
-        }
-        return updateStatus(orderMaster, CheckStatusEnum.APPLY_BUT_NO_CHECK.getStatus());
+        checkPaid(orderMaster);
+        return updateStatus(orderMaster, OrderStatusEnum.APPLY_BUT_NO_CHECK.getStatus());
     }
 
 
@@ -314,10 +344,8 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         if (orderMaster == null) {
             throw new GlobalCommonException("没有对应的记录");
         }
-        if (orderMaster.getStatus() < PayStatusEnum.NO_PAID.value()) {
-            throw new GlobalCommonException("该订单未支付，不允许通过！");
-        }
-        return updateStatus(orderMaster, CheckStatusEnum.PASS.getStatus());
+        checkPaid(orderMaster);
+        return updateStatus(orderMaster, OrderStatusEnum.PASS.getStatus());
     }
 
 
@@ -328,12 +356,12 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         if (orderMaster == null) {
             throw new GlobalCommonException("没有对应的记录");
         }
-        return updateStatus(orderMaster, CheckStatusEnum.NO_PASS.getStatus());
+        return updateStatus(orderMaster, OrderStatusEnum.NO_PASS.getStatus());
     }
 
     private boolean updateStatus(PurchaseOrderMaster orderMaster, int willStatus) {
         //如果是申请状态，那么状态只能改为不通过或者通过两个状态,而不能越级
-        if (CheckStatusEnum.NO_APPLY.getStatus() == orderMaster.getStatus() && willStatus > CheckStatusEnum.PASS.getStatus()) {
+        if (OrderStatusEnum.NO_APPLY.getStatus() == orderMaster.getStatus() && willStatus > OrderStatusEnum.PASS.getStatus()) {
             throw new GlobalCommonException("操作越级，非法！");
         }
         if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == orderMaster.getTransferStockStatus()) {

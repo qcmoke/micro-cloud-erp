@@ -25,12 +25,12 @@ public interface UserClient extends UserApi {
             return new UserClient() {
                 @Override
                 public Result<UserVo> getUserById(Long userId) {
-                    return Result.error();
+                    return Result.error(throwable.getMessage());
                 }
 
                 @Override
                 public Result<List<UserVo>> getUserByIds(String[] userIds) {
-                    return Result.error();
+                    return Result.error(throwable.getMessage());
                 }
 
             };

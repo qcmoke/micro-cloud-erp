@@ -26,7 +26,7 @@ public interface MaterialStockClient extends StockItemApi {
             return new MaterialStockClient() {
                 @Override
                 public Result<?> createStockPreReview(StockItemDto stockItemDto) {
-                    return Result.error();
+                    return Result.error(throwable.getMessage());
                 }
             };
         }

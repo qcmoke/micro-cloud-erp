@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-12
+ * @since 2020-03-24
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -38,19 +38,14 @@ public class MaterialRefund implements Serializable {
     private Long purchaseOrderMasterId;
 
     /**
-     * 退款渠道[1-支付宝，2-微信，3-银联，4-汇款]
+     * 退款渠道支付方式【1->支付宝；2->微信；3->银联】
      */
     private Integer refundChannel;
 
     /**
-     * 总金额
+     * 退款总金额
      */
     private Double totalAmount;
-
-    /**
-     * 退货状态（1:退货中；2:退货成功；3:退货失败）
-     */
-    private Integer status;
 
     /**
      * 退货原因
@@ -58,17 +53,12 @@ public class MaterialRefund implements Serializable {
     private String reason;
 
     /**
-     * 发货日期
+     * 退货日期
      */
-    private Date outDate;
+    private Date refundDate;
 
     /**
-     * 完成时间
-     */
-    private Date finishedTime;
-
-    /**
-     * 创建时间
+     * 退订单创建时间
      */
     private Date createTime;
 
@@ -82,19 +72,5 @@ public class MaterialRefund implements Serializable {
      */
     private Integer deleteStatus;
 
-    /**
-     * 创建退单的用户id
-     */
-    private Long createUserId;
 
-
-    /**
-     * 审核状态（1:未审核；2:审核不通；3:审核通过）
-     */
-    private Integer checkStatus;
-
-    /**
-     * 最后一次审核的用户id
-     */
-    private Long checkUserId;
 }

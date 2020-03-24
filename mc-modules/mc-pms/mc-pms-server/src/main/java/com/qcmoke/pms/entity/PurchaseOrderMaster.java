@@ -43,7 +43,7 @@ public class PurchaseOrderMaster implements Serializable {
     private Date purchaseDate;
 
     /**
-     * 支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】
+     * 支付方式【1->支付宝；2->微信；3->银联】
      */
     private Integer payType;
 

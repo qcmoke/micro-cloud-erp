@@ -13,7 +13,7 @@ import java.util.Date;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author qcmoke
@@ -25,7 +25,7 @@ import java.util.Date;
 @TableName("t_bill")
 public class Bill implements Serializable {
 
-private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * 账单编号
@@ -41,12 +41,11 @@ private static final long serialVersionUID=1L;
     /**
      * 交易单据编号(采购单，采购退货单，销售订单，销售退货单等编号)
      */
-    private String dealNum;
+    private Long dealNum;
 
     /**
-     * 账户id
+     * 账户编号
      */
-    @TableField("accountId")
     private Long accountId;
 
     /**

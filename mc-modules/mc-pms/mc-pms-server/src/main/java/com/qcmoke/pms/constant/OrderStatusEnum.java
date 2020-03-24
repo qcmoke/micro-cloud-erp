@@ -6,7 +6,7 @@ import lombok.Getter;
  * @author qcmoke
  */
 @Getter
-public enum CheckStatusEnum {
+public enum OrderStatusEnum {
     /**
      * 《入库状态》
      * 1:未提交入库申请
@@ -27,7 +27,7 @@ public enum CheckStatusEnum {
     private final int status;
     private final String info;
 
-    CheckStatusEnum(Integer status, String info) {
+    OrderStatusEnum(Integer status, String info) {
         this.status = status;
         this.info = info;
     }

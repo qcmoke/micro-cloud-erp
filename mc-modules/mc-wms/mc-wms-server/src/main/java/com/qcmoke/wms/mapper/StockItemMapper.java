@@ -19,6 +19,13 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StockItemMapper extends BaseMapper<StockItem> {
 
+    /**
+     *
+     出入库类型(1:采购入库；2:销售出库；3:采购退货出库；4:销售退货入库)
+     * @param page
+     * @param stockItemDto
+     * @return
+     */
 
     @Select("   SELECT  " +
             "     it.*,  " +
@@ -28,9 +35,13 @@ public interface StockItemMapper extends BaseMapper<StockItem> {
             "   CASE  " +
             "          it.stock_type   " +
             "          WHEN 1 THEN  " +
-            "          '入库'   " +
+            "          '采购入库'   " +
             "          WHEN 2 THEN  " +
-            "          '出库' ELSE NULL   " +
+            "          '销售出库'   " +
+            "          WHEN 3 THEN  " +
+            "          '采购退货出库'   " +
+            "          WHEN 4 THEN  " +
+            "          '销售退货入库' ELSE NULL   " +
             "     END stockTypeInfo,  " +
             "   CASE  " +
             "          it.check_status   " +

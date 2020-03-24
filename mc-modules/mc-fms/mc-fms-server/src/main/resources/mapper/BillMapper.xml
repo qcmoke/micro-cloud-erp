@@ -19,4 +19,5 @@
         bill_id, type, deal_num, accountId, total_amount, create_time, modify_time, delete_status
     </sql>
 
+
 </mapper>

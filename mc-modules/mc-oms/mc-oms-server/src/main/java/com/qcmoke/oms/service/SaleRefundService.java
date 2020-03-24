@@ -13,4 +13,6 @@ import com.qcmoke.oms.entity.SaleRefund;
  */
 public interface SaleRefundService extends IService<SaleRefund> {
 
+    void saleRefund(SaleRefund saleRefund);
+
 }

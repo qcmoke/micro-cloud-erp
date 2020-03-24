@@ -1,25 +1,40 @@
 package com.qcmoke.pms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.vo.PageResult;
+import com.qcmoke.common.vo.Result;
+import com.qcmoke.fms.constant.DealType;
+import com.qcmoke.fms.constant.PayType;
+import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.pms.client.BillClient;
+import com.qcmoke.pms.client.MaterialStockClient;
 import com.qcmoke.pms.client.UserClient;
+import com.qcmoke.pms.constant.OrderStatusEnum;
+import com.qcmoke.pms.constant.PayStatusEnum;
 import com.qcmoke.pms.entity.MaterialRefund;
+import com.qcmoke.pms.entity.PurchaseOrderDetail;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.mapper.MaterialRefundMapper;
 import com.qcmoke.pms.service.MaterialRefundService;
-import com.qcmoke.pms.utils.UserClientUtil;
+import com.qcmoke.pms.service.PurchaseOrderDetailService;
+import com.qcmoke.pms.service.PurchaseOrderMasterService;
 import com.qcmoke.pms.vo.MaterialRefundVo;
-import com.qcmoke.ums.vo.UserVo;
+import com.qcmoke.wms.constant.ItemType;
+import com.qcmoke.wms.constant.StockType;
+import com.qcmoke.wms.dto.StockItemDetailDto;
+import com.qcmoke.wms.dto.StockItemDto;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -32,50 +47,84 @@ import java.util.stream.Collectors;
 @Service
 public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper, MaterialRefund> implements MaterialRefundService {
 
-
     @Autowired
     private MaterialRefundMapper materialRefundMapper;
     @Autowired
-    private UserClient userClient;
+    private MaterialStockClient materialStockClient;
+    @Autowired
+    private BillClient billClient;
+    @Autowired
+    private PurchaseOrderMasterService purchaseOrderMasterService;
+    @Autowired
+    private PurchaseOrderDetailService purchaseOrderDetailService;
+
+    @Override
+    public void createRefuse(MaterialRefund materialRefund) {
+        Long masterId = materialRefund.getPurchaseOrderMasterId();
+        PurchaseOrderMaster orderMaster = purchaseOrderMasterService.getById(masterId);
+        if (orderMaster == null) {
+            throw new GlobalCommonException("不存在该订单");
+        }
+
+        //生成退款单
+        materialRefund.setCreateTime(new Date());
+        materialRefund.setRefundDate(new Date());
+        boolean save = this.save(materialRefund);
+        if (!save) {
+            throw new GlobalCommonException("生成退货单失败");
+        }
+
+        if (orderMaster.getStatus() >= OrderStatusEnum.STOCKED.getStatus()) {
+            //退货
+            List<PurchaseOrderDetail> detailList = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, masterId));
+            if (CollectionUtils.isEmpty(detailList)) {
+                throw new GlobalCommonException("不存在相关明细");
+            }
+            List<StockItemDetailDto> detailDtoList = new ArrayList<>();
+            detailList.forEach(detail -> {
+                StockItemDetailDto detailDto = new StockItemDetailDto();
+                detailDto.setItemId(detail.getMaterialId());
+                detailDto.setItemNum(detail.getCount());
+                detailDtoList.add(detailDto);
+            });
+            //生成出库单
+            StockItemDto stockItemDto = new StockItemDto()
+                    .setStockType(StockType.PURCHASE_OUT)
+                    .setItemType(ItemType.MATERIAL)
+                    .setOrderId(masterId)
+                    .setStockItemDetailDtoList(detailDtoList);
+            Result<?> result = materialStockClient.createStockPreReview(stockItemDto);
+            if (HttpStatus.OK.value() != result.getStatus()) {
+                throw new GlobalCommonException(result.getMessage());
+            }
+        }
+
+        if (orderMaster.getPayStatus() == PayStatusEnum.PAID.value()) {
+            Integer refundChannel = materialRefund.getRefundChannel();
+            Double totalAmount = materialRefund.getTotalAmount();
+            if (refundChannel == null || totalAmount == null) {
+                throw new GlobalCommonException("该订单已经支付，请输入退订金额和退款渠道！");
+            }
+
+            //采购退款
+            Result<?> result = billClient.addBill(
+                    new BillApiDto()
+                            .setDealNum(masterId)
+                            .setDealType(DealType.PURCHASE_IN)
+                            .setPayType(PayType.resolve(refundChannel))
+                            .setTotalAmount(totalAmount));
+            if (result.isError()) {
+                throw new GlobalCommonException(result.getMessage());
+            }
+        }
+    }
 
     @Override
     public PageResult<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefund materialDto) {
         IPage<MaterialRefundVo> iPage = materialRefundMapper.getPage(page, null);
-        List<MaterialRefundVo> records = iPage.getRecords();
-        return buildPageResult(records, iPage.getTotal());
-    }
-
-    private PageResult<MaterialRefundVo> buildPageResult(List<MaterialRefundVo> records, long total) {
-        if (CollectionUtils.isNotEmpty(records)) {
-            Set<Long> queryUserIdSet = records.stream().map(MaterialRefundVo::getCheckUserId).filter(Objects::nonNull).collect(Collectors.toSet());
-            Set<Long> createUserIdSet = records.stream().map(MaterialRefundVo::getCreateUserId).filter(Objects::nonNull).collect(Collectors.toSet());
-            queryUserIdSet.addAll(createUserIdSet);
-            List<UserVo> userVoList = UserClientUtil.getUserVoList(queryUserIdSet, userClient);
-            if (CollectionUtils.isNotEmpty(userVoList)) {
-                records.forEach(vo -> {
-                    UserVo checkUser = (UserVo) CollectionUtils.find(userVoList, object -> ((UserVo) object).getUserId().equals(vo.getCheckUserId()));
-                    if (checkUser != null) {
-                        vo.setCheckUser(checkUser);
-                    }
-                    UserVo createUser = (UserVo) CollectionUtils.find(userVoList, object -> ((UserVo) object).getUserId().equals(vo.getCreateUserId()));
-                    if (createUser != null) {
-                        vo.setCreateUser(createUser);
-                    }
-                    //如果退单没有设置金额，那么总金额设置为订单主表的总金额
-                    if (vo.getTotalAmount() == null || vo.getTotalAmount() == 0) {
-                        PurchaseOrderMaster master = vo.getPurchaseOrderMaster();
-                        if (master != null) {
-                            vo.setTotalAmount(master.getTotalAmount());
-                        }
-
-                    }
-                });
-            }
-        }
-
         PageResult<MaterialRefundVo> pageResult = new PageResult<>();
-        pageResult.setRows(records);
-        pageResult.setTotal(total);
+        pageResult.setRows(iPage.getRecords());
+        pageResult.setTotal(iPage.getTotal());
         return pageResult;
     }
 }

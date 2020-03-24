@@ -58,7 +58,7 @@ public class SaleOrderMaster implements Serializable {
     private Integer payType;
 
     /**
-     * 订单状态【1->待付款；2->待发货；3->已发货；4->未确认收货；5->已确认收货；6->已完成；7->已关闭；8->无效订单】
+     * 订单状态【1->待付款；2->待发货；3->已发货；4->未确认收货；5->已确认收货；6->已完成；7->已关闭；-1->无效订单】
      */
     private Integer status;
 

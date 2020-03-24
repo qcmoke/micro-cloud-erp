@@ -53,14 +53,12 @@ public class SaleRefundController {
     }
 
     @PostMapping
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> add(@RequestBody SaleRefund saleRefund) {
+    public Result<Boolean> saleRefund(@RequestBody SaleRefund saleRefund) {
         if (saleRefund.getSaleOrderMasterId() == null || saleRefund.getTotalAmount() == null) {
             throw new GlobalCommonException("some params are required");
         }
-        saleRefund.setCreateTime(new Date());
-        boolean save = saleRefundService.save(saleRefund);
-        return Result.ok(save);
+        saleRefundService.saleRefund(saleRefund);
+        return Result.ok();
     }
 
     @DeleteMapping("/{ids}")

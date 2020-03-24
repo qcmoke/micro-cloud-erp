@@ -9,4 +9,5 @@ public interface GlobalServiceListConstant {
     String MC_WMS_SERVER_ID = "mc-wms-server";
     String MC_UMS_SERVER_ID = "mc-ums-server";
     String MC_PMS_SERVER_ID = "mc-pms-server";
+    String MC_FMS_SERVER_ID = "mc-fms-server";
 }

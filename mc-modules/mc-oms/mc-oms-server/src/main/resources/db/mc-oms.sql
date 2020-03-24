@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 11/03/2020 00:15:55
+ Date: 24/03/2020 22:43:36
 */
 
 SET NAMES utf8mb4;
@@ -34,14 +34,16 @@ CREATE TABLE `t_customer`  (
   `postcode` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`customer_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_customer
 -- ----------------------------
-INSERT INTO `t_customer` VALUES (1, '江西省南昌市昌北经开区', '南昌银行', 137347874478935, 'abc@123.com', '王琦', '123456789', 'XXX电子上午有限公司', '0790-7378785789', '3274837', NULL, NULL, NULL);
+INSERT INTO `t_customer` VALUES (1, '江西省南昌市昌北经开区', '南昌银行', 137347874478935, 'abc@123.com', '王琦', '123456789', 'XXX电子上午有限公司', '0790-7378785789', '3274837', '2020-03-19 17:56:42', NULL, 0);
+INSERT INTO `t_customer` VALUES (2, '宝安区', '建设银行', 5852155545415654, 'xiaohua@huarun.com', '小小华', '1825016986', '华润集团', '18250169', '556000', '2020-03-22 05:35:43', '2020-03-22 05:37:54', 0);
+INSERT INTO `t_customer` VALUES (3, '宝安区', '建设银行', 5852155545415654, 'xiaohua@huarun.com', '文小华', '1825016986', '华润集团', '18250169', '556000', '2020-03-22 05:35:54', NULL, 1);
 
 -- ----------------------------
 -- Table structure for t_product
@@ -50,39 +52,41 @@ DROP TABLE IF EXISTS `t_product`;
 CREATE TABLE `t_product`  (
   `product_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '产品编号',
   `product_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '产品名称',
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片',
   `approve_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '批准文号',
   `batch_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生产批号',
-  `price` double NULL DEFAULT NULL COMMENT '单价',
+  `price` double NULL DEFAULT NULL COMMENT '销售单价(零售价)',
   `space` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品产地',
-  `supplier_id` bigint(20) NULL DEFAULT NULL COMMENT '供应商编号',
   `unit` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '单位',
+  `standard` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '规格',
+  `safety_stock` double NULL DEFAULT NULL COMMENT '安全库存',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
-  PRIMARY KEY (`product_id`) USING BTREE,
-  UNIQUE INDEX `UK_8nlyljvfo33wg4ei3nx2fujdr`(`product_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
+  PRIMARY KEY (`product_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_product
 -- ----------------------------
-INSERT INTO `t_product` VALUES (1, 'apple', '13243434564', '65454213113', 6777, '上海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (2, '魅族', '13243434564', '65454213113', 3333, '珠海', 12332, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (5, '小米', '13243434564', '65454213113', 3333, '北京', 12332, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (6, '魅蓝', '13243434564', '65454213113', 1222, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (7, 'apple6s', '13243434564', '65454213113', 6777, '上海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (8, 'apple7', '13243434564', '65454213113', 6777, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (9, 'iphone5s', '13243434564', '65454213113', 6777, '上海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (10, '魅蓝4', '13243434564', '65454213113', 1222, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (11, '魅族6', '13243434564', '65454213113', 3333, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (12, 'iphone7p', '13243434564', '65454213113', 6777, '北京', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (13, '魅族6p', '13243434564', '65454213113', 3333, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (14, '小米6s', '13243434564', '65454213113', 3333, '珠海', 121323, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (15, 'opple', '13243434564', '65454213113', 2333, '上海', 12332, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (16, 'vivo Xplay7', '13243434564', '65454213113', 2333, '珠海', 1001, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (17, 'iphone7ps', '13243434564', '65454213113', 6777, '上海', 1001, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (18, '魅蓝note', '13243434564', '65454213113', 1222, '珠海', 1001, '台', NULL, NULL, NULL);
-INSERT INTO `t_product` VALUES (19, 'iPhone4s', '13243434564', '65454213113', 4567, '上海', 1001, '台', NULL, NULL, NULL);
+INSERT INTO `t_product` VALUES (1, 'apple7', 'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=2499808568,4153967786&fm=26&gp=0.jpg', '13243434564', '65454213113', 6777, '上海', '台', '5寸', 2300, NULL, '2020-03-22 04:47:39', 0);
+INSERT INTO `t_product` VALUES (2, '魅族17', 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=927333594,287736713&fm=11&gp=0.jpg', '13243434564', '65454213113', 3333, '珠海', '台', '5寸', 2300, NULL, '2020-03-22 04:48:30', 0);
+INSERT INTO `t_product` VALUES (5, '小米10', 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3587423738,2559511326&fm=11&gp=0.jpg', '13243434564', '65454213113', 3333, '北京', '台', '5寸', 2300, NULL, '2020-03-22 04:48:55', 0);
+INSERT INTO `t_product` VALUES (6, '魅蓝note8', 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3645770028,2520835200&fm=26&gp=0.jpg', '13243434564', '65454213113', 1222, '珠海', '台', '5寸', 2300, NULL, '2020-03-22 04:49:51', 0);
+INSERT INTO `t_product` VALUES (7, 'apple6s', 'https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=2892195555,567115777&fm=26&gp=0.jpg', '13243434564', '65454213113', 6777, '上海', '台', '5寸', 2300, NULL, '2020-03-22 04:50:14', 0);
+INSERT INTO `t_product` VALUES (8, 'apple7', NULL, '13243434564', '65454213113', 6777, '珠海', '台', NULL, 2300, NULL, NULL, 1);
+INSERT INTO `t_product` VALUES (9, 'iphone5s', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1584833905416&di=d0639bf862bb88223ca413d39eebedd3&imgtype=0&src=http%3A%2F%2Fwww.0757m.com%2FUpdateImage%2Fo201309111639307825.jpg', '13243434564', '65454213113', 6777, '上海', '台', '4.7寸', 2300, NULL, '2020-03-22 04:52:22', 0);
+INSERT INTO `t_product` VALUES (10, '一加7pro', 'http://img0.imgtn.bdimg.com/it/u=3256989408,3879555238&fm=11&gp=0.jpg', '13243434564', '65454213113', 1222, '珠海', '台', '5.5寸', 2300, NULL, '2020-03-22 04:53:34', 0);
+INSERT INTO `t_product` VALUES (11, '锤子T2', 'http://img5.imgtn.bdimg.com/it/u=3353344122,2946105471&fm=26&gp=0.jpg', '13243434564', '65454213113', 3333, '珠海', '台', '5.5寸', 2300, NULL, '2020-03-22 04:54:35', 0);
+INSERT INTO `t_product` VALUES (12, 'iphone7plus', 'http://www.870818.com/images/201703/goods_img/94_P_1488790102305.jpg', '13243434564', '65454213113', 6777, '北京', '台', '5.5寸', 2300, NULL, '2020-03-22 04:55:09', 0);
+INSERT INTO `t_product` VALUES (13, '魅族6p', NULL, '13243434564', '65454213113', 3333, '珠海', '台', NULL, 2300, NULL, NULL, 1);
+INSERT INTO `t_product` VALUES (14, '小米mix3', 'http://article-fd.zol-img.com.cn/g5/M00/02/08/ChMkJ1w8gl2ISduXAAEb_NdnLggAAuYRQIoeZcAARwU725.jpg', '13243434564', '65454213113', 3333, '珠海', '台', '5.7寸', 2300, NULL, '2020-03-22 04:56:57', 0);
+INSERT INTO `t_product` VALUES (15, 'Find X2', 'https://dsfs.oppo.com/archives/202003/202003040203275e5f46532ef92.png?x-oss-process=image/format,webp', '13243434564', '65454213113', 2333, '上海', '台', '6.7寸 8G+128G 碧波', 2300, NULL, '2020-03-22 04:58:10', 0);
+INSERT INTO `t_product` VALUES (16, 'vivo X30 Pro', 'https://shopstatic.vivo.com.cn/vivoshop/commodity/14/10001814_1584322548800_750x750.png.webp', '13243434564', '65454213113', 2333, '珠海', '台', '5G版 8GB+128GB aw联名限定版', 2300, NULL, '2020-03-22 04:59:20', 0);
+INSERT INTO `t_product` VALUES (17, 'iphone7ps', NULL, '13243434564', '65454213113', 6777, '上海', '台', NULL, 2300, NULL, NULL, 1);
+INSERT INTO `t_product` VALUES (18, '三星 Galaxy Z Flip', 'https://uimgproxy.suning.cn/uimg1/sop/commodity/BXNrF1CPnd-n6oNQEc6xQg.jpg', '13243434564', '65454213113', 1222, '珠海', '台', '8GB+256GB 赛博格黑 6.7英寸掌心折叠屏设计 移动联通电信全网通4G手机', 2300, NULL, '2020-03-22 05:02:56', 0);
+INSERT INTO `t_product` VALUES (19, 'iPhone4s', NULL, '13243434564', '65454213113', 4567, '上海', '台', NULL, 2300, NULL, NULL, 1);
+INSERT INTO `t_product` VALUES (22, '小辣椒', '8GB+256GB 赛博格黑 6.7英寸掌心折叠屏设计 移动联通电信全网通4G手机', 'aaaa', 'aaaa', 233, 'sss', 'q', 'aaa', NULL, '2020-03-22 05:03:51', NULL, 1);
 
 -- ----------------------------
 -- Table structure for t_sale_order_detail
@@ -92,14 +96,21 @@ CREATE TABLE `t_sale_order_detail`  (
   `detail_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '销售订单明细表编号',
   `master_id` bigint(20) NULL DEFAULT NULL COMMENT '销售订单主表编号',
   `product_id` bigint(20) NULL DEFAULT NULL COMMENT '产品编号',
-  `customer_id` bigint(20) NULL DEFAULT NULL COMMENT '客户编号',
-  `price` double NULL DEFAULT NULL COMMENT '单价',
-  `count` bigint(20) NULL DEFAULT NULL COMMENT '数量',
+  `count` double(20, 0) NULL DEFAULT NULL COMMENT '数量',
+  `vip_price` decimal(10, 2) NULL DEFAULT NULL COMMENT '特价（如果没有指定则使用默认的产品默认你的销售价格）',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`detail_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 301 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_sale_order_detail
+-- ----------------------------
+INSERT INTO `t_sale_order_detail` VALUES (297, 70, 1, 2, NULL, '2020-03-24 15:25:36', NULL, 0);
+INSERT INTO `t_sale_order_detail` VALUES (298, 70, 2, 3, NULL, '2020-03-24 15:25:36', NULL, 0);
+INSERT INTO `t_sale_order_detail` VALUES (299, 71, 1, 2, NULL, '2020-03-24 22:40:51', NULL, 1);
+INSERT INTO `t_sale_order_detail` VALUES (300, 71, 1, 2, NULL, NULL, '2020-03-24 22:41:01', 0);
 
 -- ----------------------------
 -- Table structure for t_sale_order_master
@@ -107,34 +118,35 @@ CREATE TABLE `t_sale_order_detail`  (
 DROP TABLE IF EXISTS `t_sale_order_master`;
 CREATE TABLE `t_sale_order_master`  (
   `master_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '销售订单主表编号',
-  `customer_id` bigint(20) NULL DEFAULT NULL COMMENT '客户编号',
+  `customer_id` bigint(20) NOT NULL COMMENT '客户编号',
   `sale_date` datetime(0) NULL DEFAULT NULL COMMENT '销售时间',
-  `total_amount` double NULL DEFAULT NULL COMMENT '订单总金额',
-  `freight_amount` double NULL DEFAULT NULL COMMENT '运费金额',
-  `pay_type` tinyint(4) NULL DEFAULT NULL COMMENT '支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '订单状态【0->待付款；1->待发货；2->已发货；3->未确认收货；4->已确认收货；5->已完成；6->已关闭；7->无效订单】',
+  `total_amount` double NULL DEFAULT 0 COMMENT '订单总金额',
+  `freight_amount` double NULL DEFAULT 0 COMMENT '运费金额',
+  `pay_type` tinyint(4) NULL DEFAULT NULL COMMENT '支付方式【1->支付宝；2->微信；3->银联】',
+  `status` tinyint(4) NULL DEFAULT 1 COMMENT '订单状态【1->待付款；2->待发货；3->已发货；4->未确认收货；5->已确认收货；6->已完成；7->已关闭；-1->无效订单】\r\n（发货前必须完成支付）',
   `delivery_time` datetime(0) NULL DEFAULT NULL COMMENT '发货时间',
   `receive_time` datetime(0) NULL DEFAULT NULL COMMENT '收货人确认收货时间',
   `receiver_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人姓名',
   `receiver_phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人电话号码',
-  `receiver_post_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人邮编',
-  `receiver_province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人所在省',
-  `receiver_city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人所在城市',
-  `receiver_region` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人所在区',
   `receiver_detail_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收货人所在详细地址',
+  `delivery_channel` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '运输渠道（物流公司）',
   `delivery_sn` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流单号',
-  `bill_type` tinyint(4) NULL DEFAULT NULL COMMENT '发票类型[0->不开发票；1->电子发票；2->纸质发票]',
+  `bill_type` tinyint(4) NULL DEFAULT 1 COMMENT '发票类型[1->不开发票；2->电子发票；3->纸质发票]',
   `bill_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发票内容',
-  `bill_header` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '发票抬头',
-  `bill_receiver_phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收票人电话',
-  `bill_receiver_email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '收票人邮箱',
   `payment_time` datetime(0) NULL DEFAULT NULL COMMENT '支付时间',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态【0->未删除；1->已删除】',
-  `note` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单备注',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态【0->未删除；1->已删除】',
+  `transfer_stock_status` tinyint(4) NULL DEFAULT 1 COMMENT '发货申请状态(1:未移交申请；2:已移交申请；3:移交失败(仓库审核完时)；4:已完成移交(仓库审核完时)；)',
   PRIMARY KEY (`master_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_sale_order_master
+-- ----------------------------
+INSERT INTO `t_sale_order_master` VALUES (70, 2, '2020-03-24 15:25:35', 23553, 21, 2, 3, '2020-03-24 15:27:07', NULL, '小华', '18250169860', 'aaa', '顺丰', '556555215255555555', 1, NULL, '2020-03-24 15:25:35', '加快', '2020-03-24 15:25:35', '2020-03-24 15:27:07', 0, 4);
+INSERT INTO `t_sale_order_master` VALUES (71, 2, '2020-03-24 22:40:51', 13554, 22, 2, 2, NULL, NULL, 'ppp', '18250169860', 'ppi', NULL, NULL, 1, NULL, '2020-03-24 22:40:58', NULL, '2020-03-24 22:40:51', '2020-03-24 22:40:58', 0, 1);
 
 -- ----------------------------
 -- Table structure for t_sale_refund
@@ -143,14 +155,19 @@ DROP TABLE IF EXISTS `t_sale_refund`;
 CREATE TABLE `t_sale_refund`  (
   `refund_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '销售退单编号',
   `sale_order_master_id` bigint(20) NULL DEFAULT NULL COMMENT '订单主表id',
-  `refund_channel` tinyint(4) NULL DEFAULT NULL COMMENT '退款渠道[1-支付宝，2-微信，3-银联，4-汇款]',
+  `refund_channel` tinyint(4) NULL DEFAULT NULL COMMENT '退款渠道支付方式支付方式【1->支付宝；2->微信；3->银联】',
   `total_amount` double NULL DEFAULT NULL COMMENT '退款金额',
   `refund_date` datetime(0) NULL DEFAULT NULL COMMENT '退货时间',
   `reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退货原因',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`refund_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_sale_refund
+-- ----------------------------
+INSERT INTO `t_sale_refund` VALUES (16, 70, 2, 23553, '2020-03-24 15:28:46', '不要了', '2020-03-24 15:28:51', NULL, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;

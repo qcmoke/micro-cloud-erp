@@ -17,4 +17,6 @@ import com.qcmoke.pms.vo.MaterialRefundVo;
 public interface MaterialRefundService extends IService<MaterialRefund> {
 
     PageResult<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefund materialDto);
+
+    void createRefuse(MaterialRefund materialRefund);
 }

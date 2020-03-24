@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.WebUtil;
-import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.pms.entity.MaterialRefund;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,60 +40,12 @@ public class MaterialRefundController {
     }
 
     @PostMapping
-    @Transactional(rollbackFor = Exception.class)
     public Result<Boolean> createRefuse(MaterialRefund materialRefund) {
         if (materialRefund == null || materialRefund.getPurchaseOrderMasterId() == null) {
-            throw new GlobalCommonException("退订失败，缺少订单id。");
+            throw new GlobalCommonException("some params are required");
         }
-        Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
-        materialRefund.setCreateUserId(currentUserId);
-        materialRefund.setCreateTime(new Date());
-        materialRefund.setStatus(1);
-        materialRefund.setCheckStatus(1);
-        boolean save = materialRefundService.save(materialRefund);
-        return Result.ok(save);
-    }
-
-
-    @PutMapping("/checkFail")
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> checkFail(Long refundId) {
-        return updateStatus(refundId, 2);
-    }
-
-
-    @PutMapping("/checkPass")
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> checkPass(Long refundId) {
-        return updateStatus(refundId, 3);
-    }
-
-    private Result<Boolean> updateStatus(Long refundId, int i) {
-        if (refundId == null) {
-            throw new GlobalCommonException("refundId is required");
-        }
-        Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
-        MaterialRefund materialRefund = new MaterialRefund();
-        materialRefund.setRefundId(refundId);
-        materialRefund.setModifyTime(new Date());
-        materialRefund.setCheckUserId(currentUserId);
-        materialRefund.setCheckStatus(i);
-        boolean flag = materialRefundService.updateById(materialRefund);
-        return Result.ok(flag);
-    }
-
-
-    @PutMapping("/toShip")
-    @Transactional(rollbackFor = Exception.class)
-    public Result<Boolean> toShip(Long refundId) {
-        if (refundId == null) {
-            throw new GlobalCommonException("refundId is required");
-        }
-        Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
-        MaterialRefund materialRefund = new MaterialRefund();
-        materialRefund.setRefundId(refundId).setModifyTime(new Date()).setCheckUserId(currentUserId).setOutDate(new Date()).setStatus(1);
-        boolean flag = materialRefundService.updateById(materialRefund);
-        return Result.ok(flag);
+        materialRefundService.createRefuse(materialRefund);
+        return Result.ok();
     }
 
 
@@ -109,7 +59,6 @@ public class MaterialRefundController {
         boolean status = materialRefundService.removeByIds(idList);
         return status ? Result.ok() : Result.error();
     }
-
 
 }
 

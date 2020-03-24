@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 17/03/2020 14:40:44
+ Date: 24/03/2020 22:44:12
 */
 
 SET NAMES utf8mb4;
@@ -64,7 +64,7 @@ CREATE TABLE `t_menu`  (
   `create_time` datetime(0) NOT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`menu_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 200 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 201 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_menu
@@ -114,22 +114,22 @@ INSERT INTO `t_menu` VALUES (171, 168, 'MarkDown', NULL, '/components/markdown',
 INSERT INTO `t_menu` VALUES (172, 168, '富文本编辑器', NULL, '/components/tinymce', 'async/demos/tinymce', '', '', '0', 3, '2019-12-02 16:42:50', NULL);
 INSERT INTO `t_menu` VALUES (182, 0, '采购管理', NULL, '/pms', 'Layout', '', 'el-icon-shopping-cart-full', '0', 2, '2020-03-11 13:08:51', '2020-03-11 13:38:31');
 INSERT INTO `t_menu` VALUES (183, 182, '采购订单', NULL, 'pms/purchase', 'async/pms/purchase/index', 'view:purchase', '', '0', 2, '2020-03-11 13:28:42', '2020-03-11 13:36:06');
-INSERT INTO `t_menu` VALUES (184, 182, '收货入库', NULL, 'pms/addstock', 'async/pms/addstock/index', 'view:addstock', '', '0', 3, '2020-03-11 13:31:21', '2020-03-13 21:28:07');
-INSERT INTO `t_menu` VALUES (185, 182, '退货管理', NULL, 'pms/refund', 'async/pms/refund/index', 'view:refund', '', '0', 4, '2020-03-11 13:33:34', '2020-03-16 20:23:41');
+INSERT INTO `t_menu` VALUES (184, 182, '采购审批', NULL, 'pms/check', 'async/pms/check/index', 'pms:check:view', '', '0', 3, '2020-03-11 13:31:21', '2020-03-24 12:00:04');
+INSERT INTO `t_menu` VALUES (185, 182, '采购退货', NULL, 'pms/refund', 'async/pms/refund/index', 'pms:refund:view', '', '0', 4, '2020-03-11 13:33:34', '2020-03-20 17:22:25');
 INSERT INTO `t_menu` VALUES (186, 182, '物料管理', NULL, 'pms/material', 'async/pms/material/index', 'material:view', '', '0', 0, '2020-03-11 13:34:40', '2020-03-12 09:26:03');
 INSERT INTO `t_menu` VALUES (187, 182, '供应商管理', NULL, 'pms/supplier', 'async/pms/supplier/index', 'view:supplier', '', '0', 1, '2020-03-11 13:35:50', '2020-03-11 13:35:57');
 INSERT INTO `t_menu` VALUES (188, 0, '库存管理', NULL, '/wms', 'Layout', '', 'el-icon-house', '0', 3, '2020-03-11 13:38:14', '2020-03-11 13:38:43');
 INSERT INTO `t_menu` VALUES (189, 0, '销售管理', NULL, '/oms', 'Layout', '', 'el-icon-user', '0', 4, '2020-03-11 13:46:25', '2020-03-11 13:48:48');
 INSERT INTO `t_menu` VALUES (190, 0, '财务管理', NULL, '/fms', 'Layout', '', 'el-icon-edit', '0', 5, '2020-03-11 13:48:20', '2020-03-11 13:48:51');
-INSERT INTO `t_menu` VALUES (191, 189, '销售订单', NULL, '/oms/order', 'async/oms/order/index', 'order:view', '', '0', 1, '2020-03-11 13:53:38', NULL);
+INSERT INTO `t_menu` VALUES (191, 189, '销售订单', NULL, '/oms/order', 'async/oms/order/index', 'order:view', '', '0', 3, '2020-03-11 13:53:38', '2020-03-21 21:07:29');
 INSERT INTO `t_menu` VALUES (192, 189, '客户管理', NULL, '/oms/customer', 'async/oms/customer/index', 'customer:view', '', '0', 2, '2020-03-11 14:01:18', '2020-03-11 14:04:41');
-INSERT INTO `t_menu` VALUES (193, 189, '发货出库', NULL, '/oms/outsale', 'async/oms/outsale/index', 'outsale:view', '', '0', 3, '2020-03-11 14:01:47', '2020-03-11 14:05:47');
-INSERT INTO `t_menu` VALUES (194, 189, '产品管理', NULL, '/oms/product', 'async/oms/product/index', 'product:view', '', '0', 4, '2020-03-11 14:02:30', NULL);
-INSERT INTO `t_menu` VALUES (195, 189, '退货管理', NULL, '/oms/refund', 'async/oms/refund/index', 'refund:view', '', '0', 5, '2020-03-11 14:02:52', NULL);
-INSERT INTO `t_menu` VALUES (196, 188, '物料库存', NULL, '/wms/materielStock', 'async/wms/materielStock/index', 'stock:materiel:view', '', '0', 1, '2020-03-11 14:20:13', NULL);
-INSERT INTO `t_menu` VALUES (197, 188, '产品库存', NULL, '/wms/productStock', 'async/wms/productStock/index', 'stock:product:view', '', '0', 2, '2020-03-11 14:20:39', NULL);
-INSERT INTO `t_menu` VALUES (198, 190, '账户管理', NULL, '/fms/account', 'async/fms/account/index', 'account:view', '', '0', 1, '2020-03-11 14:21:05', NULL);
+INSERT INTO `t_menu` VALUES (194, 189, '产品管理', NULL, '/oms/product', 'async/oms/product/index', 'product:view', '', '0', 1, '2020-03-11 14:02:30', '2020-03-21 21:07:22');
+INSERT INTO `t_menu` VALUES (195, 189, '退货管理', NULL, '/oms/refund', 'async/oms/refund/index', 'oms:refund:view', '', '0', 5, '2020-03-11 14:02:52', '2020-03-20 17:19:57');
+INSERT INTO `t_menu` VALUES (196, 188, '出入库管理', NULL, '/wms/stockItem', 'async/wms/stockItem/index', 'stockItem:view', '', '0', 1, '2020-03-11 14:20:13', '2020-03-18 03:00:36');
+INSERT INTO `t_menu` VALUES (197, 188, '库存盘点', NULL, '/wms/stock', 'async/wms/stock/index', 'stock:view', '', '0', 2, '2020-03-11 14:20:39', '2020-03-20 17:25:42');
+INSERT INTO `t_menu` VALUES (198, 190, '账户管理', NULL, '/fms/account', 'async/fms/account/index', 'account:view', '', '0', 3, '2020-03-11 14:21:05', '2020-03-24 04:47:31');
 INSERT INTO `t_menu` VALUES (199, 190, '账单管理', NULL, '/fms/bill', 'async/fms/bill/index', 'bill:view', '', '0', 2, '2020-03-11 14:21:20', NULL);
+INSERT INTO `t_menu` VALUES (200, 190, '财务统计', NULL, '/fms/statistics', 'async/fms/statistics/index', 'statistics:view', '', '0', 2, '2020-03-23 23:10:50', '2020-03-24 04:47:42');
 
 -- ----------------------------
 -- Table structure for t_role
@@ -374,7 +374,7 @@ INSERT INTO `t_user` VALUES (1, 'goodbird', '$2a$10$gzhiUb1ldc1Rf3lka4k/WOoFKKGP
 INSERT INTO `t_user` VALUES (15, 'scott', '$2a$10$7tATi2STciLHnEgO/RfIxOYf2MQBu/SDVMRDs54rlSYVj2VmwwCHC', 5, 'scott@hotmail.com', '17720888888', 1, '2019-07-20 19:00:32', '2020-03-11 03:45:56', '2020-01-26 22:34:00', '2', NULL, NULL, 'BiazfanxmamNRoxxVxka.png', NULL);
 INSERT INTO `t_user` VALUES (16, 'Jane', '$2a$10$ECkfipOPY7hORVdlSzIOX.8hnig0shAZQPG8pQ7D5iVP.uVogmmHy', 4, 'Jane@hotmail.com', '13489898989', 1, '2019-09-01 10:31:21', '2019-09-01 10:32:10', '2019-09-01 10:32:27', '1', NULL, NULL, '2dd7a2d09fa94bf8b5c52e5318868b4d9.jpg', NULL);
 INSERT INTO `t_user` VALUES (17, 'qcmoke', '$2a$10$IYGlOaQYfpu0JMDPuxY.HO1IV2yyy5ZBg08A5fhx1lseJYRNdLxp.', 1, 'qcmoke@gmail.com', '13885566777', 1, '2020-01-26 23:24:09', '2020-03-11 13:12:39', '2020-01-28 18:43:48', '0', NULL, 'white', 'BiazfanxmamNRoxxVxka.png', '一个非常帅气的good boy! Peace & Love ！');
-INSERT INTO `t_user` VALUES (18, 'zhangsan', '$2a$10$i5LI/oQvkUUHQeEZwflhT..EOuUhvwm1R81LuP6zBjg7oGQivSqb2', 5, 'zhangsan@qq.com', '15908663878', 1, '2020-02-13 16:45:44', '2020-03-11 04:27:21', NULL, '0', NULL, NULL, 'default.jpg', '注册用户');
+INSERT INTO `t_user` VALUES (18, 'zhangsan', '$2a$10$i5LI/oQvkUUHQeEZwflhT..EOuUhvwm1R81LuP6zBjg7oGQivSqb2', 5, 'zhangsan@qq.com', '15908663878', 1, '2020-02-13 16:45:44', '2020-03-23 10:03:53', NULL, '0', NULL, NULL, 'default.jpg', '注册用户');
 
 -- ----------------------------
 -- Table structure for t_user_connection
@@ -413,8 +413,9 @@ CREATE TABLE `t_user_role`  (
 INSERT INTO `t_user_role` VALUES (16, 3);
 INSERT INTO `t_user_role` VALUES (15, 2);
 INSERT INTO `t_user_role` VALUES (15, 3);
-INSERT INTO `t_user_role` VALUES (18, 2);
 INSERT INTO `t_user_role` VALUES (17, 1);
 INSERT INTO `t_user_role` VALUES (1, 1);
+INSERT INTO `t_user_role` VALUES (18, 4);
+INSERT INTO `t_user_role` VALUES (18, 2);
 
 SET FOREIGN_KEY_CHECKS = 1;

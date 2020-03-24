@@ -7,6 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.fms.constant.DealType;
+import com.qcmoke.fms.constant.PayType;
+import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.oms.client.BillClient;
 import com.qcmoke.oms.client.ProductStockClient;
 import com.qcmoke.oms.constant.OrderStatusEnum;
 import com.qcmoke.oms.constant.TransferStockStatusEnum;
@@ -50,8 +54,6 @@ import java.util.stream.Collectors;
 public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMapper, SaleOrderMaster> implements SaleOrderMasterService {
 
     @Autowired
-    private ProductStockClient productStockClient;
-    @Autowired
     private SaleOrderDetailService saleOrderDetailService;
     @Autowired
     private SaleOrderMasterService saleOrderMasterService;
@@ -61,6 +63,11 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     private SaleOrderDetailMapper saleOrderDetailMapper;
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductStockClient productStockClient;
+    @Autowired
+    private BillClient billClient;
 
 
     @Transactional(rollbackFor = Exception.class)
@@ -115,6 +122,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         SaleOrderMaster saleOrderMaster = BeanCopyUtil.copy(orderMasterDto, SaleOrderMaster.class);
         List<SaleOrderDetail> dtoDetails = orderMasterDto.getDetails();
         Boolean isPayStatus = orderMasterDto.getIsPayStatus();
+        Double freightAmount = orderMasterDto.getFreightAmount();
         Long customerId = saleOrderMaster.getCustomerId();
         Long masterDtoId = saleOrderMaster.getMasterId();
         boolean isCreateOrder = masterDtoId == null;
@@ -135,7 +143,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         }
         //计算总金额
         List<Product> productList = productService.listByIds(dtoDetails.stream().map(SaleOrderDetail::getProductId).collect(Collectors.toList()));
-        AtomicReference<Double> amountTotal = new AtomicReference<>(0.0);
+        AtomicReference<Double> orderAmountTotal = new AtomicReference<>(0.0);
         dtoDetails.forEach(detail -> {
             Long productId = detail.getProductId();
             Double count = detail.getCount();
@@ -143,7 +151,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
                 throw new GlobalCommonException("详细存在无效记录");
             }
             Product product = (Product) CollectionUtils.find(productList, object -> ((Product) object).getProductId().equals(productId));
-            amountTotal.updateAndGet(v -> v + product.getPrice() * count);
+            orderAmountTotal.updateAndGet(v -> v + product.getPrice() * count);
         });
         //创建订单主表
         if (isCreateOrder) {
@@ -151,8 +159,11 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         } else {
             saleOrderMaster.setModifyTime(new Date());
         }
-        saleOrderMaster.setTotalAmount(amountTotal.get());
+        saleOrderMaster.setTotalAmount(orderAmountTotal.get());
         if (isPayStatus) {
+            if (freightAmount == null) {
+                throw new GlobalCommonException("运费为空！");
+            }
             saleOrderMaster.setStatus(OrderStatusEnum.PAID_NO_SHIPPED.value());
             saleOrderMaster.setPaymentTime(new Date());
         } else {
@@ -162,6 +173,23 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         if (!flag) {
             throw new GlobalCommonException("更新订单失败");
         }
+
+        if (isPayStatus) {
+            Double orderAmountTotalValue = orderAmountTotal.get();
+            Double billAmountTotal = orderAmountTotalValue + freightAmount;
+            //将收入记录到财务账单
+            BillApiDto billApiDto = new BillApiDto()
+                    .setDealNum(saleOrderMaster.getMasterId())
+                    .setDealType(DealType.SALE_IN)
+                    .setPayType(PayType.valueOf(saleOrderMaster.getPayType()))
+                    .setTotalAmount(billAmountTotal);
+            Result<?> result = billClient.addBill(billApiDto);
+            if (result.isError()) {
+                throw new GlobalCommonException("收入记录到财务账单失败");
+            }
+        }
+
+
         //更新相关明细
         saleOrderDetailMapper.delete(new LambdaQueryWrapper<SaleOrderDetail>().eq(SaleOrderDetail::getMasterId, masterDtoId));
         dtoDetails.forEach(detail -> {
@@ -261,16 +289,20 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     }
 
 
+    /**
+     * 确认收货处理
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateUserDelivery(SaleOrderMaster willUpdateOrderMaster, Boolean isReceived) {
-        Long willUpdateMasterId = willUpdateOrderMaster.getMasterId();
-        SaleOrderMaster orderMaster = saleOrderMasterService.getById(willUpdateMasterId);
+    public void confirmUserReceipt(SaleOrderMaster willUpdateOrderMaster, Boolean isReceived) {
+
+        SaleOrderMaster orderMaster = saleOrderMasterService.getById(willUpdateOrderMaster.getMasterId());
+
         if (orderMaster == null) {
             throw new GlobalCommonException("不存在该订单！");
         }
+
         OrderStatusEnum currentOrderStatus = OrderStatusEnum.resolve(orderMaster.getStatus());
-        OrderStatusEnum willOrderStatus = OrderStatusEnum.RECEIVED;
         if (OrderStatusEnum.isMoreAndEqOther(currentOrderStatus, OrderStatusEnum.FINISHED)) {
             throw new GlobalCommonException("该订已经完成，不能再修改！");
         }
@@ -282,7 +314,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             if (OrderStatusEnum.isLessAndEqOther(currentOrderStatus, OrderStatusEnum.PAID_NO_SHIPPED)) {
                 throw new GlobalCommonException("该订单还未发货！");
             }
-            willUpdateOrderMaster.setStatus(willOrderStatus.value());
+            willUpdateOrderMaster.setStatus(OrderStatusEnum.RECEIVED.value());
         }
         willUpdateOrderMaster.setModifyTime(new Date());
         boolean flag = saleOrderMasterService.updateById(willUpdateOrderMaster);

@@ -11,8 +11,7 @@ public enum PayTypeEnum {
      */
     ALI_PAY(1, "支付宝"),
     WEI_PAY(2, "微信"),
-    UNION_PAY(3, "银联"),
-    CASH_ON_DELIVERY(4, "货到付款");
+    UNION_PAY(3, "银联");
     private final int value;
     private final String info;
 

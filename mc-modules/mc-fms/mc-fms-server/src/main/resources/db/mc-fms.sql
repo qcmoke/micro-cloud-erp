@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 11/03/2020 00:13:49
+ Date: 24/03/2020 22:43:18
 */
 
 SET NAMES utf8mb4;
@@ -22,17 +22,24 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `t_account`;
 CREATE TABLE `t_account`  (
-  `account_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账户id',
+  `account_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '账户id（支付类型要和账户id一致）',
   `account_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '账户名称',
   `bank_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易平台名称(支付宝，微信，银行)',
-  `bank_num` int(11) NULL DEFAULT NULL COMMENT '交易平台账号或者银行卡号',
-  `amount` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '余额',
-  `is_default` tinyint(4) NULL DEFAULT NULL COMMENT '是否默认(1:是；2:否)',
+  `bank_num` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易平台账号或者银行卡号',
+  `amount` double(255, 0) NULL DEFAULT NULL COMMENT '余额',
+  `is_default` tinyint(4) NULL DEFAULT 2 COMMENT '是否默认(1:是；2:否)',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`account_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_account
+-- ----------------------------
+INSERT INTO `t_account` VALUES (1, '支付宝账户', '支付宝', '666666666111132456000000', 20000, 1, '2020-03-24 08:58:19', NULL, 0);
+INSERT INTO `t_account` VALUES (2, '微信账户', '微信', '555555555111132456000000', 20000, 2, '2020-03-24 08:58:21', NULL, 0);
+INSERT INTO `t_account` VALUES (3, '银联账户', '银联', '777777777111132456000000', 20000, 2, '2020-03-24 08:58:23', NULL, 0);
 
 -- ----------------------------
 -- Table structure for t_bill
@@ -41,13 +48,22 @@ DROP TABLE IF EXISTS `t_bill`;
 CREATE TABLE `t_bill`  (
   `bill_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账单编号',
   `type` tinyint(4) NULL DEFAULT NULL COMMENT '账目类型(1:采购付款；2:采购退货收款；3:销售收款；4:销售退款)',
-  `deal_num` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '交易单据编号(采购单，采购退货单，销售订单，销售退货单等编号)',
-  `accountId` bigint(20) NULL DEFAULT NULL COMMENT '账户id',
+  `deal_num` bigint(20) NULL DEFAULT NULL COMMENT '交易单据编号(采购单，采购退货单，销售订单，销售退货单等编号)',
+  `account_id` bigint(20) NULL DEFAULT NULL COMMENT '账户id',
   `total_amount` double NULL DEFAULT NULL COMMENT '合计金额',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  `delete_status` tinyint(4) NULL DEFAULT NULL COMMENT '删除状态',
+  `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`bill_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of t_bill
+-- ----------------------------
+INSERT INTO `t_bill` VALUES (34, 2, 79, 1, 2640, '2020-03-24 19:37:38', NULL, 0);
+INSERT INTO `t_bill` VALUES (35, 2, 80, 1, 960, '2020-03-24 19:46:21', NULL, 0);
+INSERT INTO `t_bill` VALUES (36, 2, 82, 1, 1120, '2020-03-24 19:48:11', NULL, 0);
+INSERT INTO `t_bill` VALUES (37, 1, 81, 1, 4502, '2020-03-24 19:57:28', NULL, 0);
+INSERT INTO `t_bill` VALUES (38, 3, 71, 2, 13576, '2020-03-24 22:41:01', NULL, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
