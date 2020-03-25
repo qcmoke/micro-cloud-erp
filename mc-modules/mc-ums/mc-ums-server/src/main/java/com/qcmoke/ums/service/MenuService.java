@@ -22,4 +22,6 @@ public interface MenuService extends IService<Menu> {
     PageResult getPage(Menu menu);
 
     List<MenuExport> findMenuList(Menu menu);
+
+    void removeMenusByIdList(List<Long> idList);
 }

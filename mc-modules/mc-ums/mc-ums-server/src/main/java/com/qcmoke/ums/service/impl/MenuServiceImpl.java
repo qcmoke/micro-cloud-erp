@@ -31,6 +31,15 @@ import java.util.Set;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
 
     @Override
+    public void removeMenusByIdList(List<Long> idList) {
+        this.remove(new LambdaQueryWrapper<Menu>()
+                .in(Menu::getMenuId, idList)
+                .or()
+                .in(Menu::getParentId, idList)
+        );
+    }
+
+    @Override
     public List<MenuExport> findMenuList(Menu menu) {
         LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(menu.getMenuName())) {

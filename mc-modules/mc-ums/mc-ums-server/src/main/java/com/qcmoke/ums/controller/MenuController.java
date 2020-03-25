@@ -1,6 +1,8 @@
 package com.qcmoke.ums.controller;
 
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.qcmoke.common.exception.GlobalCommonException;
+import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.ums.constant.MenuConstant;
@@ -11,6 +13,7 @@ import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.vo.VueRouter;
 import com.wuwenze.poi.ExcelKit;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -84,8 +87,11 @@ public class MenuController {
 
     @DeleteMapping("/{menuIds}")
     public void deleteMenus(@NotBlank(message = "{required}") @PathVariable String menuIds) {
-        String[] ids = menuIds.split(StringPool.COMMA);
-        this.menuService.removeByIds(Arrays.asList(ids));
+        List<Long> idList = WebUtil.parseIdStrToLongList(menuIds);
+        if (CollectionUtils.isEmpty(idList)){
+            throw  new GlobalCommonException("没有可删除的menu");
+        }
+        this.menuService.removeMenusByIdList(idList);
     }
 
     @PutMapping
