@@ -8,18 +8,18 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 129.204.185.161:8848
-        ip: 129.204.185.161
+        server-addr: ${mc.nacos.ip}:8848
+        ip: ${mc.nacos.application.ip}
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://129.204.185.161:3306/mc-oms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://${mc.mysql.ip}:3306/mc-oms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
 
   #redis配置
   redis:
     database: 0
-    host: 129.204.185.161
+    host: ${mc.redis.ip}
     port: 6379
     password: qcmoke)[good](boy
     jedis:
@@ -29,7 +29,6 @@ spring:
         max-active: 2000
         max-wait: 10000
     timeout: 5000
-
 
   #json时间转换全局格式
   jackson:
@@ -53,7 +52,6 @@ mybatis-plus:
       logic-delete-field: deleteStatus  #全局逻辑删除字段值(实体类的属性，而不是表的属性) 3.3.0开始支持(使用mp自带方法删除和查找都会附带逻辑删除功能 ,自己写的sql不会，但@result调动mybatisplus的函数，那么这个子函数也会加上,),统一了全局都是delete_status为逻辑删除字段,但如果实体类上有 @TableLogic 则以实体上的为准，忽略全局
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
-
 
 #feign注解支持hystrix服务降级处理
 feign:

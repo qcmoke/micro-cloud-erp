@@ -9,16 +9,17 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: qcmoke.club:8848
+        server-addr: ${mc.nacos.ip}
+        ip: ${mc.nacos.application.ip}
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://qcmoke.club:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://${mc.mysql.ip}:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
   #redis配置
   redis:
     database: 0
-    host: qcmoke.club
+    host: ${mc.redis.ip}
     port: 6379
     password: qcmoke)[good](boy
     jedis:

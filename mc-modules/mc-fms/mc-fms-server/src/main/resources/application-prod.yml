@@ -8,18 +8,18 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 39.106.195.202:8848
-        ip: 129.204.185.161
+        server-addr: ${mc.nacos.ip}:8848
+        ip: ${mc.nacos.application.ip}
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://39.106.195.202:3306/mc-fms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
+    url: jdbc:mysql://${mc.mysql.ip}:3306/mc-fms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
 
   #redis配置
   redis:
     database: 0
-    host: 39.106.195.202
+    host: ${mc.redis.ip}
     port: 6379
     password: qcmoke)[good](boy
     jedis:
