@@ -1,0 +1,144 @@
+version: '3'
+services:
+  mc-auth-server:
+    build: mc-auth-server
+    image: mc-auth-server
+    container_name: mc-auth-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 9090:9090
+    restart: on-failure
+  mc-gateway-server:
+    build: mc-gateway-server
+    image: mc-gateway-server
+    container_name: mc-gateway-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.oauth-service-ip=129.204.185.161"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 9070:9070
+    restart: on-failure
+  mc-monitor-server:
+    build: mc-monitor-server
+    image: mc-monitor-server
+    container_name: mc-monitor-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 9090:9090
+    restart: on-failure
+
+
+  mc-ums-server:
+    build: mc-modules/mc-ums/mc-ums-server
+    image: mc-ums-server
+    container_name: mc-ums-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.zipkin.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 8080:8080
+    restart: on-failure
+  mc-fms-server:
+    build: mc-modules/mc-fms/mc-fms-server
+    image: mc-fms-server
+    container_name: mc-fms-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.zipkin.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 8010:8010
+    restart: on-failure
+  mc-oms-server:
+    build: mc-modules/mc-oms/mc-oms-server
+    image: mc-oms-server
+    container_name: mc-oms-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.zipkin.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 8020:8020
+    restart: on-failure
+  mc-pms-server:
+    build: mc-modules/mc-pms/mc-pms-server
+    image: mc-pms-server
+    container_name: mc-pms-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.zipkin.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 8030:8030
+    restart: on-failure
+  mc-wms-server:
+    build: mc-modules/mc-wms/mc-wms-server
+    image: mc-wms-server
+    container_name: mc-wms-server
+    volumes:
+      - "/micro-cloud-erp/tmp/logs/:/tmp/logs"
+    command:
+      - "--mc.nacos.ip=39.106.195.202"
+      - "--mc.nacos.application.ip=129.204.185.161"
+      - "--mc.mysql.ip=39.106.195.202"
+      - "--mc.redis.ip=39.106.195.202"
+      - "--mc.zipkin.ip=39.106.195.202"
+      - "--spring.profiles.active=prod"
+    environment:
+      - "TZ=Asia/Shanghai"
+    ports:
+      - 8040:8040
+    restart: on-failure
