@@ -76,6 +76,32 @@ hystrix:
             timeoutInMilliseconds: 64000
 
 
+###配置oauth2，通过client-id和client-secret到认证服务器认证并获取jwt签名的公钥
+security:
+  oauth2:
+    client:
+      client-id: admin
+      client-secret: 123456
+    resource:
+      jwt:
+        key-uri: http://39.106.195.202:9090/oauth/token_key
+
+
+#springboot admin监控信息
+info:
+  app:
+    name: ${spring.application.name}
+    description: "@project.description@"
+    version: "@project.version@"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
 logging:
   level:
     com.qcmoke: debug

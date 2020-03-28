@@ -80,3 +80,20 @@ oauth2:
         client-id: wxd99431bbff8305a0
         client-secret: 60f78681d063590a469f1b297feff3c4
         redirect-uri: http://www.pinzhi365.com/qqLogin/weixin
+
+#springboot admin监控信息
+#如果Spring Boot Admin的服务端和客户端都注册到注册中心的情况下，客户端是不需要加服务端的spring.boot.admin.client.url的；注意：父工程的spring-boot-starter-parent依赖要放在 <parent>，下面的的信息才会在Spring Boot Admin显示完整
+info:
+  app:
+    name: ${spring.application.name}
+    description: "@project.description@"
+    version: "@project.version@"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    # 是否展示健康检查详情
+    health:
+      show-details: ALWAYS

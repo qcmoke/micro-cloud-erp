@@ -78,6 +78,20 @@ hystrix:
             #hystrix超时时间，默认是1秒，设置为64秒。hystrix.default.timeoutInMilliseconds >= (host.connectTimeoutMillis + host.socketTimeoutMillis) + (ribbon.ConnectTimeout +ribbon.ReadTimeout)
             timeoutInMilliseconds: 64000
 
+#springboot admin监控信息
+info:
+  app:
+    name: ${spring.application.name}
+    description: "@project.description@"
+    version: "@project.version@"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
 
 logging:
   level:

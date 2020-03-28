@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author qcmoke
  */
-//@EnableAutoResourceServerSecurity
+@EnableAutoResourceServerSecurity
 @EnableFeignClients
 @EnableDiscoveryClient
 @ComponentScan({"com.qcmoke.fms", "com.qcmoke.common.handler"})

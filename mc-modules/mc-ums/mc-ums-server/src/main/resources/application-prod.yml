@@ -41,6 +41,22 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
 
+
+#springboot admin监控信息
+info:
+  app:
+    name: ${spring.application.name}
+    description: "@project.description@"
+    version: "@project.version@"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: ALWAYS
+
 logging:
   level:
     com.qcmoke: info

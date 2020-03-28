@@ -14,10 +14,19 @@
         <module>mc-common</module>
         <module>mc-auth-common</module>
         <module>mc-auth-server</module>
-        <module>mc-modules</module>
         <module>mc-gateway-server</module>
-        <module>mc-zuul-server</module>
+        <!--<module>mc-zuul-server</module>-->
+        <module>mc-monitor-server</module>
+        <module>mc-modules</module>
     </modules>
+
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.8.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
 
     <properties>
@@ -25,7 +34,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <platform-bom.version>Cairo-SR7</platform-bom.version>
-        <spring-boot.version>2.0.8.RELEASE</spring-boot.version>
         <spring-cloud.version>Finchley.SR4</spring-cloud.version>
         <spring-cloud-alibaba.version>2.0.1.RELEASE</spring-cloud-alibaba.version>
         <!--忽略编译时执行test-->
@@ -57,17 +65,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
 </project>

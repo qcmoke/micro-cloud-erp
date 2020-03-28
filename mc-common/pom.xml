@@ -18,6 +18,7 @@
         <fastjson.version>1.2.58</fastjson.version>
         <p6spy.version>3.8.1</p6spy.version>
         <jose4j.version>0.7.0</jose4j.version>
+        <spring-boot-admin-starter.version>2.0.6</spring-boot-admin-starter.version>
     </properties>
 
     <dependencies>
@@ -90,15 +91,22 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        <!--eureka客户端-->
-        <!--<dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>-->
         <!--nacos客户端-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+        <!--spring boot admin监控客户端-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${spring-boot-admin-starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>HdrHistogram</artifactId>
+                    <groupId>org.hdrhistogram</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

@@ -5,6 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>mc-fms-server</artifactId>
+    <description>财务管理服务</description>
 
     <parent>
         <artifactId>mc-fms</artifactId>
