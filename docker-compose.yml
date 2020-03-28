@@ -48,7 +48,7 @@ services:
     environment:
       - "TZ=Asia/Shanghai"
     ports:
-      - 9090:9090
+      - 9080:9080
     restart: on-failure
 
 
