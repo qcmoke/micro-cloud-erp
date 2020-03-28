@@ -30,6 +30,14 @@ spring:
         max-wait: 10000
     timeout: 5000
 
+  #链路追踪
+  zipkin:
+    base-url: http://${mc.zipkin.ip}:9411
+  sleuth:
+    sampler:
+      #采样率(0~1 其中1表示采集全部)
+      probability: 1
+
   #json时间转换全局格式
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

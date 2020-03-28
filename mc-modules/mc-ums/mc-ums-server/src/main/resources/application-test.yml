@@ -16,6 +16,14 @@ spring:
     username: root
     password: qcmoke)[good](boy
 
+  #链路追踪
+  zipkin:
+    base-url: http://${mc.zipkin.ip}:9411
+  sleuth:
+    sampler:
+      #采样率(0~1 其中1表示采集全部)
+      probability: 1
+
   #redis配置
   redis:
     database: 0
