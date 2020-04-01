@@ -14,10 +14,41 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+
     <dependencies>
+        <!--zipkin-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+        <!--mybatis-plus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!--mysql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.48</version><!--升级到5.1.48版本以避免seata在mybatisplus中操作date类型报错的问题-->
+            <scope>runtime</scope>
+        </dependency>
+        <!--seata（将默认的0.9.0版本升级到1.0.0,解决一些seata sql更新操作设值为空而报错的bug）-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.seata</groupId>
+                    <artifactId>seata-all</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.seata</groupId>
+            <artifactId>seata-all</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

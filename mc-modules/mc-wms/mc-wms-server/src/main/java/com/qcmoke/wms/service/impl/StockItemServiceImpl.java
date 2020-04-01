@@ -15,6 +15,7 @@ import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.mapper.StockItemMapper;
 import com.qcmoke.wms.service.StockItemService;
 import com.qcmoke.wms.vo.StockItemVo;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +46,7 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
     }
 
 
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void checkPass(Long stockItemId) {
@@ -83,6 +85,7 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
     }
 
 
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void checkFail(Long stockItemId) {

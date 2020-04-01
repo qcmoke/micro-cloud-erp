@@ -1,0 +1,73 @@
+## docker-compose.yml文件的版本
+version: '3.1'
+services:                     # compose管理的服务
+
+  #（1）缓存
+  redis:
+    image: redis              # 指定镜像
+    container_name: redis-1   # 容器名称
+    restart: always           # 开机自动启动
+    ports:                    # 端口映射
+      - 6379:6379
+    volumes:                  # 目录映射
+      - /micro-cloud-erp/redis/conf:/usr/local/etc/redis
+      - /micro-cloud-erp/redis/data:/data
+    command: redis-server --requirepass qcmoke)[good](boy --appendonly yes #执行的命令; requirepass来指定远程登录密码; appendonly来指定是否开启持久化策略
+    #command: redis-server /usr/local/etc/redis/redis.conf --appendonly yes
+
+  #（2）数据库
+  mysql:
+    image: mysql:5.7.24
+    container_name: mysql-1
+    ports:
+      - 3306:3306
+    environment:                          # 环境变量
+      MYSQL_ROOT_PASSWORD: qcmoke)[good](boy   # 设置数据库root密码
+    restart: always
+    volumes:
+      - /micro-cloud-erp/mysql/data:/var/lib/mysql
+      #当 MySQL 服务启动时会以/etc/mysql/my.cnf为配置文件，而该文件会导入/etc/mysql/conf.d目录中所有以.cnf为后缀的文件。
+      #这些文件会拓展或覆盖 /etc/mysql/my.cnf 文件中的配置。因此创建以.cnf结尾的配置文件并挂载至MySQL容器中的/etc/mysql/conf.d目录即可。
+      #在本项目中只要在docker-compose up前上传my.cnf文件到宿主机的/micro-cloud-erp/mysql/conf.d/my.cnf目录即可。如果在docker-compose up后的话，需要重启mysql容器才能重新加载到自定义的配置文件。
+      - /micro-cloud-erp/mysql/conf.d:/etc/mysql/conf.d
+
+  #（3）服务注册中心和配置中心nacos
+  nacos:
+    image: nacos/nacos-server
+    container_name: nacos-standalone
+    restart: always
+    environment:
+      - MODE=standalone
+    ports:
+      - 8848:8848
+
+  #（4）链路追踪zipkin
+  zipkin:
+   image: openzipkin/zipkin
+   container_name: zipkin
+   restart: always
+   ports:
+     - 9411:9411
+
+
+  #（5）分布式事务seata
+  seata:
+    image: seataio/seata-server:1.0.0
+    container_name: seata
+    restart: always
+    ports:
+      - 8091:8091
+    depends_on:
+      - nacos
+    environment:
+      - SEATA_IP=39.106.195.202 #注册到nacos时本服务所使用的ip
+      - SEATA_CONFIG_NAME=file:/root/seata-config/registry #指定seata配置文件的路径为/root/seata-config/
+    volumes:
+      - /micro-cloud-erp/seata/config:/root/seata-config #将配置好的file.conf和registry.conf上传到/micro-cloud-erp/seata/config后再启动
+      - /micro-cloud-erp/seata/logs:/root/logs
+
+
+# docker-compose up          #它将尝试自动完成包括构建镜像，（重新）创建服务，启动服务，并关联服务相关容器的一系列操作。相关的服务都将会被自动启动，除非已经处于运行状态。
+# docker-compose up -d       #以守护进程模式运行加-d选项
+# docker-compose down        #此命令将会停止 up 命令所启动的容器，并移除网络
+# docker-compose restart [options] [SERVICE...]  #重启项目中的服务。

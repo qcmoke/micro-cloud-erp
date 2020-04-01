@@ -10,19 +10,14 @@ spring:
       discovery:
         server-addr: ${mc.nacos.ip}
         ip: ${mc.nacos.application.ip}
+    alibaba:
+      seata:
+        tx-service-group: mc_tx_group
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://${mc.mysql.ip}:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
-
-  #链路追踪
-  zipkin:
-    base-url: http://${mc.zipkin.ip}:9411
-  sleuth:
-    sampler:
-      #采样率(0~1 其中1表示采集全部)
-      probability: 1
 
   #redis配置
   redis:
@@ -37,6 +32,14 @@ spring:
         max-active: 2000
         max-wait: 10000
     timeout: 5000
+
+  #链路追踪
+  zipkin:
+    base-url: http://${mc.zipkin.ip}:9411
+  sleuth:
+    sampler:
+      #采样率(0~1 其中1表示采集全部)
+      probability: 1
 
   #json时间转换全局格式
   jackson:

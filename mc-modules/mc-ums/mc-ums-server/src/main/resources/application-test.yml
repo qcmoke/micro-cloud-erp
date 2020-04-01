@@ -38,6 +38,10 @@ spring:
         max-wait: 10000
     timeout: 5000
 
+  #本服务暂时不需要seata，可禁用其自动装配，防止启动报错
+  autoconfigure:
+    exclude: com.alibaba.cloud.seata.GlobalTransactionAutoConfiguration
+
 ##配置mybatis plus
 mybatis-plus:
   type-aliases-package: com.qcmoke.ums.entity
@@ -48,6 +52,7 @@ mybatis-plus:
       table-prefix: t_                                      #全局表前缀
   configuration:
     map-underscore-to-camel-case: true                      #开启驼峰式命名规则支持
+
 
 #springboot admin监控信息
 info:

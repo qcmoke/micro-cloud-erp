@@ -10,6 +10,9 @@ spring:
       discovery:
         server-addr: ${mc.nacos.ip}
         ip: ${mc.nacos.application.ip}
+    alibaba:
+      seata:
+        tx-service-group: mc_tx_group
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://${mc.mysql.ip}:3306/mc-pms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true

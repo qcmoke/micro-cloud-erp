@@ -23,6 +23,7 @@ import com.qcmoke.wms.service.StockItemDetailService;
 import com.qcmoke.wms.service.StockItemService;
 import com.qcmoke.wms.service.StockService;
 import com.qcmoke.wms.vo.StockVo;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,6 +86,7 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
      * 2、设置发货申请单状态为已完成
      * 3、通知申请发库的服务修改其状态为发库成功
      */
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void outItemFromStock(OutItemFromStockDto outItemFromStockDto) {
@@ -175,6 +177,7 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
      * （2）计算明细，并将对应的物料加入库存
      * （3）通知申请入库的服务表明“入库成功”
      */
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addItemToStock(List<Long> stockItemIdList) {

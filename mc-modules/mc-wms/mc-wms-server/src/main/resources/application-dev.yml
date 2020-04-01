@@ -10,6 +10,9 @@ spring:
     nacos:
       discovery:
         server-addr: qcmoke.club:8848
+    alibaba:
+      seata:
+        tx-service-group: mc_tx_group
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://qcmoke.club:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true

@@ -30,6 +30,7 @@ import com.qcmoke.wms.constant.ItemType;
 import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.StockItemDetailDto;
 import com.qcmoke.wms.dto.StockItemDto;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -116,6 +117,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     /**
      * 创建或修改订单
      */
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void createOrUpdateSaleOrder(OrderMasterDto orderMasterDto) {
@@ -189,15 +191,18 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             }
         }
 
-
         //更新相关明细
-        saleOrderDetailMapper.delete(new LambdaQueryWrapper<SaleOrderDetail>().eq(SaleOrderDetail::getMasterId, masterDtoId));
+        saleOrderDetailService.remove(new LambdaQueryWrapper<SaleOrderDetail>().eq(SaleOrderDetail::getMasterId, masterDtoId));
         dtoDetails.forEach(detail -> {
             if (isCreateOrder) {
                 Long masterId = saleOrderMaster.getMasterId();
-                detail.setCreateTime(new Date()).setMasterId(masterId);
+                detail
+                        .setCreateTime(new Date())
+                        .setMasterId(masterId);
             } else {
-                detail.setModifyTime(new Date()).setMasterId(masterDtoId);
+                detail
+                        .setModifyTime(new Date())
+                        .setMasterId(masterDtoId);
             }
         });
         flag = saleOrderDetailService.saveBatch(dtoDetails);
