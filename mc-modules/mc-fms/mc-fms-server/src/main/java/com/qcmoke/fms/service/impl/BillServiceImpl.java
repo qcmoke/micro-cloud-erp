@@ -81,8 +81,9 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
             case SALE_OUT:
             case PURCHASE_OUT:
                 double updateAmount = account.getAmount() - totalAmount;
-                if (updateAmount < 0) {
-                    throw new GlobalCommonException("该账户余额已不足！");
+                Double safetyAmount = account.getSafetyAmount();
+                if (updateAmount < safetyAmount) {
+                    throw new GlobalCommonException("该账户余额已低于账户的安全余额量！,请联系财务管理员充值");
                 }
                 account.setAmount(updateAmount);
                 break;

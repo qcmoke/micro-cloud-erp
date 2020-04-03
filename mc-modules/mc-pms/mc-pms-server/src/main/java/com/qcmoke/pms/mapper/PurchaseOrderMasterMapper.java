@@ -68,7 +68,7 @@ public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaste
             "       `t_purchase_order_master` pm " +
             "   WHERE" +
             "       pm.delete_status = 0 " +
-            "       AND NOT EXISTS ( SELECT tr.purchase_order_master_id FROM t_material_refund tr WHERE tr.purchase_order_master_id = pm.master_id and tr.delete_status = 0) " +
+            "       AND NOT EXISTS ( SELECT tr.purchase_order_master_id FROM t_material_refund tr WHERE tr.purchase_order_master_id = pm.master_id) " +
             "   ORDER BY" +
             "       pm.create_time," +
             "       pm.modify_time," +

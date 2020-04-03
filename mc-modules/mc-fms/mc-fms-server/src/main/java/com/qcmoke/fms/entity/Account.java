@@ -53,6 +53,11 @@ public class Account implements Serializable {
     private Double amount;
 
     /**
+     * 安全余额量
+     */
+    private Double safetyAmount;
+
+    /**
      * 是否默认(1:是；2:否)
      */
     private Integer isDefault;

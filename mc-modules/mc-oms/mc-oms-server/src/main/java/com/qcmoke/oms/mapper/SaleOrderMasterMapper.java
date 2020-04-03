@@ -78,7 +78,7 @@ public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
             "       LEFT JOIN t_customer cus ON ( so.customer_id = cus.customer_id ) " +
             "   WHERE" +
             "       so.delete_status = 0" +
-            "       AND NOT EXISTS (  SELECT tr.sale_order_master_id FROM t_sale_refund tr WHERE tr.sale_order_master_id = so.master_id and tr.delete_status = 0) ")
+            "       AND NOT EXISTS (  SELECT tr.sale_order_master_id FROM t_sale_refund tr WHERE tr.sale_order_master_id = so.master_id) ")
     @Results({
             @Result(property = "details", column = "master_id2", many = @Many(select = "com.qcmoke.oms.mapper.SaleOrderDetailMapper.getListByMasterId"))
     })

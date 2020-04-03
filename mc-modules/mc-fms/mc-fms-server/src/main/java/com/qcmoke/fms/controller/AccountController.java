@@ -52,9 +52,16 @@ public class AccountController {
                 || account.getBankNum() == null) {
             throw new GlobalCommonException("some params are required");
         }
-        account.setCreateTime(new Date());
-        boolean save = accountService.saveOrUpdate(account);
-        return Result.ok(save);
+        if (account.getAccountId() == null) {
+            account.setCreateTime(new Date());
+        } else {
+            account.setModifyTime(new Date());
+        }
+        boolean flag = accountService.saveOrUpdate(account);
+        if (!flag) {
+            throw  new GlobalCommonException("更新失败");
+        }
+        return Result.ok();
     }
 
 
@@ -65,8 +72,11 @@ public class AccountController {
         if (CollectionUtils.isEmpty(idList)) {
             throw new GlobalCommonException("ids is required");
         }
-        boolean status = accountService.removeByIds(idList);
-        return status ? Result.ok() : Result.error();
+        boolean flag = accountService.removeByIds(idList);
+        if (!flag) {
+            throw  new GlobalCommonException("删除失败");
+        }
+        return Result.ok();
     }
 
 
