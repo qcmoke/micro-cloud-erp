@@ -1,6 +1,6 @@
-package com.qcmoke.pms.vo;
+package com.qcmoke.oms.vo;
 
-import com.qcmoke.pms.entity.MaterialRefund;
+import com.qcmoke.oms.entity.SaleRefund;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,18 +9,16 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class MaterialRefundVo extends MaterialRefund {
-
-    private String refundChannelInfo;
-
-
+public class SaleRefundVo extends SaleRefund {
     /**
      * 仓库审核状态（1：未审核；2：审核通过；3：审核不通过）
      */
     private String stockCheckStatusInfo;
 
     /**
-     * 发货状态（1：未发货；2：已发货）
+     * 入库状态（1：未入库；2：已入库）
      */
-    private String stockOutStatusInfo;
+    private String stockInStatusInfo;
+
+    private String refundChannelInfo;
 }

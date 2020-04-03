@@ -4,6 +4,7 @@ import com.qcmoke.common.constant.GlobalServiceListConstant;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.pms.api.PurchaseOrderMasterApi;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
+import com.qcmoke.wms.constant.StockType;
 import feign.hystrix.FallbackFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -32,7 +33,7 @@ public interface PurchaseOrderMasterClient extends PurchaseOrderMasterApi {
                 }
 
                 @Override
-                public Result<?> checkCallBackForCreateStockPreReview(Long orderId, boolean b) {
+                public Result<?> checkCallBackForCreateStockItem(StockType stockType, Long orderId, boolean b) {
                     return Result.error(throwable.getMessage());
                 }
 

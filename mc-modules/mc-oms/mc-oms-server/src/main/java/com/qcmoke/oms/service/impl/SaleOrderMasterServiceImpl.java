@@ -20,11 +20,12 @@ import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
 import com.qcmoke.oms.entity.Product;
 import com.qcmoke.oms.entity.SaleOrderDetail;
 import com.qcmoke.oms.entity.SaleOrderMaster;
-import com.qcmoke.oms.mapper.SaleOrderDetailMapper;
+import com.qcmoke.oms.entity.SaleRefund;
 import com.qcmoke.oms.mapper.SaleOrderMasterMapper;
 import com.qcmoke.oms.service.ProductService;
 import com.qcmoke.oms.service.SaleOrderDetailService;
 import com.qcmoke.oms.service.SaleOrderMasterService;
+import com.qcmoke.oms.service.SaleRefundService;
 import com.qcmoke.oms.vo.SaleOrderMasterVo;
 import com.qcmoke.wms.constant.ItemType;
 import com.qcmoke.wms.constant.StockType;
@@ -61,9 +62,9 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     @Autowired
     private SaleOrderMasterMapper saleOrderMasterMapper;
     @Autowired
-    private SaleOrderDetailMapper saleOrderDetailMapper;
-    @Autowired
     private ProductService productService;
+    @Autowired
+    private SaleRefundService saleRefundService;
 
     @Autowired
     private ProductStockClient productStockClient;
@@ -73,22 +74,45 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void checkCallBackForCreateStockPreReview(Long orderId, boolean isOk) {
-        SaleOrderMaster master = this.getById(orderId);
-        if (master == null) {
-            throw new GlobalCommonException("不存在相关记录");
+    public void checkCallBackForCreateStockItem(StockType stockType, Long orderId, boolean isOk) {
+        //销售发货
+        if (StockType.SALE_OUT == stockType) {
+            SaleOrderMaster master = this.getById(orderId);
+            if (master == null) {
+                throw new GlobalCommonException("不存在销售订单相关记录");
+            }
+            master.setModifyTime(new Date());
+            if (isOk) {
+                master.setTransferStockStatus(TransferStockStatusEnum.FINISH.getStatus());
+            } else {
+                master.setTransferStockStatus(TransferStockStatusEnum.FAIL.getStatus());
+            }
+            boolean flag = this.updateById(master);
+            if (!flag) {
+                throw new GlobalCommonException("修改状态失败");
+            }
         }
-        master.setModifyTime(new Date());
-        if (isOk) {
-            master.setTransferStockStatus(TransferStockStatusEnum.FINISH.getStatus());
-        } else {
-            master.setTransferStockStatus(TransferStockStatusEnum.FAIL.getStatus());
+
+        //销售退货
+        if (StockType.SALE_IN.value() == stockType.value()) {
+            SaleRefund saleRefund = saleRefundService.getById(orderId);
+            if (saleRefund == null) {
+                throw new GlobalCommonException("不存在销售退单相关记录");
+            }
+            if (isOk) {
+                saleRefund.setStockCheckStatus(2);
+            } else {
+                saleRefund.setStockCheckStatus(3);
+            }
+            saleRefund.setModifyTime(new Date());
+            boolean flag = saleRefundService.updateById(saleRefund);
+            if (!flag) {
+                throw new GlobalCommonException("修改状态失败");
+            }
         }
-        boolean flag = this.updateById(master);
-        if (!flag) {
-            throw new GlobalCommonException("修改状态失败");
-        }
+
     }
+
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -259,7 +283,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         StockItemDto stockItemDto = new StockItemDto()
                 .setStockType(StockType.SALE_OUT)
                 .setItemType(ItemType.PRODUCT)
-                .setOrderId(masterId)
+                .setDealId(masterId)
                 .setStockItemDetailDtoList(itemDetailDtoList);
         Result<?> result = productStockClient.createStockPreReview(stockItemDto);
         if (HttpStatus.OK.value() != result.getStatus()) {

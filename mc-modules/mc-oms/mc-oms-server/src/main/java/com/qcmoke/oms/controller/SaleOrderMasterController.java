@@ -17,7 +17,9 @@ import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
 import com.qcmoke.oms.dto.UpdateDeliveryDto;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.service.SaleOrderMasterService;
+import com.qcmoke.oms.service.SaleRefundService;
 import com.qcmoke.oms.vo.SaleOrderMasterVo;
+import com.qcmoke.wms.constant.StockType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -41,54 +43,13 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
     @Autowired
     private SaleOrderMasterService saleOrderMasterService;
 
-
-    /**
-     * 入库成功回调
-     */
-    @RequestMapping("/successForInItemToStock")
-    @Override
-    public Result<?> successForInItemToStock(@RequestBody List<Long> orderList) {
-        log.info("入库成功回调,orderList={}", orderList);
-        if (CollectionUtils.isEmpty(orderList)) {
-            throw new GlobalCommonException("orderList is required");
-        }
-        /*
-         * TODO 待开发
-         */
-        return null;
-    }
-
-    /**
-     * 审核结果回调
-     */
-    @Override
-    @RequestMapping(value = "/checkCallBackForCreateStockPreReview", method = RequestMethod.GET)
-    public Result<?> checkCallBackForCreateStockPreReview(@RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
-        log.info("审核结果回调,orderId={},isOk={}", orderId, isOk);
-        if (orderId == null) {
-            throw new GlobalCommonException("orderId is required");
-        }
-        saleOrderMasterService.checkCallBackForCreateStockPreReview(orderId, isOk);
-        return Result.ok();
-    }
+    @Autowired
+    private SaleRefundService saleRefundService;
 
 
     /**
-     * 出库成功回调
+     * 批量刪除
      */
-    @RequestMapping("/successForOutItemFromStock")
-    @Override
-    public Result<?> successForOutItemFromStock(@RequestBody SaleOrderMasterApiDto saleOrderMasterApiDto) {
-        log.info("出库成功回调,saleOrderMasterApiDto={}", saleOrderMasterApiDto);
-        if (StringUtils.isBlank(saleOrderMasterApiDto.getDeliveryChannel())
-                || StringUtils.isBlank(saleOrderMasterApiDto.getDeliverySn())
-                || saleOrderMasterApiDto.getMasterId() == null) {
-            throw new GlobalCommonException("deliveryChannel deliverySn  masterId are required");
-        }
-        saleOrderMasterService.successForOutItemFromStock(saleOrderMasterApiDto);
-        return Result.ok();
-    }
-
     @DeleteMapping("/{ids}")
     public Result<Boolean> delete(@PathVariable String ids) {
         List<Long> idList = WebUtil.parseIdStrToLongList(ids);
@@ -113,6 +74,9 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
         return Result.ok(pageResult);
     }
 
+    /**
+     * 创建或修改订单
+     */
     @PostMapping("/createOrUpdateSaleOrder")
     public Result<?> createOrUpdateSaleOrder(@RequestBody OrderMasterDto orderMasterDto) {
         saleOrderMasterService.createOrUpdateSaleOrder(orderMasterDto);
@@ -164,6 +128,51 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
         return Result.ok();
     }
 
+    /**
+     * 退货入库成功回调
+     */
+    @RequestMapping("/successForInItemToStock")
+    @Override
+    public Result<?> successForInItemToStock(@RequestBody List<Long> orderList) {
+        log.info("入库成功回调,orderList={}", orderList);
+        if (CollectionUtils.isEmpty(orderList)) {
+            throw new GlobalCommonException("orderList is required");
+        }
+        saleRefundService.successForInItemToStock(orderList);
+        return Result.ok();
+    }
+
+
+    /**
+     * 审核结果回调
+     */
+    @Override
+    @RequestMapping(value = "/checkCallBackForCreateStockItem", method = RequestMethod.GET)
+    public Result<?> checkCallBackForCreateStockItem(@RequestParam("stockType") StockType stockType, @RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
+        log.info("审核结果回调,stockType={},orderId={},isOk={}", stockType, orderId, isOk);
+        if (orderId == null || stockType == null) {
+            throw new GlobalCommonException("orderId is required");
+        }
+        saleOrderMasterService.checkCallBackForCreateStockItem(stockType, orderId, isOk);
+        return Result.ok();
+    }
+
+
+    /**
+     * 出库成功回调
+     */
+    @RequestMapping("/successForOutItemFromStock")
+    @Override
+    public Result<?> successForOutItemFromStock(@RequestBody SaleOrderMasterApiDto saleOrderMasterApiDto) {
+        log.info("出库成功回调,saleOrderMasterApiDto={}", saleOrderMasterApiDto);
+        if (StringUtils.isBlank(saleOrderMasterApiDto.getDeliveryChannel())
+                || StringUtils.isBlank(saleOrderMasterApiDto.getDeliverySn())
+                || saleOrderMasterApiDto.getMasterId() == null) {
+            throw new GlobalCommonException("deliveryChannel deliverySn  masterId are required");
+        }
+        saleOrderMasterService.successForOutItemFromStock(saleOrderMasterApiDto);
+        return Result.ok();
+    }
 
 }
 

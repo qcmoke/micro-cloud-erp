@@ -89,7 +89,7 @@ public class StockItemController implements StockItemApi {
         List<StockItemDetailDto> stockItemDetailDtoList = stockItemDto.getStockItemDetailDtoList();
         StockType stockType = stockItemDto.getStockType();
         ItemType itemType = stockItemDto.getItemType();
-        Long orderId = stockItemDto.getOrderId();
+        Long orderId = stockItemDto.getDealId();
         if (CollectionUtils.isEmpty(stockItemDetailDtoList)
                 || stockType == null
                 || itemType == null
@@ -99,7 +99,7 @@ public class StockItemController implements StockItemApi {
 
         StockItem dbStockItem = stockItemService.getOne(
                 new LambdaQueryWrapper<StockItem>()
-                        .eq(StockItem::getOrderId, orderId)
+                        .eq(StockItem::getDealId, orderId)
                         .eq(StockItem::getItemType, itemType.value())
                         .eq(StockItem::getStockType,stockType.value()));
         if (dbStockItem != null) {

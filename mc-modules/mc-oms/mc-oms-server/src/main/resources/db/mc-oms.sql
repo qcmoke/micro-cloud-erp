@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 24/03/2020 22:43:36
+ Date: 03/04/2020 13:47:30
 */
 
 SET NAMES utf8mb4;
@@ -102,15 +102,13 @@ CREATE TABLE `t_sale_order_detail`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
   PRIMARY KEY (`detail_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 301 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_sale_order_detail
 -- ----------------------------
-INSERT INTO `t_sale_order_detail` VALUES (297, 70, 1, 2, NULL, '2020-03-24 15:25:36', NULL, 0);
-INSERT INTO `t_sale_order_detail` VALUES (298, 70, 2, 3, NULL, '2020-03-24 15:25:36', NULL, 0);
-INSERT INTO `t_sale_order_detail` VALUES (299, 71, 1, 2, NULL, '2020-03-24 22:40:51', NULL, 1);
-INSERT INTO `t_sale_order_detail` VALUES (300, 71, 1, 2, NULL, NULL, '2020-03-24 22:41:01', 0);
+INSERT INTO `t_sale_order_detail` VALUES (14, 13, 1, 1, NULL, '2020-04-03 01:31:23', NULL, 0);
+INSERT INTO `t_sale_order_detail` VALUES (15, 13, 2, 2, NULL, '2020-04-03 01:31:23', NULL, 0);
 
 -- ----------------------------
 -- Table structure for t_sale_order_master
@@ -140,13 +138,12 @@ CREATE TABLE `t_sale_order_master`  (
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态【0->未删除；1->已删除】',
   `transfer_stock_status` tinyint(4) NULL DEFAULT 1 COMMENT '发货申请状态(1:未移交申请；2:已移交申请；3:移交失败(仓库审核完时)；4:已完成移交(仓库审核完时)；)',
   PRIMARY KEY (`master_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 72 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_sale_order_master
 -- ----------------------------
-INSERT INTO `t_sale_order_master` VALUES (70, 2, '2020-03-24 15:25:35', 23553, 21, 2, 3, '2020-03-24 15:27:07', NULL, '小华', '18250169860', 'aaa', '顺丰', '556555215255555555', 1, NULL, '2020-03-24 15:25:35', '加快', '2020-03-24 15:25:35', '2020-03-24 15:27:07', 0, 4);
-INSERT INTO `t_sale_order_master` VALUES (71, 2, '2020-03-24 22:40:51', 13554, 22, 2, 2, NULL, NULL, 'ppp', '18250169860', 'ppi', NULL, NULL, 1, NULL, '2020-03-24 22:40:58', NULL, '2020-03-24 22:40:51', '2020-03-24 22:40:58', 0, 1);
+INSERT INTO `t_sale_order_master` VALUES (13, 1, '2020-04-03 01:31:18', 13443, 22, 1, 3, '2020-04-03 01:34:00', NULL, 'oo', '18250169860', 'ppp', 'sf', '123456457', 1, NULL, '2020-04-03 01:31:18', NULL, '2020-04-03 01:31:18', '2020-04-03 01:34:00', 0, 4);
 
 -- ----------------------------
 -- Table structure for t_sale_refund
@@ -162,12 +159,33 @@ CREATE TABLE `t_sale_refund`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态',
+  `stock_check_status` tinyint(4) NULL DEFAULT 1 COMMENT '仓库审核状态（1：未审核；2：审核通过；3：审核不通过）',
+  `stock_in_status` tinyint(4) NULL DEFAULT 1 COMMENT '入库状态（1：未入库；2：已入库）',
   PRIMARY KEY (`refund_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_sale_refund
 -- ----------------------------
-INSERT INTO `t_sale_refund` VALUES (16, 70, 2, 23553, '2020-03-24 15:28:46', '不要了', '2020-03-24 15:28:51', NULL, 0);
+INSERT INTO `t_sale_refund` VALUES (3, 13, 1, 13443, '2020-04-03 01:32:19', '不用了', '2020-04-03 01:32:21', NULL, 1, 1, 1);
+INSERT INTO `t_sale_refund` VALUES (4, 13, 2, 13443, '2020-04-03 01:34:28', 'buyl', '2020-04-03 01:34:30', '2020-04-03 01:35:02', 0, 2, 2);
+
+-- ----------------------------
+-- Table structure for undo_log
+-- ----------------------------
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `branch_id` bigint(20) NOT NULL,
+  `xid` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `context` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `rollback_info` longblob NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `log_created` datetime(0) NOT NULL,
+  `log_modified` datetime(0) NOT NULL,
+  `ext` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `ux_undo_log`(`xid`, `branch_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

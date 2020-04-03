@@ -1,7 +1,6 @@
 package com.qcmoke.oms.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcmoke.common.dto.PageQuery;
@@ -11,6 +10,7 @@ import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.entity.SaleRefund;
 import com.qcmoke.oms.service.SaleRefundService;
+import com.qcmoke.oms.vo.SaleRefundVo;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +37,10 @@ public class SaleRefundController {
 
 
     @GetMapping
-    public Result<PageResult<SaleRefund>> page(PageQuery pageQuery, SaleRefund saleRefund) {
-        IPage<SaleRefund> pageInfo = saleRefundService.page(new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize()), new QueryWrapper<>(saleRefund));
-        PageResult<SaleRefund> pageResult = new PageResult<>(pageInfo.getRecords(), pageInfo.getTotal());
+    public Result<PageResult<SaleRefundVo>> page(PageQuery pageQuery, SaleRefund saleRefund) {
+        Page<SaleRefund> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+        IPage<SaleRefundVo> pageInfo = saleRefundService.getPage(page, saleRefund);
+        PageResult<SaleRefundVo> pageResult = new PageResult<>(pageInfo.getRecords(), pageInfo.getTotal());
         return Result.ok(pageResult);
     }
 

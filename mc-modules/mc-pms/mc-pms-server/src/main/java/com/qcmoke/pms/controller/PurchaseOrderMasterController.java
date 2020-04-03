@@ -14,6 +14,7 @@ import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.service.PurchaseOrderMasterService;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
+import com.qcmoke.wms.constant.StockType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,21 +40,18 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
 
 
     /**
-     * 出库成功回调
+     * 采购退货出库成功回调
      */
     @RequestMapping("/successForOutItemFromStock")
     @Override
-    public Result<?> successForOutItemFromStock(PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
+    public Result<?> successForOutItemFromStock(@RequestBody PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
         log.info("出库成功回调,purchaseOrderMasterApiDto={}", purchaseOrderMasterApiDto);
-        /*
-         * TODO
-         * 待开发
-         */
-        return null;
+        purchaseOrderMasterService.successForOutItemFromStock(purchaseOrderMasterApiDto);
+        return Result.ok();
     }
 
     /**
-     * 入库成功回调
+     * 采购入库成功回调
      */
     @Override
     @RequestMapping("/successForInItemToStock")
@@ -70,13 +68,13 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
      * 审核结果回调
      */
     @Override
-    @RequestMapping("/checkCallBackForCreateStockPreReview")
-    public Result<?> checkCallBackForCreateStockPreReview(@RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
-        log.info("审核结果回调,orderId={},isOk={}", orderId, isOk);
-        if (orderId == null) {
+    @RequestMapping("/checkCallBackForCreateStockItem")
+    public Result<?> checkCallBackForCreateStockItem(@RequestParam("stockType") StockType stockType, @RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
+        log.info("审核结果回调,stockType={},orderId={},isOk={}", stockType, orderId, isOk);
+        if (orderId == null || stockType == null) {
             throw new GlobalCommonException("orderId is required");
         }
-        purchaseOrderMasterService.checkCallBackForCreateStockPreReview(orderId, isOk);
+        purchaseOrderMasterService.checkCallBackForCreateStockItem(stockType, orderId, isOk);
         return Result.ok();
     }
 
@@ -138,7 +136,7 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
      * 提交审核申请
      */
     @PutMapping("/toApplyCheck/{masterId}")
-    public Result<Boolean> toApplyCheck(@PathVariable Long masterId){
+    public Result<Boolean> toApplyCheck(@PathVariable Long masterId) {
         boolean flag = purchaseOrderMasterService.toApplyCheck(masterId);
         return flag ? Result.ok() : Result.error();
     }

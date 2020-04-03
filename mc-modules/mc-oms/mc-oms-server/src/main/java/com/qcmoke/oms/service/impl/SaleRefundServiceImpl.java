@@ -1,6 +1,8 @@
 package com.qcmoke.oms.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.vo.Result;
@@ -17,10 +19,12 @@ import com.qcmoke.oms.mapper.SaleRefundMapper;
 import com.qcmoke.oms.service.SaleOrderDetailService;
 import com.qcmoke.oms.service.SaleOrderMasterService;
 import com.qcmoke.oms.service.SaleRefundService;
+import com.qcmoke.oms.vo.SaleRefundVo;
 import com.qcmoke.wms.constant.ItemType;
 import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.StockItemDetailDto;
 import com.qcmoke.wms.dto.StockItemDto;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +54,34 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
     private SaleOrderMasterService saleOrderMasterService;
     @Autowired
     private SaleOrderDetailService saleOrderDetailService;
+    @Autowired
+    private SaleRefundMapper saleRefundMapper;
 
+    @Override
+    public IPage<SaleRefundVo> getPage(Page<SaleRefund> page, SaleRefund saleRefund) {
+        return saleRefundMapper.getPage(page, saleRefund);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void successForInItemToStock(List<Long> orderList) {
+        List<SaleRefund> saleRefundList = this.listByIds(orderList);
+        if (CollectionUtils.isEmpty(saleRefundList)) {
+            throw new GlobalCommonException("不存在相关的退单记录");
+        }
+        saleRefundList.forEach(saleRefund -> {
+            saleRefund.setModifyTime(new Date());
+            saleRefund.setStockInStatus(2);
+        });
+        boolean flag = this.updateBatchById(saleRefundList);
+        if (!flag) {
+            throw new GlobalCommonException("更新退单状态失败");
+        }
+
+    }
+
+
+    @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void saleRefund(SaleRefund saleRefund) {
@@ -71,7 +102,7 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
         if (OrderStatusEnum.isMoreAndEqOther(statusEnum, OrderStatusEnum.PAID_NO_SHIPPED)) {
             Result<?> result = billClient.addBill(
                     new BillApiDto()
-                            .setDealNum(saleRefund.getSaleOrderMasterId())
+                            .setDealNum(saleRefund.getRefundId())
                             .setDealType(DealType.SALE_OUT)
                             .setPayType(PayType.resolve(saleRefund.getRefundChannel()))
                             .setTotalAmount(saleRefund.getTotalAmount()));
@@ -97,7 +128,7 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
             StockItemDto stockItemDto = new StockItemDto()
                     .setStockType(StockType.SALE_IN)
                     .setItemType(ItemType.PRODUCT)
-                    .setOrderId(masterId)
+                    .setDealId(saleRefund.getRefundId())
                     .setStockItemDetailDtoList(detailDtoList);
             Result<?> result = productStockClient.createStockPreReview(stockItemDto);
             if (HttpStatus.OK.value() != result.getStatus()) {

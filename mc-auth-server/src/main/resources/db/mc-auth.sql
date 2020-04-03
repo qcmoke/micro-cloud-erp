@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 24/03/2020 22:42:48
+ Date: 03/04/2020 13:46:40
 */
 
 SET NAMES utf8mb4;
@@ -67,6 +67,7 @@ CREATE TABLE `oauth_client_details`  (
 -- ----------------------------
 -- Records of oauth_client_details
 -- ----------------------------
+INSERT INTO `oauth_client_details` VALUES ('actuator', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'actuator', 'client_credentials', NULL, 'ADMIN', NULL, NULL, NULL, 'true');
 INSERT INTO `oauth_client_details` VALUES ('admin', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,authorization_code', 'http://127.0.0.1:80/admin/callback', NULL, 3600, NULL, NULL, 'true');
 INSERT INTO `oauth_client_details` VALUES ('gateway', '', '$2a$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password', NULL, NULL, 3600, NULL, NULL, NULL);
 INSERT INTO `oauth_client_details` VALUES ('social', '', '$10$Jh7dVwn/X86L89DIiqT5ROaWAzL1.fRLhVQBVUlLx6HfXpDsHTy7y', 'all', 'password,refresh_token', NULL, NULL, 3600, NULL, NULL, NULL);

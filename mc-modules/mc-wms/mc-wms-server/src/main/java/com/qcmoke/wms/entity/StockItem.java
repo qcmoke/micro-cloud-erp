@@ -63,9 +63,9 @@ private static final long serialVersionUID=1L;
     private Integer finishStatus;
 
     /**
-     * 订单编号
+     * 交易编号
      */
-    private Long orderId;
+    private Long dealId;
 
     /**
      * 出入库时间

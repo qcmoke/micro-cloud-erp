@@ -63,20 +63,21 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
             throw new GlobalCommonException("更新出入单失败");
         }
         StockType stockType = StockType.valueOf(stockItem.getStockType());
+        Long orderId = stockItem.getDealId();
         Result<?> result;
         switch (stockType) {
             case SALE_IN:
             case SALE_OUT:
-                result = saleOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), true);
+                result = saleOrderMasterClient.checkCallBackForCreateStockItem(stockType, orderId, true);
                 if (result.isError()) {
-                    throw new GlobalCommonException("通知oms失败");
+                    throw new GlobalCommonException("通知oms失败,e=" + result.getMessage());
                 }
                 break;
             case PURCHASE_IN:
             case PURCHASE_OUT:
-                result = purchaseOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), true);
+                result = purchaseOrderMasterClient.checkCallBackForCreateStockItem(stockType, orderId, true);
                 if (result.isError()) {
-                    throw new GlobalCommonException("通知pms失败");
+                    throw new GlobalCommonException("通知pms失败,e=" + result.getMessage());
                 }
                 break;
             default:
@@ -103,16 +104,16 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
         switch (stockType) {
             case SALE_IN:
             case SALE_OUT:
-                result = saleOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), false);
+                result = saleOrderMasterClient.checkCallBackForCreateStockItem(stockType, stockItem.getDealId(), false);
                 if (result.isError()) {
-                    throw new GlobalCommonException("通知oms失败");
+                    throw new GlobalCommonException("通知oms失败,e=" + result.getMessage());
                 }
                 break;
             case PURCHASE_IN:
             case PURCHASE_OUT:
-                result = purchaseOrderMasterClient.checkCallBackForCreateStockPreReview(stockItem.getOrderId(), false);
+                result = purchaseOrderMasterClient.checkCallBackForCreateStockItem(stockType, stockItem.getDealId(), false);
                 if (result.isError()) {
-                    throw new GlobalCommonException("通知pms失败");
+                    throw new GlobalCommonException("通知pms失败,e=" + result.getMessage());
                 }
                 break;
             default:

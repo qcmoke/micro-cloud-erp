@@ -39,12 +39,12 @@ public class MaterialRefundController {
         return Result.ok(pageResult);
     }
 
-    @PostMapping
-    public Result<Boolean> createRefuse(MaterialRefund materialRefund) {
+    @PostMapping("/createRefund")
+    public Result<Boolean> createRefund(@RequestBody MaterialRefund materialRefund) {
         if (materialRefund == null || materialRefund.getPurchaseOrderMasterId() == null) {
             throw new GlobalCommonException("some params are required");
         }
-        materialRefundService.createRefuse(materialRefund);
+        materialRefundService.createRefund(materialRefund);
         return Result.ok();
     }
 

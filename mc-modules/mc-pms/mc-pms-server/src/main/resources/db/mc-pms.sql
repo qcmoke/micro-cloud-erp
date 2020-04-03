@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 24/03/2020 22:43:54
+ Date: 03/04/2020 13:47:56
 */
 
 SET NAMES utf8mb4;
@@ -62,31 +62,17 @@ CREATE TABLE `t_material_refund`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '退订单创建时间',
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态【0->未删除；1->已删除】',
+  `stock_check_status` tinyint(4) NULL DEFAULT 1 COMMENT '仓库审核状态（1：未审核；2：审核通过；3：审核不通过）',
+  `stock_out_status` tinyint(4) NULL DEFAULT 1 COMMENT '发货状态（1：未发货；2：已发货）',
   PRIMARY KEY (`refund_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_material_refund
 -- ----------------------------
-INSERT INTO `t_material_refund` VALUES (9, 34, NULL, NULL, '不要了', '2020-03-24 16:50:07', '2020-03-18 11:25:52', '2020-03-24 16:50:12', 1);
-INSERT INTO `t_material_refund` VALUES (10, 79, NULL, NULL, '破恐龙', NULL, '2020-03-24 15:39:56', '2020-03-24 16:51:55', 1);
-INSERT INTO `t_material_refund` VALUES (11, 80, NULL, NULL, 'qqq', NULL, '2020-03-24 15:59:24', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (12, 81, NULL, NULL, 'qq', NULL, '2020-03-24 16:21:16', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (13, 83, NULL, NULL, 'yyy', NULL, '2020-03-24 16:33:42', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (14, 79, NULL, NULL, 'ooo', '2020-03-24 18:35:13', '2020-03-24 18:35:13', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (15, 79, NULL, NULL, 'ooo', '2020-03-24 18:35:16', '2020-03-24 18:35:16', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (16, 79, NULL, NULL, 'ooo', '2020-03-24 18:35:23', '2020-03-24 18:35:23', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (17, 82, NULL, NULL, 'pp', '2020-03-24 18:35:36', '2020-03-24 18:35:36', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (18, 84, NULL, NULL, '', '2020-03-24 18:36:15', '2020-03-24 18:36:15', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (19, 79, 1, 2640, '', '2020-03-24 19:36:57', '2020-03-24 19:36:57', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (20, 79, 1, 2640, '', '2020-03-24 19:37:38', '2020-03-24 19:37:38', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (21, 80, 1, 960, '', '2020-03-24 19:46:20', '2020-03-24 19:46:20', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (22, 81, NULL, 2240, '不要了', '2020-03-24 19:47:07', '2020-03-24 19:47:07', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (23, 79, 3, 2640, '不要了啊', '2020-03-24 19:47:48', '2020-03-24 19:47:48', NULL, 0);
-INSERT INTO `t_material_refund` VALUES (24, 81, NULL, 2240, '不要了啊', '2020-03-24 19:48:00', '2020-03-24 19:48:00', NULL, 1);
-INSERT INTO `t_material_refund` VALUES (25, 82, 1, 1120, '不要了啊', '2020-03-24 19:48:11', '2020-03-24 19:48:11', NULL, 0);
-INSERT INTO `t_material_refund` VALUES (26, 80, 1, 960, '不要了啊', '2020-03-24 19:48:21', '2020-03-24 19:48:21', NULL, 0);
-INSERT INTO `t_material_refund` VALUES (27, 80, 1, 960, '不要了啊', '2020-03-24 19:48:36', '2020-03-24 19:48:36', NULL, 0);
+INSERT INTO `t_material_refund` VALUES (33, 10, 1, 758, '錢錢錢', '2020-04-03 04:10:50', '2020-04-03 04:10:50', NULL, 0, 1, 1);
+INSERT INTO `t_material_refund` VALUES (34, 11, 1, 8757, '不要了', '2020-04-03 04:26:44', '2020-04-03 04:26:44', NULL, 0, 1, 1);
+INSERT INTO `t_material_refund` VALUES (35, 12, 2, 6158, '22', '2020-04-03 04:38:38', '2020-04-03 04:38:38', NULL, 0, 1, 1);
 
 -- ----------------------------
 -- Table structure for t_purchase_order_detail
@@ -101,22 +87,16 @@ CREATE TABLE `t_purchase_order_detail`  (
   `modify_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态【0->未删除；1->已删除】',
   PRIMARY KEY (`detail_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 286 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_purchase_order_detail
 -- ----------------------------
-INSERT INTO `t_purchase_order_detail` VALUES (275, 5, 79, 3, '2020-03-24 15:39:43', '2020-03-24 15:39:43', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (276, 4, 79, 3, '2020-03-24 15:39:43', '2020-03-24 15:39:43', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (277, 4, 80, 3, '2020-03-24 15:59:03', '2020-03-24 15:59:03', 1);
-INSERT INTO `t_purchase_order_detail` VALUES (278, 5, 81, 4, '2020-03-24 16:21:09', '2020-03-24 16:21:09', 1);
-INSERT INTO `t_purchase_order_detail` VALUES (279, 5, 82, 2, '2020-03-24 16:29:46', '2020-03-24 16:29:46', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (280, 6, 83, 2, '2020-03-24 16:33:26', '2020-03-24 16:33:26', 1);
-INSERT INTO `t_purchase_order_detail` VALUES (281, 4, 84, 1, '2020-03-24 18:36:09', '2020-03-24 18:36:09', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (282, 4, 80, 3, '2020-03-24 19:39:36', '2020-03-24 19:39:36', 1);
-INSERT INTO `t_purchase_order_detail` VALUES (283, 4, 80, 3, '2020-03-24 19:39:44', '2020-03-24 19:39:44', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (284, 5, 81, 4, '2020-03-24 19:53:34', '2020-03-24 19:53:34', 0);
-INSERT INTO `t_purchase_order_detail` VALUES (285, 6, 83, 2, '2020-03-24 19:54:42', '2020-03-24 19:54:42', 0);
+INSERT INTO `t_purchase_order_detail` VALUES (13, 4, 11, 3, '2020-04-03 04:26:27', '2020-04-03 04:26:27', 0);
+INSERT INTO `t_purchase_order_detail` VALUES (14, 8, 11, 3, '2020-04-03 04:26:27', '2020-04-03 04:26:27', 0);
+INSERT INTO `t_purchase_order_detail` VALUES (15, 8, 12, 2, '2020-04-03 04:37:35', '2020-04-03 04:37:35', 0);
+INSERT INTO `t_purchase_order_detail` VALUES (16, 4, 12, 3, '2020-04-03 04:37:35', '2020-04-03 04:37:35', 0);
+INSERT INTO `t_purchase_order_detail` VALUES (17, 6, 13, 3, '2020-04-03 04:45:11', '2020-04-03 04:45:11', 0);
 
 -- ----------------------------
 -- Table structure for t_purchase_order_master
@@ -138,17 +118,14 @@ CREATE TABLE `t_purchase_order_master`  (
   `delete_status` tinyint(4) NULL DEFAULT 0 COMMENT '删除状态【0->未删除；1->已删除】',
   `transfer_stock_status` tinyint(4) NULL DEFAULT 1 COMMENT '移交库存状态(1:未移交；2:已移交申请；3:移交失败；4:已完成移交；)',
   PRIMARY KEY (`master_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 85 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of t_purchase_order_master
 -- ----------------------------
-INSERT INTO `t_purchase_order_master` VALUES (79, 2, '2020-03-24 15:39:43', 3, 2, 2640, 23, 17, 1, '', '2020-03-24 15:39:43', NULL, 0, 1);
-INSERT INTO `t_purchase_order_master` VALUES (80, 1, '2020-03-24 15:59:03', 2, 2, 960, 22, 17, 1, '', '2020-03-24 15:59:03', '2020-03-24 19:39:43', 0, 1);
-INSERT INTO `t_purchase_order_master` VALUES (81, 2, '2020-03-24 16:21:08', 1, 2, 2240, 22, 17, 4, '', '2020-03-24 16:21:08', '2020-03-24 19:57:18', 0, 1);
-INSERT INTO `t_purchase_order_master` VALUES (82, 2, '2020-03-24 16:29:46', 1, 2, 1120, 25, 17, 1, '', '2020-03-24 16:29:46', NULL, 0, 1);
-INSERT INTO `t_purchase_order_master` VALUES (83, 2, '2020-03-24 16:33:26', 3, 2, 204, 52, 17, 2, '', '2020-03-24 16:33:26', '2020-03-24 19:54:47', 0, 1);
-INSERT INTO `t_purchase_order_master` VALUES (84, 1, '2020-03-24 18:36:08', NULL, 1, 320, NULL, 17, 1, '', '2020-03-24 18:36:08', NULL, 0, 1);
+INSERT INTO `t_purchase_order_master` VALUES (11, 1, '2020-04-03 04:26:26', 1, 2, 8757, 22, 17, 1, '', '2020-04-03 04:26:26', NULL, 0, 1);
+INSERT INTO `t_purchase_order_master` VALUES (12, 1, '2020-04-03 04:37:34', 1, 2, 6158, 22, 17, 2, '', '2020-04-03 04:37:34', '2020-04-03 04:37:44', 0, 1);
+INSERT INTO `t_purchase_order_master` VALUES (13, 2, '2020-04-03 04:45:11', 3, 2, 1137, 25, 17, 4, '', '2020-04-03 04:45:11', '2020-04-03 04:45:26', 0, 1);
 
 -- ----------------------------
 -- Table structure for t_supplier
@@ -209,5 +186,23 @@ INSERT INTO `t_supplier_material` VALUES (54, 4, 2, 0);
 INSERT INTO `t_supplier_material` VALUES (55, 4, 7, 0);
 INSERT INTO `t_supplier_material` VALUES (56, 1, 4, 0);
 INSERT INTO `t_supplier_material` VALUES (57, 1, 8, 0);
+
+-- ----------------------------
+-- Table structure for undo_log
+-- ----------------------------
+DROP TABLE IF EXISTS `undo_log`;
+CREATE TABLE `undo_log`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `branch_id` bigint(20) NOT NULL,
+  `xid` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `context` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `rollback_info` longblob NOT NULL,
+  `log_status` int(11) NOT NULL,
+  `log_created` datetime(0) NOT NULL,
+  `log_modified` datetime(0) NOT NULL,
+  `ext` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `ux_undo_log`(`xid`, `branch_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;

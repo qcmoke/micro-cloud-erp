@@ -16,7 +16,7 @@ import java.util.Date;
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-24
+ * @since 2020-04-02
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -53,7 +53,7 @@ public class MaterialRefund implements Serializable {
     private String reason;
 
     /**
-     * 退货日期
+     * 退货时间
      */
     private Date refundDate;
 
@@ -71,6 +71,16 @@ public class MaterialRefund implements Serializable {
      * 删除状态【0->未删除；1->已删除】
      */
     private Integer deleteStatus;
+
+    /**
+     * 仓库审核状态（1：未审核；2：审核通过；3：审核不通过）
+     */
+    private Integer stockCheckStatus;
+
+    /**
+     * 发货状态（1：未发货；2：已发货）
+     */
+    private Integer stockOutStatus;
 
 
 }

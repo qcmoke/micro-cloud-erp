@@ -18,9 +18,9 @@ import java.util.List;
 public class StockItemDto implements Serializable {
 
     /**
-     * 订单编号(必填)
+     * 交易编号(必填)
      */
-    private Long orderId;
+    private Long dealId;
 
 
     /**

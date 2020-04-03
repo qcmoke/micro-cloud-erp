@@ -1,19 +1,28 @@
 package com.qcmoke.fms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.fms.constant.DealType;
+import com.qcmoke.fms.constant.PayType;
+import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.fms.entity.Account;
 import com.qcmoke.fms.entity.Bill;
 import com.qcmoke.fms.mapper.BillMapper;
+import com.qcmoke.fms.service.AccountService;
 import com.qcmoke.fms.service.BillService;
 import com.qcmoke.fms.vo.BillVo;
 import com.qcmoke.fms.vo.StatisticsDataItemVo;
 import com.qcmoke.fms.vo.StatisticsDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,12 +39,70 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
 
     @Autowired
     private BillMapper billMapper;
+    @Autowired
+    private AccountService accountService;
 
 
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void addBill(BillApiDto billApiDto) {
+        Double totalAmount = billApiDto.getTotalAmount();
+        Long dealNum = billApiDto.getDealNum();
+        PayType payType = billApiDto.getPayType();
+        long accountId = Integer.toUnsignedLong(payType.value());
+        DealType dealType = billApiDto.getDealType();
+        int dealTypeValue = dealType.value();
+
+        int count = this.count(new LambdaQueryWrapper<Bill>()
+                .eq(Bill::getDealNum, dealNum)
+                .eq(Bill::getType, dealTypeValue));
+        if (count > 0) {
+            throw new GlobalCommonException("该账单已经存在!");
+        }
+
+        Bill bill = new Bill();
+        bill.setDealNum(dealNum);
+        bill.setTotalAmount(totalAmount);
+        bill.setAccountId(accountId);
+        bill.setType(dealTypeValue);
+        bill.setCreateTime(new Date());
+        boolean flag = this.save(bill);
+        if (!flag) {
+            throw new GlobalCommonException("创建账单失败!");
+        }
+
+        //根据交易金额扣减或者添加相应的账余额
+        Account account = accountService.getById(accountId);
+        if (account == null) {
+            throw new GlobalCommonException("不存在相应的账户");
+        }
+        account.setModifyTime(new Date());
+        switch (dealType) {
+            case SALE_OUT:
+            case PURCHASE_OUT:
+                double updateAmount = account.getAmount() - totalAmount;
+                if (updateAmount < 0) {
+                    throw new GlobalCommonException("该账户余额已不足！");
+                }
+                account.setAmount(updateAmount);
+                break;
+            case SALE_IN:
+            case PURCHASE_IN:
+                account.setAmount(account.getAmount() + totalAmount);
+                break;
+            default:
+                throw new GlobalCommonException("不支持该交易类型");
+        }
+        account.setModifyTime(new Date());
+        flag = accountService.updateById(account);
+        if (!flag) {
+            throw new GlobalCommonException("修改账户余额失败!");
+        }
+    }
 
     @Override
     public IPage<BillVo> getPage(Page<Bill> page, Bill bill) {
-        return billMapper.getPage(page,bill);
+        return billMapper.getPage(page, bill);
     }
 
     @Override

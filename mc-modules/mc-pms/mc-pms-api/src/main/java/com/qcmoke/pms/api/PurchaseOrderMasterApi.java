@@ -2,6 +2,7 @@ package com.qcmoke.pms.api;
 
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
+import com.qcmoke.wms.constant.StockType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,8 +29,8 @@ public interface PurchaseOrderMasterApi {
     /**
      * 审核结果回调
      */
-    @RequestMapping("/checkCallBackForCreateStockPreReview")
-    Result<?> checkCallBackForCreateStockPreReview(@RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk);
+    @RequestMapping("/checkCallBackForCreateStockItem")
+    Result<?> checkCallBackForCreateStockItem(@RequestParam("stockType") StockType stockType, @RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk);
 
 
 }

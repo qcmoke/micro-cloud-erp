@@ -144,7 +144,7 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
         /*3、通知申请发库的服务修改其状态为发库成功*/
         String deliveryChannel = outItemFromStockDto.getDeliveryChannel();
         String deliverySn = outItemFromStockDto.getDeliverySn();
-        Long orderId = stockItem.getOrderId();
+        Long orderId = stockItem.getDealId();
         StockType stockType = StockType.valueOf(stockItem.getStockType());
         switch (stockType) {
             case SALE_OUT:
@@ -188,15 +188,19 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
             throw new GlobalCommonException("不存在相关的订单记录");
         }
         Integer bothItemType = stockItemList.get(0).getItemType();
+        Integer bothStockType = stockItemList.get(0).getStockType();
         for (StockItem stockItem : stockItemList) {
             if (!bothItemType.equals(stockItem.getItemType())) {
-                throw new GlobalCommonException("该操作只能同时存一种货物！");
+                throw new GlobalCommonException("该操作只能同时存一种货物(物料或者产品)！");
+            }
+            if (!bothStockType.equals(stockItem.getStockType())) {
+                throw new GlobalCommonException("该操作只能同时操作一种出入库类型)！");
             }
             if (stockItem.getCheckStatus() == null || stockItem.getCheckStatus() < CheckStatusEnum.PASS.value()) {
-                throw new GlobalCommonException("该订单存在未审核通过，请联系管理员审核");
+                throw new GlobalCommonException("存在未审核通过的订单");
             }
             if (stockItem.getFinishStatus() == FinishStatusEnum.FINISHED.value()) {
-                throw new GlobalCommonException("该订单已经完成入库");
+                throw new GlobalCommonException("存在已经完成入库的订单");
             }
             stockItem.setAdminId(currentUserId);
             stockItem.setMakeDate(new Date());
@@ -242,19 +246,19 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
         }
 
         //（3）通知申请入库的服务表明“入库成功”
-        List<Long> orderList = stockItemList.stream().map(StockItem::getOrderId).collect(Collectors.toList());
-        StockType stockType = StockType.valueOf(bothItemType);
+        List<Long> orderList = stockItemList.stream().map(StockItem::getDealId).collect(Collectors.toList());
+        StockType stockType = StockType.valueOf(bothStockType);
         switch (stockType) {
             case SALE_IN:
-                Result<?> result1 = saleOrderMasterClient.successForInItemToStock(orderList);
-                if (result1.isError()) {
-                    throw new GlobalCommonException("通知oms失败");
+                Result<?> result = saleOrderMasterClient.successForInItemToStock(orderList);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知oms失败,e=" + result.getMessage());
                 }
                 break;
             case PURCHASE_IN:
-                Result<?> result2 = purchaseOrderMasterClient.successForInItemToStock(orderList);
-                if (result2.isError()) {
-                    throw new GlobalCommonException("通知pms失败");
+                result = purchaseOrderMasterClient.successForInItemToStock(orderList);
+                if (result.isError()) {
+                    throw new GlobalCommonException("通知pms失败,e=" + result.getMessage());
                 }
                 break;
             default:

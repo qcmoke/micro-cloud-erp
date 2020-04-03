@@ -12,7 +12,6 @@ import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
 import com.qcmoke.pms.client.BillClient;
 import com.qcmoke.pms.client.MaterialStockClient;
-import com.qcmoke.pms.client.UserClient;
 import com.qcmoke.pms.constant.OrderStatusEnum;
 import com.qcmoke.pms.constant.PayStatusEnum;
 import com.qcmoke.pms.entity.MaterialRefund;
@@ -27,10 +26,12 @@ import com.qcmoke.wms.constant.ItemType;
 import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.StockItemDetailDto;
 import com.qcmoke.wms.dto.StockItemDto;
+import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,8 +59,10 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
     @Autowired
     private PurchaseOrderDetailService purchaseOrderDetailService;
 
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public void createRefuse(MaterialRefund materialRefund) {
+    public void createRefund(MaterialRefund materialRefund) {
         Long masterId = materialRefund.getPurchaseOrderMasterId();
         PurchaseOrderMaster orderMaster = purchaseOrderMasterService.getById(masterId);
         if (orderMaster == null) {
@@ -91,7 +94,7 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
             StockItemDto stockItemDto = new StockItemDto()
                     .setStockType(StockType.PURCHASE_OUT)
                     .setItemType(ItemType.MATERIAL)
-                    .setOrderId(masterId)
+                    .setDealId(materialRefund.getRefundId())
                     .setStockItemDetailDtoList(detailDtoList);
             Result<?> result = materialStockClient.createStockPreReview(stockItemDto);
             if (HttpStatus.OK.value() != result.getStatus()) {
@@ -107,12 +110,12 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
             }
 
             //采购退款
-            Result<?> result = billClient.addBill(
-                    new BillApiDto()
-                            .setDealNum(masterId)
-                            .setDealType(DealType.PURCHASE_IN)
-                            .setPayType(PayType.resolve(refundChannel))
-                            .setTotalAmount(totalAmount));
+            BillApiDto billApiDto = new BillApiDto()
+                    .setDealNum(materialRefund.getRefundId())
+                    .setDealType(DealType.PURCHASE_IN)
+                    .setPayType(PayType.valueOf(refundChannel))
+                    .setTotalAmount(totalAmount);
+            Result<?> result = billClient.addBill(billApiDto);
             if (result.isError()) {
                 throw new GlobalCommonException(result.getMessage());
             }

@@ -2,9 +2,10 @@ package com.qcmoke.fms.api;
 
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.fms.dto.BillApiDto;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  * @author qcmoke
@@ -12,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/bill")
 public interface BillApi {
 
-    @RequestMapping(value = "/addBill", method = RequestMethod.POST)
+    @PostMapping(value = "/addBill", consumes = MediaType.APPLICATION_JSON_VALUE)
     Result<?> addBill(@RequestBody BillApiDto billApiDto);
 }

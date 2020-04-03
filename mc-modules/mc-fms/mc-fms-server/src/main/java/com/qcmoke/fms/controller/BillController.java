@@ -12,11 +12,14 @@ import com.qcmoke.fms.api.BillApi;
 import com.qcmoke.fms.constant.DealType;
 import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.fms.entity.Account;
 import com.qcmoke.fms.entity.Bill;
+import com.qcmoke.fms.service.AccountService;
 import com.qcmoke.fms.service.BillService;
 import com.qcmoke.fms.vo.BillVo;
 import com.qcmoke.fms.vo.StatisticsDataVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,33 +41,12 @@ public class BillController implements BillApi {
     private BillService billService;
 
 
-    @Transactional(rollbackFor = Exception.class)
+
+
     @Override
-    @RequestMapping(value = "/addBill", method = RequestMethod.POST)
+    @PostMapping(value = "/addBill", consumes = MediaType.APPLICATION_JSON_VALUE)
     public Result<?> addBill(@RequestBody BillApiDto billApiDto) {
-        Double totalAmount = billApiDto.getTotalAmount();
-        Long dealNum = billApiDto.getDealNum();
-        PayType payType = billApiDto.getPayType();
-        DealType dealType = billApiDto.getDealType();
-        int dealTypeValue = dealType.value();
-
-        int count = billService.count(new LambdaQueryWrapper<Bill>()
-                .eq(Bill::getDealNum, dealNum)
-                .eq(Bill::getType, dealTypeValue));
-        if (count > 0) {
-            throw new GlobalCommonException("该账单已经存在!");
-        }
-
-        Bill bill = new Bill();
-        bill.setDealNum(dealNum);
-        bill.setTotalAmount(totalAmount);
-        bill.setAccountId(Integer.toUnsignedLong(payType.value()));
-        bill.setType(dealTypeValue);
-        bill.setCreateTime(new Date());
-        boolean save = billService.save(bill);
-        if (!save) {
-            throw new GlobalCommonException("创建账单失败!");
-        }
+       billService.addBill(billApiDto);
         return Result.ok();
     }
 

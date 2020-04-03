@@ -8,6 +8,7 @@ import com.qcmoke.oms.dto.OrderMasterDto;
 import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.vo.SaleOrderMasterVo;
+import com.qcmoke.wms.constant.StockType;
 
 import java.util.List;
 
@@ -34,5 +35,5 @@ public interface SaleOrderMasterService extends IService<SaleOrderMaster> {
 
     void successForOutItemFromStock(SaleOrderMasterApiDto orderMasterDto);
 
-    void checkCallBackForCreateStockPreReview(Long orderId, boolean isOk);
+    void checkCallBackForCreateStockItem(StockType stockType, Long orderId, boolean isOk);
 }
