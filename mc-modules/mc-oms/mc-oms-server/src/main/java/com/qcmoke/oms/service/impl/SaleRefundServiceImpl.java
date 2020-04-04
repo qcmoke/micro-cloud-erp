@@ -11,7 +11,8 @@ import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
 import com.qcmoke.oms.client.BillClient;
 import com.qcmoke.oms.client.ProductStockClient;
-import com.qcmoke.oms.constant.OrderStatusEnum;
+import com.qcmoke.oms.constant.OutStatusEnum;
+import com.qcmoke.oms.constant.PayStatusEnum;
 import com.qcmoke.oms.entity.SaleOrderDetail;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.entity.SaleRefund;
@@ -98,8 +99,7 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
         }
 
         //退款
-        OrderStatusEnum statusEnum = OrderStatusEnum.resolve(orderMaster.getStatus());
-        if (OrderStatusEnum.isMoreAndEqOther(statusEnum, OrderStatusEnum.PAID_NO_SHIPPED)) {
+        if (PayStatusEnum.PAID.value() == orderMaster.getPayStatus()) {
             Result<?> result = billClient.addBill(
                     new BillApiDto()
                             .setDealNum(saleRefund.getRefundId())
@@ -112,7 +112,7 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
         }
 
         //退货
-        if (OrderStatusEnum.isMoreAndEqOther(statusEnum, OrderStatusEnum.SHIPPED)) {
+        if (OutStatusEnum.SHIPPED.value() == orderMaster.getOutStatus()) {
             List<SaleOrderDetail> detailList = saleOrderDetailService.list(new LambdaQueryWrapper<SaleOrderDetail>().eq(SaleOrderDetail::getMasterId, masterId));
             if (CollectionUtils.isEmpty(detailList)) {
                 throw new GlobalCommonException("不存在相关明细");

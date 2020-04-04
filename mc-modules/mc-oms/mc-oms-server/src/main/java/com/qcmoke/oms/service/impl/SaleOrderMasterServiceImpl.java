@@ -12,8 +12,7 @@ import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
 import com.qcmoke.oms.client.BillClient;
 import com.qcmoke.oms.client.ProductStockClient;
-import com.qcmoke.oms.constant.OrderStatusEnum;
-import com.qcmoke.oms.constant.TransferStockStatusEnum;
+import com.qcmoke.oms.constant.*;
 import com.qcmoke.oms.dto.ApplyForDeliveryDto;
 import com.qcmoke.oms.dto.OrderMasterDto;
 import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
@@ -83,9 +82,9 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             }
             master.setModifyTime(new Date());
             if (isOk) {
-                master.setTransferStockStatus(TransferStockStatusEnum.FINISH.getStatus());
+                master.setStockCheckStatus(StockCheckStatusEnum.FINISH.getStatus());
             } else {
-                master.setTransferStockStatus(TransferStockStatusEnum.FAIL.getStatus());
+                master.setStockCheckStatus(StockCheckStatusEnum.FAIL.getStatus());
             }
             boolean flag = this.updateById(master);
             if (!flag) {
@@ -125,7 +124,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         master.setDeliveryTime(new Date());
         master.setDeliverySn(orderMasterDto.getDeliverySn());
         master.setDeliveryChannel(orderMasterDto.getDeliveryChannel());
-        master.setStatus(OrderStatusEnum.SHIPPED.value());
+        master.setOutStatus(OutStatusEnum.SHIPPED.value());
         boolean flag = this.updateById(master);
         if (!flag) {
             throw new GlobalCommonException("修改状态失败");
@@ -162,8 +161,7 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             if (orderMaster == null) {
                 throw new GlobalCommonException("不存在修改的订单");
             }
-            OrderStatusEnum currentOrderStatus = OrderStatusEnum.valueOf(orderMaster.getStatus());
-            if (OrderStatusEnum.isMoreAndEqOther(currentOrderStatus, OrderStatusEnum.PAID_NO_SHIPPED)) {
+            if (PayStatusEnum.PAID.value() == orderMaster.getPayStatus()) {
                 throw new GlobalCommonException("该订单已完成支付，不允许修改");
             }
         }
@@ -190,10 +188,10 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             if (freightAmount == null) {
                 throw new GlobalCommonException("运费为空！");
             }
-            saleOrderMaster.setStatus(OrderStatusEnum.PAID_NO_SHIPPED.value());
+            saleOrderMaster.setPayStatus(PayStatusEnum.PAID.value());
             saleOrderMaster.setPaymentTime(new Date());
         } else {
-            saleOrderMaster.setStatus(OrderStatusEnum.NO_PAY.value());
+            saleOrderMaster.setPayStatus(PayStatusEnum.NO_PAID.value());
         }
         boolean flag = saleOrderMasterService.saveOrUpdate(saleOrderMaster);
         if (!flag) {
@@ -246,16 +244,15 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
         if (orderMaster == null) {
             throw new GlobalCommonException("不存在该订单");
         }
-        OrderStatusEnum currentOrderStatus = OrderStatusEnum.valueOf(orderMaster.getStatus());
-        if (OrderStatusEnum.isLessAndEqOther(currentOrderStatus, OrderStatusEnum.NO_PAY)) {
+        if (PayStatusEnum.PAID.value() != orderMaster.getPayStatus()) {
             throw new GlobalCommonException("该订未支付,无法申请发货");
         }
-        if (OrderStatusEnum.isMoreAndEqOther(currentOrderStatus, OrderStatusEnum.SHIPPED)) {
-            throw new GlobalCommonException("该订已经发货或者完成，无需再申请发货");
+        if (OutStatusEnum.SHIPPED.value() == orderMaster.getOutStatus()) {
+            throw new GlobalCommonException("该订已经发货完成，无需再申请发货");
         }
         createStockPreReview(masterId);
         orderMaster.setModifyTime(new Date());
-        orderMaster.setTransferStockStatus(TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
+        orderMaster.setStockCheckStatus(StockCheckStatusEnum.ALREADY_TRANSFER.getStatus());
         boolean flag = saleOrderMasterService.updateById(orderMaster);
         if (!flag) {
             throw new GlobalCommonException("申请发货失败！");
@@ -302,15 +299,16 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
             throw new GlobalCommonException("不存在要删除的订单！");
         }
         masterList.forEach(master -> {
-            OrderStatusEnum currentOrderStatusEnum = OrderStatusEnum.valueOf(master.getStatus());
-            if (OrderStatusEnum.isMoreAndEqOther(currentOrderStatusEnum, OrderStatusEnum.PAID_NO_SHIPPED)) {
+            if (PayStatusEnum.PAID.value() == master.getPayStatus()) {
                 throw new GlobalCommonException("包含已完成支付的订单，不允许删除！");
             }
         });
+        //删除主表记录
         boolean flag = this.removeByIds(idList);
         if (!flag) {
             throw new GlobalCommonException("订单删除失败");
         }
+        //删除明细记录
         flag = saleOrderDetailService.remove(new LambdaQueryWrapper<SaleOrderDetail>().in(SaleOrderDetail::getMasterId, idList));
         if (!flag) {
             throw new GlobalCommonException("订单明细删除失败");
@@ -324,26 +322,23 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void confirmUserReceipt(SaleOrderMaster willUpdateOrderMaster, Boolean isReceived) {
-
         SaleOrderMaster orderMaster = saleOrderMasterService.getById(willUpdateOrderMaster.getMasterId());
-
         if (orderMaster == null) {
             throw new GlobalCommonException("不存在该订单！");
         }
-
-        OrderStatusEnum currentOrderStatus = OrderStatusEnum.resolve(orderMaster.getStatus());
-        if (OrderStatusEnum.isMoreAndEqOther(currentOrderStatus, OrderStatusEnum.FINISHED)) {
+        if (FinishStatusEnum.FINISHED.value() == orderMaster.getFinishStatus()) {
             throw new GlobalCommonException("该订已经完成，不能再修改！");
         }
 
-        if (currentOrderStatus == OrderStatusEnum.RECEIVED) {
+        if (ReceiveStatusEnum.FINISHED.value() == orderMaster.getReceiveStatus()) {
             throw new GlobalCommonException("该订单已经确认收货，无需重复操作！");
         }
         if (isReceived) {
-            if (OrderStatusEnum.isLessAndEqOther(currentOrderStatus, OrderStatusEnum.PAID_NO_SHIPPED)) {
+            if (OutStatusEnum.SHIPPED.value() != orderMaster.getOutStatus()) {
                 throw new GlobalCommonException("该订单还未发货！");
             }
-            willUpdateOrderMaster.setStatus(OrderStatusEnum.RECEIVED.value());
+            willUpdateOrderMaster.setReceiveStatus(ReceiveStatusEnum.FINISHED.value());
+            willUpdateOrderMaster.setFinishStatus(FinishStatusEnum.FINISHED.value());
         }
         willUpdateOrderMaster.setModifyTime(new Date());
         boolean flag = saleOrderMasterService.updateById(willUpdateOrderMaster);

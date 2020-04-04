@@ -48,6 +48,21 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
 
 
     /**
+     * TODO
+     * 订单分页
+     */
+    @GetMapping("/page")
+    public Result<PageResult<SaleOrderMasterVo>> page(PageQuery pageQuery, OrderMasterDto orderMasterDto) {
+        Page<SaleOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
+        IPage<SaleOrderMasterVo> iPage = saleOrderMasterService.getPage(page, orderMasterDto);
+        PageResult<SaleOrderMasterVo> pageResult = new PageResult<>();
+        pageResult.setRows(iPage.getRecords());
+        pageResult.setTotal(iPage.getTotal());
+        return Result.ok(pageResult);
+    }
+
+
+    /**
      * 批量刪除
      */
     @DeleteMapping("/{ids}")
@@ -60,19 +75,6 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
         return Result.ok("删除成功");
     }
 
-
-    /**
-     * 订单分页
-     */
-    @GetMapping("/page")
-    public Result<PageResult<SaleOrderMasterVo>> page(PageQuery pageQuery, OrderMasterDto orderMasterDto) {
-        Page<SaleOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        IPage<SaleOrderMasterVo> iPage = saleOrderMasterService.getPage(page, orderMasterDto);
-        PageResult<SaleOrderMasterVo> pageResult = new PageResult<>();
-        pageResult.setRows(iPage.getRecords());
-        pageResult.setTotal(iPage.getTotal());
-        return Result.ok(pageResult);
-    }
 
     /**
      * 创建或修改订单

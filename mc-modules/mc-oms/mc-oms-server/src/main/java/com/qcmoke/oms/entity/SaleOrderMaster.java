@@ -12,11 +12,11 @@ import java.util.Date;
 
 /**
  * <p>
- *
+ * 
  * </p>
  *
  * @author qcmoke
- * @since 2020-03-20
+ * @since 2020-04-04
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,7 +24,7 @@ import java.util.Date;
 @TableName("t_sale_order_master")
 public class SaleOrderMaster implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID=1L;
 
     /**
      * 销售订单主表编号
@@ -53,14 +53,9 @@ public class SaleOrderMaster implements Serializable {
     private Double freightAmount;
 
     /**
-     * 支付方式【1->支付宝；2->微信；3->银联； 4->货到付款；】
+     * 支付方式【1->支付宝；2->微信；3->银联】
      */
     private Integer payType;
-
-    /**
-     * 订单状态【1->待付款；2->待发货；3->已发货；4->未确认收货；5->已确认收货；6->已完成；7->已关闭；-1->无效订单】
-     */
-    private Integer status;
 
     /**
      * 发货时间
@@ -86,8 +81,6 @@ public class SaleOrderMaster implements Serializable {
      * 收货人所在详细地址
      */
     private String receiverDetailAddress;
-
-
 
     /**
      * 运输渠道（物流公司）
@@ -130,13 +123,34 @@ public class SaleOrderMaster implements Serializable {
     private Date modifyTime;
 
     /**
+     * 支付状态(包含运费)【1:未支付；2:已支付】
+     */
+    private Integer payStatus;
+
+    /**
+     * 仓库审核状态（1:未提交申请；2:已申请未审核；3：审核不通过；4：审核通过）
+     */
+    private Integer stockCheckStatus;
+
+    /**
+     * 发货状态（1：未发货；2：已发货）
+     */
+    private Integer outStatus;
+
+    /**
+     * 客户收货状态（1：未收货；2：已收货）
+     */
+    private Integer receiveStatus;
+
+    /**
+     * 完成状态（1：未完成；2：已完成）
+     */
+    private Integer finishStatus;
+
+    /**
      * 删除状态【0->未删除；1->已删除】
      */
     private Integer deleteStatus;
 
-    /**
-     * 发货申请状态(1:未移交申请；2:已移交申请；3:移交失败；4:已完成移交；)
-     */
-    private Integer transferStockStatus;
 
 }

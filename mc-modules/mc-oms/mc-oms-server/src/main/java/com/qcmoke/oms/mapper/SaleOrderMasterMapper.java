@@ -19,29 +19,56 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
+
+
     @Select("   SELECT" +
             "       so.*," +
             "       so.master_id master_id2," +
             "       cus.customer_name," +
             "   CASE" +
-            "           so.`status` " +
+            "           so.`pay_status` " +
             "           WHEN 1 THEN" +
-            "           '待付款' " +
+            "           '未支付' " +
             "           WHEN 2 THEN" +
-            "           '待发货' " +
-            "           WHEN 3 THEN" +
-            "           '已发货' " +
+            "           '已支付'" +
+            "           ELSE NULL " +
+            "       END payStatusInfo," +
+            "   CASE" +
+            "           so.stock_check_status " +
             "           WHEN 4 THEN" +
-            "           '未确认收货' " +
-            "           WHEN 5 THEN" +
-            "           '已确认收货' " +
-            "           WHEN 6 THEN" +
-            "           '已完成' " +
-            "           WHEN 7 THEN" +
-            "           '已关闭' " +
-            "           WHEN -1 THEN" +
-            "           '无效订单' ELSE NULL " +
-            "       END statusInfo," +
+            "           '审核通过' " +
+            "           WHEN 3 THEN" +
+            "           '审核不通过' " +
+            "           WHEN 2 THEN" +
+            "           '已申请未审核' " +
+            "           WHEN 1 THEN" +
+            "           '未提交申请'" +
+            "           ELSE NULL " +
+            "       END stockCheckStatusInfo," +
+            "   CASE" +
+            "           so.`out_status` " +
+            "           WHEN 1 THEN" +
+            "           '未发货' " +
+            "           WHEN 2 THEN" +
+            "           '已发货'  " +
+            "           ELSE NULL " +
+            "       END outStatusInfo," +
+            "   CASE" +
+            "           so.`receive_status` " +
+            "           WHEN 1 THEN" +
+            "           '未完成' " +
+            "           WHEN 2 THEN" +
+            "           '已完成'  " +
+            "           ELSE NULL " +
+            "       END receiveStatusInfo," +
+            "   CASE" +
+            "           so.`finish_status` " +
+            "           WHEN 1 THEN" +
+            "           '未完成' " +
+            "           WHEN 2 THEN" +
+            "           '已完成'  " +
+            "           ELSE NULL " +
+            "       END finishStatusInfo," +
             "   CASE" +
             "           so.pay_type " +
             "           WHEN 1 THEN" +
@@ -50,20 +77,8 @@ public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
             "           '微信' " +
             "           WHEN 3 THEN" +
             "           '银联' " +
-            "           WHEN 4 THEN" +
-            "           '货到付款' ELSE NULL " +
+            "           ELSE NULL " +
             "       END payTypeInfo," +
-            "   CASE" +
-            "           so.transfer_stock_status " +
-            "           WHEN 4 THEN" +
-            "           '已完成移交' " +
-            "           WHEN 3 THEN" +
-            "           '移交失败' " +
-            "           WHEN 2 THEN" +
-            "           '已移交申请' " +
-            "           WHEN 1 THEN" +
-            "           '未移交申请' ELSE NULL " +
-            "       END transferStockStatusInfo," +
             "   CASE" +
             "           so.bill_type " +
             "           WHEN 1 THEN" +
