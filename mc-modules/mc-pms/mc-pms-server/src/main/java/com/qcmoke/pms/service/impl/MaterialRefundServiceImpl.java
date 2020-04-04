@@ -12,7 +12,7 @@ import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
 import com.qcmoke.pms.client.BillClient;
 import com.qcmoke.pms.client.MaterialStockClient;
-import com.qcmoke.pms.constant.OrderStatusEnum;
+import com.qcmoke.pms.constant.InStatusEnum;
 import com.qcmoke.pms.constant.PayStatusEnum;
 import com.qcmoke.pms.entity.MaterialRefund;
 import com.qcmoke.pms.entity.PurchaseOrderDetail;
@@ -77,7 +77,7 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
             throw new GlobalCommonException("生成退货单失败");
         }
 
-        if (orderMaster.getStatus() >= OrderStatusEnum.STOCKED.getStatus()) {
+        if (InStatusEnum.SHIPPED.value() == orderMaster.getInStatus()) {
             //退货
             List<PurchaseOrderDetail> detailList = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, masterId));
             if (CollectionUtils.isEmpty(detailList)) {

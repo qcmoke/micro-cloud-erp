@@ -23,10 +23,7 @@ public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster
 
     PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
 
-    void transferToStock(Long masterId, Long currentUserId);
-
-
-    PageResult<PurchaseOrderMasterVo> pageForAddStock(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
+    void transferToStockAndBill(Long masterId, Long currentUserId);
 
     void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId);
 

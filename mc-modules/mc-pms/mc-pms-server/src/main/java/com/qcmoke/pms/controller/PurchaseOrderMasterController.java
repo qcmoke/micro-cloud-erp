@@ -38,57 +38,13 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
     @Autowired
     private PurchaseOrderMasterService purchaseOrderMasterService;
 
-
     /**
-     * 采购退货出库成功回调
+     * 分页查询
      */
-    @RequestMapping("/successForOutItemFromStock")
-    @Override
-    public Result<?> successForOutItemFromStock(@RequestBody PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
-        log.info("出库成功回调,purchaseOrderMasterApiDto={}", purchaseOrderMasterApiDto);
-        purchaseOrderMasterService.successForOutItemFromStock(purchaseOrderMasterApiDto);
-        return Result.ok();
-    }
-
-    /**
-     * 采购入库成功回调
-     */
-    @Override
-    @RequestMapping("/successForInItemToStock")
-    public Result<?> successForInItemToStock(@RequestBody List<Long> masterIdList) {
-        log.info("入库成功回调,masterIdList={}", masterIdList);
-        if (CollectionUtils.isEmpty(masterIdList)) {
-            throw new GlobalCommonException("masterIdList is required");
-        }
-        purchaseOrderMasterService.successForInItemToStock(masterIdList);
-        return Result.ok();
-    }
-
-    /**
-     * 审核结果回调
-     */
-    @Override
-    @RequestMapping("/checkCallBackForCreateStockItem")
-    public Result<?> checkCallBackForCreateStockItem(@RequestParam("stockType") StockType stockType, @RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
-        log.info("审核结果回调,stockType={},orderId={},isOk={}", stockType, orderId, isOk);
-        if (orderId == null || stockType == null) {
-            throw new GlobalCommonException("orderId is required");
-        }
-        purchaseOrderMasterService.checkCallBackForCreateStockItem(stockType, orderId, isOk);
-        return Result.ok();
-    }
-
     @GetMapping
     public Result<PageResult<PurchaseOrderMasterVo>> page(PageQuery pageQuery, PurchaseOrderMaster purchaseOrderMaster) {
         Page<PurchaseOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
         PageResult<PurchaseOrderMasterVo> pageResult = purchaseOrderMasterService.getPage(page, purchaseOrderMaster);
-        return Result.ok(pageResult);
-    }
-
-    @GetMapping("/pageForAddStock")
-    public Result<PageResult<PurchaseOrderMasterVo>> pageForAddStock(PageQuery pageQuery, PurchaseOrderMaster purchaseOrderMaster) {
-        Page<PurchaseOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        PageResult<PurchaseOrderMasterVo> pageResult = purchaseOrderMasterService.pageForAddStock(page, purchaseOrderMaster);
         return Result.ok(pageResult);
     }
 
@@ -161,15 +117,56 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
 
 
     /**
-     * 生成出入库单
+     * 生成出入库单和财务账单
      */
     @PutMapping("/transferToStock/{masterId}")
-    public void transferToStock(@PathVariable Long masterId) {
+    public void transferToStockAndBill(@PathVariable Long masterId) {
         if (masterId == null) {
             throw new GlobalCommonException("masterId is required");
         }
         Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
-        purchaseOrderMasterService.transferToStock(masterId, currentUserId);
+        purchaseOrderMasterService.transferToStockAndBill(masterId, currentUserId);
+    }
+
+
+
+    /**
+     * 采购退货出库成功回调
+     */
+    @RequestMapping("/successForOutItemFromStock")
+    @Override
+    public Result<?> successForOutItemFromStock(@RequestBody PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
+        log.info("出库成功回调,purchaseOrderMasterApiDto={}", purchaseOrderMasterApiDto);
+        purchaseOrderMasterService.successForOutItemFromStock(purchaseOrderMasterApiDto);
+        return Result.ok();
+    }
+
+    /**
+     * 采购入库成功回调
+     */
+    @Override
+    @RequestMapping("/successForInItemToStock")
+    public Result<?> successForInItemToStock(@RequestBody List<Long> masterIdList) {
+        log.info("入库成功回调,masterIdList={}", masterIdList);
+        if (CollectionUtils.isEmpty(masterIdList)) {
+            throw new GlobalCommonException("masterIdList is required");
+        }
+        purchaseOrderMasterService.successForInItemToStock(masterIdList);
+        return Result.ok();
+    }
+
+    /**
+     * 审核结果回调
+     */
+    @Override
+    @RequestMapping("/checkCallBackForCreateStockItem")
+    public Result<?> checkCallBackForCreateStockItem(@RequestParam("stockType") StockType stockType, @RequestParam("orderId") Long orderId, @RequestParam("isOk") boolean isOk) {
+        log.info("审核结果回调,stockType={},orderId={},isOk={}", stockType, orderId, isOk);
+        if (orderId == null || stockType == null) {
+            throw new GlobalCommonException("orderId is required");
+        }
+        purchaseOrderMasterService.checkCallBackForCreateStockItem(stockType, orderId, isOk);
+        return Result.ok();
     }
 
 }

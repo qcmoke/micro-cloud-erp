@@ -20,13 +20,58 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaster> {
 
-
-
     @Select("   SELECT " +
             "       pm.*," +
-            "       IF( pm.pay_status = 1, '未支付', '已支付' ) AS pay_status_info," +
             "       pm.master_id AS master_id2," +
             "       pm.supplier_id AS supplier_id2," +
+            "   CASE" +
+            "           pm.`pay_status` " +
+            "           WHEN 1 THEN" +
+            "           '未支付' " +
+            "           WHEN 2 THEN" +
+            "           '已支付'" +
+            "           ELSE NULL " +
+            "       END payStatusInfo," +
+            "   CASE" +
+            "           pm.purchase_check_status " +
+            "           WHEN 4 THEN" +
+            "           '审核通过' " +
+            "           WHEN 3 THEN" +
+            "           '审核不通过' " +
+            "           WHEN 2 THEN" +
+            "           '已申请未审核' " +
+            "           WHEN 1 THEN" +
+            "           '未提交申请'" +
+            "           ELSE NULL " +
+            "       END purchaseCheckStatusInfo," +
+            "   CASE" +
+            "           pm.stock_check_status " +
+            "           WHEN 4 THEN" +
+            "           '审核通过' " +
+            "           WHEN 3 THEN" +
+            "           '审核不通过' " +
+            "           WHEN 2 THEN" +
+            "           '已申请未审核' " +
+            "           WHEN 1 THEN" +
+            "           '未提交申请'" +
+            "           ELSE NULL " +
+            "       END stockCheckStatusInfo," +
+            "   CASE" +
+            "           pm.`in_status` " +
+            "           WHEN 1 THEN" +
+            "           '未入库' " +
+            "           WHEN 2 THEN" +
+            "           '已入库'  " +
+            "           ELSE NULL " +
+            "       END inStatusInfo," +
+            "   CASE" +
+            "           pm.`finish_status` " +
+            "           WHEN 1 THEN" +
+            "           '未完成' " +
+            "           WHEN 2 THEN" +
+            "           '已完成'  " +
+            "           ELSE NULL " +
+            "       END finishStatusInfo," +
             "   CASE" +
             "           pm.pay_type " +
             "           WHEN 1 THEN" +
@@ -37,33 +82,7 @@ public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaste
             "           '银联' " +
             "           WHEN 4 THEN" +
             "           '货到付款' ELSE NULL " +
-            "       END payTypeInfo," +
-            "   CASE" +
-            "           pm.status " +
-            "           WHEN 1 THEN" +
-            "           '未提交入库申请' " +
-            "           WHEN 2 THEN" +
-            "           '已提交申请但未审核' " +
-            "           WHEN 3 THEN" +
-            "           '审核不通过' " +
-            "           WHEN 4 THEN" +
-            "           '审核通过' " +
-            "           WHEN 4 THEN" +
-            "           '未入库' " +
-            "           WHEN 6 THEN" +
-            "           '已入库' ELSE NULL " +
-            "       END statusInfo," +
-            "   CASE" +
-            "           pm.transfer_stock_status " +
-            "           WHEN 1 THEN" +
-            "           '未移交' " +
-            "           WHEN 2 THEN" +
-            "           '已移交申请' " +
-            "           WHEN 3 THEN" +
-            "           '移交失败' " +
-            "           WHEN 4 THEN" +
-            "           '已完成移交' ELSE NULL " +
-            "       END transferStockStatusInfo" +
+            "       END payTypeInfo" +
             "   FROM" +
             "       `t_purchase_order_master` pm " +
             "   WHERE" +
@@ -71,71 +90,11 @@ public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaste
             "       AND NOT EXISTS ( SELECT tr.purchase_order_master_id FROM t_material_refund tr WHERE tr.purchase_order_master_id = pm.master_id) " +
             "   ORDER BY" +
             "       pm.create_time," +
-            "       pm.modify_time," +
-            "       pm.`status`")
+            "       pm.modify_time")
     @Results({
             @Result(property = "supplier", column = "supplier_id2", one = @One(select = "com.qcmoke.pms.mapper.SupplierMapper.selectById", fetchType = FetchType.LAZY)),
             @Result(property = "purchaseOrderDetailVoSet", column = "master_id2", many = @Many(select = "com.qcmoke.pms.mapper.PurchaseOrderDetailMapper.getListByMasterId"))
     })
     IPage<PurchaseOrderMasterVo> selectPurchaseOrderMasterVoPage(Page<PurchaseOrderMaster> page);
-
-    @Select("   SELECT " +
-            "       pm.*," +
-            "       IF( pm.pay_status = 1, '未支付', '已支付' ) AS pay_status_info," +
-            "       pm.master_id AS master_id2," +
-            "       pm.supplier_id AS supplier_id2," +
-            "   CASE" +
-            "           pm.pay_type " +
-            "           WHEN 1 THEN" +
-            "           '支付宝' " +
-            "           WHEN 2 THEN" +
-            "           '微信' " +
-            "           WHEN 3 THEN" +
-            "           '银联' " +
-            "           WHEN 4 THEN" +
-            "           '货到付款' ELSE NULL " +
-            "       END payTypeInfo," +
-            "   CASE" +
-            "           pm.status " +
-            "           WHEN 1 THEN" +
-            "           '未提交入库申请' " +
-            "           WHEN 2 THEN" +
-            "           '已提交申请但未审核' " +
-            "           WHEN 3 THEN" +
-            "           '审核不通过' " +
-            "           WHEN 4 THEN" +
-            "           '审核通过' " +
-            "           WHEN 4 THEN" +
-            "           '未入库' " +
-            "           WHEN 6 THEN" +
-            "           '已入库' ELSE NULL " +
-            "       END statusInfo," +
-            "   CASE" +
-            "           pm.transfer_stock_status " +
-            "           WHEN 1 THEN" +
-            "           '未移交' " +
-            "           WHEN 2 THEN" +
-            "           '已移交申请' " +
-            "           WHEN 3 THEN" +
-            "           '移交失败' " +
-            "           WHEN 4 THEN" +
-            "           '已完成移交' ELSE NULL " +
-            "       END transferStockStatusInfo" +
-            "   FROM" +
-            "       `t_purchase_order_master` pm " +
-            "   WHERE" +
-            "       pm.`status` != 0" +
-            "       AND pm.delete_status = 0 " +
-            "       AND pm.pay_status = 2 " +
-            "       AND NOT EXISTS ( SELECT tr.purchase_order_master_id FROM t_material_refund tr WHERE tr.purchase_order_master_id = pm.master_id and tr.delete_status = 0) " +
-            "   ORDER BY" +
-            "       pm.create_time," +
-            "       pm.modify_time," +
-            "       pm.`status`")
-    @Results({
-            @Result(property = "supplier", column = "supplier_id2", one = @One(select = "com.qcmoke.pms.mapper.SupplierMapper.selectById")),
-            @Result(property = "purchaseOrderDetailVoSet", column = "master_id2", many = @Many(select = "com.qcmoke.pms.mapper.PurchaseOrderDetailMapper.getListByMasterId"))
-    })
-    IPage<PurchaseOrderMasterVo> selectPurchaseOrderMasterVoPageForAddStock(Page<PurchaseOrderMaster> page);
 
 }

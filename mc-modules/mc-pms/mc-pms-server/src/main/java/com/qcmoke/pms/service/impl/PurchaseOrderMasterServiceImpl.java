@@ -15,10 +15,7 @@ import com.qcmoke.fms.dto.BillApiDto;
 import com.qcmoke.pms.client.BillClient;
 import com.qcmoke.pms.client.MaterialStockClient;
 import com.qcmoke.pms.client.UserClient;
-import com.qcmoke.pms.constant.OrderStatusEnum;
-import com.qcmoke.pms.constant.PayStatusEnum;
-import com.qcmoke.pms.constant.PayTypeEnum;
-import com.qcmoke.pms.constant.TransferStockStatusEnum;
+import com.qcmoke.pms.constant.*;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
 import com.qcmoke.pms.entity.*;
@@ -72,78 +69,6 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     @Autowired
     private BillClient billClient;
 
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void successForInItemToStock(List<Long> masterIdList) {
-        List<PurchaseOrderMaster> masterList = this.listByIds(masterIdList);
-        if (CollectionUtils.isEmpty(masterList)) {
-            throw new GlobalCommonException("不存在相关记录");
-        }
-        masterList.forEach(master -> {
-            master.setModifyTime(new Date());
-            master.setStatus(OrderStatusEnum.STOCKED.getStatus());
-        });
-        boolean flag = this.updateBatchById(masterList);
-        if (!flag) {
-            throw new GlobalCommonException("修改订单状态失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void successForOutItemFromStock(PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
-        Long masterId = purchaseOrderMasterApiDto.getMasterId();
-        MaterialRefund refund = materialRefundService.getById(masterId);
-        if (refund == null) {
-            throw new GlobalCommonException("不存在相关退单记录");
-        }
-        refund.setStockOutStatus(2);
-        refund.setModifyTime(new Date());
-        boolean flag = materialRefundService.updateById(refund);
-        if (!flag) {
-            throw new GlobalCommonException("修改退单记录状态失败");
-        }
-    }
-
-    @Transactional(rollbackFor = Exception.class)
-    @Override
-    public void checkCallBackForCreateStockItem(StockType stockType, Long orderId, boolean isOk) {
-        if (StockType.PURCHASE_IN == stockType) {
-            PurchaseOrderMaster master = this.getById(orderId);
-            if (master == null) {
-                throw new GlobalCommonException("不存在相关记录");
-            }
-            if (isOk) {
-                master.setTransferStockStatus(TransferStockStatusEnum.FINISH.getStatus());
-            } else {
-                master.setTransferStockStatus(TransferStockStatusEnum.FAIL.getStatus());
-            }
-            master.setModifyTime(new Date());
-            boolean flag = this.updateById(master);
-            if (!flag) {
-                throw new GlobalCommonException("修改状态失败");
-            }
-        }
-
-        if (StockType.PURCHASE_OUT == stockType) {
-            MaterialRefund refund = materialRefundService.getById(orderId);
-            if (refund == null) {
-                throw new GlobalCommonException("不存在相关记录");
-            }
-            if (isOk) {
-                refund.setStockCheckStatus(2);
-            } else {
-                refund.setStockCheckStatus(3);
-            }
-            refund.setModifyTime(new Date());
-            boolean flag = materialRefundService.updateById(refund);
-            if (!flag) {
-                throw new GlobalCommonException("修改退单状态失败");
-            }
-        }
-
-    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -204,8 +129,8 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
             if (orderMaster == null) {
                 throw new GlobalCommonException("不存在修改的订单");
             }
-            if (orderMaster.getStatus() >= OrderStatusEnum.PASS.getStatus()) {
-                throw new GlobalCommonException("该订单已审核通过，不允许修改！");
+            if (PurchaseCheckStatusEnum.PASS.value() == orderMaster.getPurchaseCheckStatus()) {
+                throw new GlobalCommonException("该订单已经采购管理员审核通过，不允许修改！");
             }
         }
 
@@ -272,12 +197,6 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     }
 
     @Override
-    public PageResult<PurchaseOrderMasterVo> pageForAddStock(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster) {
-        IPage<PurchaseOrderMasterVo> iPage = purchaseOrderMasterMapper.selectPurchaseOrderMasterVoPageForAddStock(page);
-        return buildPageResult(iPage.getRecords(), iPage.getTotal());
-    }
-
-    @Override
     public PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster) {
         IPage<PurchaseOrderMasterVo> iPage = purchaseOrderMasterMapper.selectPurchaseOrderMasterVoPage(page);
         return buildPageResult(iPage.getRecords(), iPage.getTotal());
@@ -289,16 +208,16 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void transferToStock(Long masterId, Long currentUserId) {
+    public void transferToStockAndBill(Long masterId, Long currentUserId) {
         PurchaseOrderMaster orderMaster = this.getById(masterId);
         if (orderMaster == null) {
             throw new GlobalCommonException("不存在对应的订单！");
         }
-        if (orderMaster.getStatus() == null || orderMaster.getStatus() < OrderStatusEnum.PASS.getStatus()) {
+        if (PurchaseCheckStatusEnum.PASS.value() != orderMaster.getPurchaseCheckStatus()) {
             throw new GlobalCommonException("审核未通过不能移交仓库生成出入库单！");
         }
-        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == orderMaster.getTransferStockStatus()) {
-            throw new GlobalCommonException("改订单已经移交仓库，不能重复！");
+        if (StockCheckStatusEnum.APPLIED_BUT_NO_CHECK.getStatus() == orderMaster.getStockCheckStatus()) {
+            throw new GlobalCommonException("改订单已经提交仓库，不能重复！");
         }
 
 
@@ -313,7 +232,7 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
                 .setTotalAmount(billAmountTotal);
         Result<?> billResult = billClient.addBill(billApiDto);
         if (billResult.isError()) {
-            throw new GlobalCommonException("支出记录到财务账单失败");
+            throw new GlobalCommonException("支出记录到财务账单失败,e=" + billResult.getMessage());
         }
 
 
@@ -337,14 +256,14 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         stockItemDto.setStockItemDetailDtoList(stockItemDetailDtoList);
         Result<?> result = materialStockClient.createStockPreReview(stockItemDto);
         if (HttpStatus.OK.value() != result.getStatus()) {
-            throw new GlobalCommonException("移交失败！");
+            throw new GlobalCommonException(result.getMessage());
         }
 
-        //修改订单为已移交
+        //修改订单为已提交仓库审核
         orderMaster.setMasterId(masterId);
         orderMaster.setOperatorId(currentUserId);
-        orderMaster.setTransferStockStatus(TransferStockStatusEnum.ALREADY_TRANSFER.getStatus());
-        orderMaster.setStatus(OrderStatusEnum.NOT_STOCKED.getStatus());
+        orderMaster.setStockCheckStatus(StockCheckStatusEnum.APPLIED_BUT_NO_CHECK.getStatus());
+        orderMaster.setInStatus(InStatusEnum.NOT_SHIPPED.value());
         orderMaster.setModifyTime(new Date());
         boolean flag = this.updateById(orderMaster);
         if (!flag) {
@@ -369,7 +288,10 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
             throw new GlobalCommonException("没有对应的记录");
         }
         checkPaid(orderMaster);
-        return updateStatus(orderMaster, OrderStatusEnum.APPLY_BUT_NO_CHECK.getStatus());
+        if (PurchaseCheckStatusEnum.PASS.value() == orderMaster.getPurchaseCheckStatus()) {
+            throw new GlobalCommonException("该订单已经审核通过，不能再申请");
+        }
+        return updateStatusForCheck(orderMaster, PurchaseCheckStatusEnum.APPLIED_BUT_NO_CHECK.value());
     }
 
 
@@ -381,7 +303,7 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
             throw new GlobalCommonException("没有对应的记录");
         }
         checkPaid(orderMaster);
-        return updateStatus(orderMaster, OrderStatusEnum.PASS.getStatus());
+        return updateStatusForCheck(orderMaster, PurchaseCheckStatusEnum.PASS.value());
     }
 
 
@@ -392,23 +314,93 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         if (orderMaster == null) {
             throw new GlobalCommonException("没有对应的记录");
         }
-        return updateStatus(orderMaster, OrderStatusEnum.NO_PASS.getStatus());
+        return updateStatusForCheck(orderMaster, PurchaseCheckStatusEnum.FAIL.value());
     }
 
-    private boolean updateStatus(PurchaseOrderMaster orderMaster, int willStatus) {
-        //如果是申请状态，那么状态只能改为不通过或者通过两个状态,而不能越级
-        if (OrderStatusEnum.NO_APPLY.getStatus() == orderMaster.getStatus() && willStatus > OrderStatusEnum.PASS.getStatus()) {
-            throw new GlobalCommonException("操作越级，非法！");
-        }
-        if (TransferStockStatusEnum.ALREADY_TRANSFER.getStatus() == orderMaster.getTransferStockStatus()) {
-            throw new GlobalCommonException("改订单已经移交仓库，不能再进行修改！");
+    private boolean updateStatusForCheck(PurchaseOrderMaster orderMaster, int willStatus) {
+        if (StockCheckStatusEnum.APPLIED_BUT_NO_CHECK.getStatus() == orderMaster.getStockCheckStatus()) {
+            throw new GlobalCommonException("改订单已经提交仓库审核，不能再进行修改！");
         }
 
         orderMaster.setModifyTime(new Date());
-        orderMaster.setStatus(willStatus);
+        orderMaster.setPurchaseCheckStatus(willStatus);
         orderMaster.setOperatorId(OauthSecurityJwtUtil.getCurrentUserId());
-        orderMaster.setTransferStockStatus(TransferStockStatusEnum.NO_TRANSFER.getStatus());
+        orderMaster.setStockCheckStatus(StockCheckStatusEnum.NO_APPLY.getStatus());
         return this.updateById(orderMaster);
+    }
+
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void successForInItemToStock(List<Long> masterIdList) {
+        List<PurchaseOrderMaster> masterList = this.listByIds(masterIdList);
+        if (CollectionUtils.isEmpty(masterList)) {
+            throw new GlobalCommonException("不存在相关记录");
+        }
+        masterList.forEach(master -> {
+            master.setModifyTime(new Date());
+            master.setInStatus(InStatusEnum.SHIPPED.value());
+            master.setFinishStatus(FinishStatusEnum.FINISHED.value());
+        });
+        boolean flag = this.updateBatchById(masterList);
+        if (!flag) {
+            throw new GlobalCommonException("修改订单状态失败");
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void successForOutItemFromStock(PurchaseOrderMasterApiDto purchaseOrderMasterApiDto) {
+        Long masterId = purchaseOrderMasterApiDto.getMasterId();
+        MaterialRefund refund = materialRefundService.getById(masterId);
+        if (refund == null) {
+            throw new GlobalCommonException("不存在相关退单记录");
+        }
+        refund.setStockOutStatus(2);
+        refund.setModifyTime(new Date());
+        boolean flag = materialRefundService.updateById(refund);
+        if (!flag) {
+            throw new GlobalCommonException("修改退单记录状态失败");
+        }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void checkCallBackForCreateStockItem(StockType stockType, Long orderId, boolean isOk) {
+        if (StockType.PURCHASE_IN == stockType) {
+            PurchaseOrderMaster master = this.getById(orderId);
+            if (master == null) {
+                throw new GlobalCommonException("不存在相关记录");
+            }
+            if (isOk) {
+                master.setStockCheckStatus(StockCheckStatusEnum.PASS.getStatus());
+            } else {
+                master.setStockCheckStatus(StockCheckStatusEnum.FAIL.getStatus());
+            }
+            master.setModifyTime(new Date());
+            boolean flag = this.updateById(master);
+            if (!flag) {
+                throw new GlobalCommonException("修改状态失败");
+            }
+        }
+
+        if (StockType.PURCHASE_OUT == stockType) {
+            MaterialRefund refund = materialRefundService.getById(orderId);
+            if (refund == null) {
+                throw new GlobalCommonException("不存在相关记录");
+            }
+            if (isOk) {
+                refund.setStockCheckStatus(2);
+            } else {
+                refund.setStockCheckStatus(3);
+            }
+            refund.setModifyTime(new Date());
+            boolean flag = materialRefundService.updateById(refund);
+            if (!flag) {
+                throw new GlobalCommonException("修改退单状态失败");
+            }
+        }
+
     }
 
 }
