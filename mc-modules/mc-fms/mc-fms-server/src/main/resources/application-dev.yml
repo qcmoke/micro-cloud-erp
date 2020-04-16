@@ -10,6 +10,7 @@ spring:
     nacos:
       discovery:
         server-addr: 39.106.195.202:8848
+#        ip: 192.168.31.106
     alibaba:
       seata:
         tx-service-group: mc_tx_group

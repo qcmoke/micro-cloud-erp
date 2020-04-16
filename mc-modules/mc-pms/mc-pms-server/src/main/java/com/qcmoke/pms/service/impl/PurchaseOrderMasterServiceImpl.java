@@ -185,7 +185,7 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
                     .setTotalAmount(billAmountTotal);
             Result<?> result = billClient.addBill(billApiDto);
             if (result.isError()) {
-                throw new GlobalCommonException("收入记录到财务账单失败");
+                throw new GlobalCommonException(result.getMessage());
             }
         }
 
