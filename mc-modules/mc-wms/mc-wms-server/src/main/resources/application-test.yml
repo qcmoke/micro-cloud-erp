@@ -18,19 +18,6 @@ spring:
     url: jdbc:mysql://${mc.mysql.ip}:3306/mc-wms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
-  #redis配置
-  redis:
-    database: 0
-    host: ${mc.redis.ip}
-    port: 6379
-    password: qcmoke)[good](boy
-    jedis:
-      pool:
-        min-idle: 8
-        max-idle: 500
-        max-active: 2000
-        max-wait: 10000
-    timeout: 5000
 
   #链路追踪
   zipkin:

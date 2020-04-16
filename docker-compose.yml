@@ -62,7 +62,6 @@ services:
       - "--mc.nacos.ip=39.106.195.202"
       - "--mc.nacos.application.ip=129.204.185.161"
       - "--mc.mysql.ip=39.106.195.202"
-      - "--mc.redis.ip=39.106.195.202"
       - "--mc.zipkin.ip=39.106.195.202"
       - "--spring.profiles.active=prod"
     environment:
@@ -80,7 +79,6 @@ services:
       - "--mc.nacos.ip=39.106.195.202"
       - "--mc.nacos.application.ip=129.204.185.161"
       - "--mc.mysql.ip=39.106.195.202"
-      - "--mc.redis.ip=39.106.195.202"
       - "--mc.zipkin.ip=39.106.195.202"
       - "--spring.profiles.active=prod"
     environment:
@@ -98,7 +96,6 @@ services:
       - "--mc.nacos.ip=39.106.195.202"
       - "--mc.nacos.application.ip=129.204.185.161"
       - "--mc.mysql.ip=39.106.195.202"
-      - "--mc.redis.ip=39.106.195.202"
       - "--mc.zipkin.ip=39.106.195.202"
       - "--spring.profiles.active=prod"
     environment:
@@ -116,7 +113,6 @@ services:
       - "--mc.nacos.ip=39.106.195.202"
       - "--mc.nacos.application.ip=129.204.185.161"
       - "--mc.mysql.ip=39.106.195.202"
-      - "--mc.redis.ip=39.106.195.202"
       - "--mc.zipkin.ip=39.106.195.202"
       - "--spring.profiles.active=prod"
     environment:
@@ -134,7 +130,6 @@ services:
       - "--mc.nacos.ip=39.106.195.202"
       - "--mc.nacos.application.ip=129.204.185.161"
       - "--mc.mysql.ip=39.106.195.202"
-      - "--mc.redis.ip=39.106.195.202"
       - "--mc.zipkin.ip=39.106.195.202"
       - "--spring.profiles.active=prod"
     environment:
