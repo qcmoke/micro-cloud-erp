@@ -3,6 +3,7 @@ package com.qcmoke.pms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.pms.dto.PurchaseOrderMasterQuery;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
 import org.apache.ibatis.annotations.*;
@@ -20,7 +21,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaster> {
 
-    @Select("   SELECT " +
+    @Select("   <script>" +
+            "   SELECT " +
             "       pm.*," +
             "       pm.master_id AS master_id2," +
             "       pm.supplier_id AS supplier_id2," +
@@ -87,14 +89,21 @@ public interface PurchaseOrderMasterMapper extends BaseMapper<PurchaseOrderMaste
             "       `t_purchase_order_master` pm " +
             "   WHERE" +
             "       pm.delete_status = 0 " +
+            "       <if test='query.createTimeFrom != null and query.createTimeTo != null'>" +
+            "           AND pm.create_time &gt;= #{query.createTimeFrom} AND pm.create_time &lt;= #{query.createTimeTo} " +
+            "       </if>" +
+            "       <if test='query.isCheckRequest'>" +
+            "           AND pm.purchase_check_status != 1" +
+            "       </if>" +
             "       AND NOT EXISTS ( SELECT tr.purchase_order_master_id FROM t_material_refund tr WHERE tr.purchase_order_master_id = pm.master_id) " +
             "   ORDER BY" +
             "       pm.create_time," +
-            "       pm.modify_time")
+            "       pm.modify_time" +
+            "   </script>")
     @Results({
             @Result(property = "supplier", column = "supplier_id2", one = @One(select = "com.qcmoke.pms.mapper.SupplierMapper.selectById", fetchType = FetchType.LAZY)),
             @Result(property = "purchaseOrderDetailVoSet", column = "master_id2", many = @Many(select = "com.qcmoke.pms.mapper.PurchaseOrderDetailMapper.getListByMasterId"))
     })
-    IPage<PurchaseOrderMasterVo> selectPurchaseOrderMasterVoPage(Page<PurchaseOrderMaster> page);
+    IPage<PurchaseOrderMasterVo> selectPurchaseOrderMasterVoPage(Page<PurchaseOrderMaster> page, @Param("query") PurchaseOrderMasterQuery query);
 
 }

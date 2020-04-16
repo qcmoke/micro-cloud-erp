@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
+import com.qcmoke.pms.dto.PurchaseOrderMasterQuery;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
 import com.qcmoke.wms.constant.StockType;
@@ -21,9 +22,9 @@ import java.util.List;
  */
 public interface PurchaseOrderMasterService extends IService<PurchaseOrderMaster> {
 
-    PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster);
+    PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMasterQuery purchaseOrderMasterQuery);
 
-    void transferToStockAndBill(Long masterId, Long currentUserId);
+    void applyToStock(Long masterId, Long currentUserId);
 
     void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId);
 

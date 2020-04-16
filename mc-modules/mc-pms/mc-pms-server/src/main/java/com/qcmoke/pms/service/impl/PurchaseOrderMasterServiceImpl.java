@@ -18,6 +18,7 @@ import com.qcmoke.pms.client.UserClient;
 import com.qcmoke.pms.constant.*;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
+import com.qcmoke.pms.dto.PurchaseOrderMasterQuery;
 import com.qcmoke.pms.entity.*;
 import com.qcmoke.pms.mapper.PurchaseOrderMasterMapper;
 import com.qcmoke.pms.service.*;
@@ -151,6 +152,13 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         if (isCreateOrder) {
             purchaseOrderMaster.setCreateTime(new Date()).setPurchaseDate(new Date());
         } else {
+            PurchaseOrderMaster orderMaster = this.getById(masterDtoId);
+            if (orderMaster == null) {
+                throw new GlobalCommonException("不存在修改的订单");
+            }
+            if (PayStatusEnum.PAID.value() == orderMaster.getPayStatus()) {
+                throw new GlobalCommonException("该订单已完成支付，不允许修改");
+            }
             purchaseOrderMaster.setModifyTime(new Date());
         }
         if (orderIsPaid) {
@@ -164,6 +172,21 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         boolean flag = this.saveOrUpdate(purchaseOrderMaster);
         if (!flag) {
             throw new GlobalCommonException("创建或修改订单失败");
+        }
+
+        //将收入记录到财务账单
+        if (orderIsPaid) {
+            Double orderAmountTotalValue = amountTotal.get();
+            Double billAmountTotal = orderAmountTotalValue + freight;
+            BillApiDto billApiDto = new BillApiDto()
+                    .setDealNum(purchaseOrderMaster.getMasterId())
+                    .setDealType(DealType.PURCHASE_OUT)
+                    .setPayType(PayType.valueOf(purchaseOrderMaster.getPayType()))
+                    .setTotalAmount(billAmountTotal);
+            Result<?> result = billClient.addBill(billApiDto);
+            if (result.isError()) {
+                throw new GlobalCommonException("收入记录到财务账单失败");
+            }
         }
 
         //更新相关明细
@@ -197,18 +220,18 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     }
 
     @Override
-    public PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMaster purchaseOrderMaster) {
-        IPage<PurchaseOrderMasterVo> iPage = purchaseOrderMasterMapper.selectPurchaseOrderMasterVoPage(page);
+    public PageResult<PurchaseOrderMasterVo> getPage(Page<PurchaseOrderMaster> page, PurchaseOrderMasterQuery query) {
+        IPage<PurchaseOrderMasterVo> iPage = purchaseOrderMasterMapper.selectPurchaseOrderMasterVoPage(page, query);
         return buildPageResult(iPage.getRecords(), iPage.getTotal());
     }
 
     /**
-     * 生成出入库单和财务账单
+     * 生成出入库单
      */
     @GlobalTransactional(rollbackFor = Exception.class)
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void transferToStockAndBill(Long masterId, Long currentUserId) {
+    public void applyToStock(Long masterId, Long currentUserId) {
         PurchaseOrderMaster orderMaster = this.getById(masterId);
         if (orderMaster == null) {
             throw new GlobalCommonException("不存在对应的订单！");
@@ -221,22 +244,22 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
         }
 
 
-        //将支出记录到财务账单
-        Double orderAmountTotalValue = orderMaster.getTotalAmount();
-        Double freight = orderMaster.getFreight();
-        Double billAmountTotal = orderAmountTotalValue + orderAmountTotalValue + freight;
-        BillApiDto billApiDto = new BillApiDto()
-                .setDealNum(orderMaster.getMasterId())
-                .setDealType(DealType.PURCHASE_OUT)
-                .setPayType(PayType.valueOf(orderMaster.getPayType()))
-                .setTotalAmount(billAmountTotal);
-        Result<?> billResult = billClient.addBill(billApiDto);
-        if (billResult.isError()) {
-            throw new GlobalCommonException("支出记录到财务账单失败,e=" + billResult.getMessage());
-        }
+//        //将支出记录到财务账单
+//        Double orderAmountTotalValue = orderMaster.getTotalAmount();
+//        Double freight = orderMaster.getFreight();
+//        Double billAmountTotal = orderAmountTotalValue + orderAmountTotalValue + freight;
+//        BillApiDto billApiDto = new BillApiDto()
+//                .setDealNum(orderMaster.getMasterId())
+//                .setDealType(DealType.PURCHASE_OUT)
+//                .setPayType(PayType.valueOf(orderMaster.getPayType()))
+//                .setTotalAmount(billAmountTotal);
+//        Result<?> billResult = billClient.addBill(billApiDto);
+//        if (billResult.isError()) {
+//            throw new GlobalCommonException("支出记录到财务账单失败,e=" + billResult.getMessage());
+//        }
 
 
-        //将采购订单对应的明细物料加到移交明细单里
+        //将采购订单对应的明细物料加到入库单明细单里
         List<PurchaseOrderDetail> details = purchaseOrderDetailService.list(new LambdaQueryWrapper<PurchaseOrderDetail>().eq(PurchaseOrderDetail::getMasterId, orderMaster.getMasterId()));
         List<StockItemDetailDto> stockItemDetailDtoList = new ArrayList<>();
         details.forEach(detail -> {

@@ -11,6 +11,7 @@ import com.qcmoke.common.vo.Result;
 import com.qcmoke.pms.api.PurchaseOrderMasterApi;
 import com.qcmoke.pms.dto.PurchaseOrderMasterApiDto;
 import com.qcmoke.pms.dto.PurchaseOrderMasterDto;
+import com.qcmoke.pms.dto.PurchaseOrderMasterQuery;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
 import com.qcmoke.pms.service.PurchaseOrderMasterService;
 import com.qcmoke.pms.vo.PurchaseOrderMasterVo;
@@ -42,9 +43,9 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
      * 分页查询
      */
     @GetMapping
-    public Result<PageResult<PurchaseOrderMasterVo>> page(PageQuery pageQuery, PurchaseOrderMaster purchaseOrderMaster) {
+    public Result<PageResult<PurchaseOrderMasterVo>> page(PageQuery pageQuery, PurchaseOrderMasterQuery purchaseOrderMasterQuery) {
         Page<PurchaseOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        PageResult<PurchaseOrderMasterVo> pageResult = purchaseOrderMasterService.getPage(page, purchaseOrderMaster);
+        PageResult<PurchaseOrderMasterVo> pageResult = purchaseOrderMasterService.getPage(page, purchaseOrderMasterQuery);
         return Result.ok(pageResult);
     }
 
@@ -117,17 +118,16 @@ public class PurchaseOrderMasterController implements PurchaseOrderMasterApi {
 
 
     /**
-     * 生成出入库单和财务账单
+     * 生成入库单
      */
-    @PutMapping("/transferToStock/{masterId}")
-    public void transferToStockAndBill(@PathVariable Long masterId) {
+    @PutMapping("/applyToStock/{masterId}")
+    public void applyToStock(@PathVariable Long masterId) {
         if (masterId == null) {
             throw new GlobalCommonException("masterId is required");
         }
         Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
-        purchaseOrderMasterService.transferToStockAndBill(masterId, currentUserId);
+        purchaseOrderMasterService.applyToStock(masterId, currentUserId);
     }
-
 
 
     /**

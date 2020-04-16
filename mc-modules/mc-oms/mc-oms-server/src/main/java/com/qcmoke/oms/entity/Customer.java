@@ -33,7 +33,7 @@ private static final long serialVersionUID=1L;
     private Long customerId;
 
     /**
-     * 客户收收货地址
+     * 客户收货地址
      */
     private String address;
 
