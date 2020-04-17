@@ -135,4 +135,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         });
         userRoleService.saveBatch(userRoles);
     }
+
+    @Override
+    @Transactional
+    public void deleteUsers(String[] userIds) {
+        List<String> list = Arrays.asList(userIds);
+        this.removeByIds(list);
+        // 删除用户角色
+        this.userRoleService.remove(new LambdaQueryWrapper<UserRole>().in(UserRole::getUserId, list));
+    }
 }

@@ -2,6 +2,7 @@ package com.qcmoke.ums.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.qcmoke.common.dto.PageQuery;
 import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
@@ -75,6 +76,13 @@ public class UserController implements UserApi {
         this.userService.updateUser(userDto);
     }
 
+
+    @DeleteMapping("/{userIds}")
+    public void deleteUsers(@NotBlank(message = "{required}") @PathVariable String userIds) {
+        String[] ids = userIds.split(StringPool.COMMA);
+        this.userService.deleteUsers(ids);
+    }
+    
 
     /**
      * 修改个人信息

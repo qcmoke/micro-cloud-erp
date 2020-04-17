@@ -35,4 +35,6 @@ public interface UserService extends IService<User> {
     void updateUser(UserDto userDto);
 
     void createUser(UserDto userDto);
+
+    void deleteUsers(String[] ids);
 }
