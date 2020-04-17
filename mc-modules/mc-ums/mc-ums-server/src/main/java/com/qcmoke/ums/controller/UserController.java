@@ -66,17 +66,32 @@ public class UserController implements UserApi {
         return Result.ok();
     }
 
+    /**
+     * 创建用户
+     *
+     * @param userDto
+     */
     @PostMapping
     public void addUser(@Valid UserDto userDto) {
         this.userService.createUser(userDto);
     }
 
+    /**
+     * 修改用户信息
+     *
+     * @param userDto
+     */
     @PutMapping
     public void updateUser(@Valid UserDto userDto) {
         this.userService.updateUser(userDto);
     }
 
 
+    /**
+     * 批量删除
+     *
+     * @param userIds
+     */
     @DeleteMapping("/{userIds}")
     public void deleteUsers(@NotBlank(message = "{required}") @PathVariable String userIds) {
         String[] ids = userIds.split(StringPool.COMMA);
@@ -121,11 +136,21 @@ public class UserController implements UserApi {
         return Result.ok();
     }
 
+    /**
+     * 修改密码
+     *
+     * @param password
+     */
     @PutMapping("/password")
     public void updatePassword(@NotBlank(message = "{required}") String password) {
         userService.updatePassword(password);
     }
 
+    /**
+     * 重置密码
+     *
+     * @param usernames
+     */
     @PutMapping("/password/reset")
     public void resetPassword(@NotBlank(message = "{required}") String usernames) {
         String[] usernameArr = usernames.split(StringPool.COMMA);

@@ -32,7 +32,7 @@ public class UserDto {
     private String description;
     private String avatar;
     private Integer userId;
-    @NotBlank(message = "{required}")
+    // @NotBlank(message = "{required}")
     private Integer status;
     @Size(max = 50, message = "{noMoreThan}")
     @Email(message = "{email}")
