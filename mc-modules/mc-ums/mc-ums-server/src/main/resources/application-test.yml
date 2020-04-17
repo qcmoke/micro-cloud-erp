@@ -24,9 +24,10 @@ spring:
       #采样率(0~1 其中1表示采集全部)
       probability: 1
 
-  #本服务暂时不需要seata，可禁用其自动装配，防止启动报错
+  #本服务暂时不需要seata和redis，可禁用其自动装配，防止启动报错
   autoconfigure:
-    exclude: com.alibaba.cloud.seata.GlobalTransactionAutoConfiguration
+    exclude: com.alibaba.cloud.seata.GlobalTransactionAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
 
 ##配置mybatis plus
 mybatis-plus:

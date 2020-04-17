@@ -18,6 +18,8 @@ spring:
     url: jdbc:mysql://${mc.mysql.ip}:3306/mc-fms?useSSL=false&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true
     username: root
     password: qcmoke)[good](boy
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 
   #链路追踪
   zipkin:

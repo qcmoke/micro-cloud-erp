@@ -19,6 +19,9 @@ spring:
     username: root
     password: qcmoke)[good](boy
 
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+
   #链路追踪
   zipkin:
     base-url: http://${mc.zipkin.ip}:9411

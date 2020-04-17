@@ -42,9 +42,9 @@ spring:
 #        max-wait: 10000
 #    timeout: 5000
 
-  #本服务暂时不需要seata，可禁用其自动装配，防止启动报错
+  #本服务暂时不需要seata和redis，可禁用其自动装配，防止启动报错
   autoconfigure:
-    exclude: com.alibaba.cloud.seata.GlobalTransactionAutoConfiguration
+    exclude: com.alibaba.cloud.seata.GlobalTransactionAutoConfiguration,org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 
 ##配置mybatis plus
 mybatis-plus:
