@@ -15,10 +15,7 @@ import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.vo.UserVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -66,6 +63,11 @@ public class UserController implements UserApi {
         String currentUsername = OauthSecurityJwtUtil.getCurrentUsername(request);
         log.info("记录登录成功日志,currentUsername={}", currentUsername);
         return Result.ok();
+    }
+
+    @PostMapping
+    public void addUser(@Valid UserDto userDto) {
+        this.userService.createUser(userDto);
     }
 
     @PutMapping

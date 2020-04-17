@@ -33,4 +33,6 @@ public interface UserService extends IService<User> {
     PageResult getPage(CurrentUser currentUser, PageQuery pageQuery);
 
     void updateUser(UserDto userDto);
+
+    void createUser(UserDto userDto);
 }

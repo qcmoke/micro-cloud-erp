@@ -87,6 +87,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return pageResult;
     }
 
+    // 默认头像
+    public static final String DEFAULT_AVATAR = "default.jpg";
+    // 默认密码
+    public static final String DEFAULT_PASSWORD = "1234qwer";
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void createUser(UserDto userDto) {
+        // 创建用户
+        User user = new User();
+        user.setCreateTime(new Date());
+        user.setAvatar(DEFAULT_AVATAR);
+        user.setPassword(DEFAULT_PASSWORD);
+        this.save(user);
+        // 保存用户角色
+        String[] roleNames = userDto.getRoleId().split(StringPool.COMMA);
+        List<UserRole> userRoles = new ArrayList<>();
+        Arrays.stream(roleNames).forEach(roleId -> {
+            UserRole userRole = new UserRole();
+            userRole.setUserId(user.getUserId());
+            userRole.setRoleId(Long.valueOf(roleId));
+            userRoles.add(userRole);
+        });
+        userRoleService.saveBatch(userRoles);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
