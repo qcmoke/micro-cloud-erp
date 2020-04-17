@@ -49,7 +49,11 @@ public class StockController {
 
     @PutMapping
     public Result<?> update(StockUpdateVo stockUpdateVo) {
-        if (stockUpdateVo == null || StringUtils.isBlank(stockUpdateVo.getArea()) || stockUpdateVo.getStockId() == null || stockUpdateVo.getSMax() == null) {
+        if (stockUpdateVo == null
+                || StringUtils.isBlank(stockUpdateVo.getArea())
+                || stockUpdateVo.getStockId() == null
+                || stockUpdateVo.getSMax() == null
+                || stockUpdateVo.getItemCount() == null) {
             throw new GlobalCommonException("参数不正确");
         }
         Stock stock = BeanCopyUtil.copy(stockUpdateVo, Stock.class);

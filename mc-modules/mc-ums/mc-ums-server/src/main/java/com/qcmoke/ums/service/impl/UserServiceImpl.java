@@ -55,7 +55,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         User user = new User();
         user.setUserId(currentUserId);
         user.setModifyTime(new Date());
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         boolean flag = this.updateById(user);
         if (!flag) {
             throw new GlobalCommonException("修改用户失败");
