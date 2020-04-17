@@ -8,6 +8,7 @@ import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.BeanCopyUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.wms.dto.StockQuery;
 import com.qcmoke.wms.entity.Stock;
 import com.qcmoke.wms.service.StockService;
 import com.qcmoke.wms.vo.StockUpdateVo;
@@ -38,10 +39,10 @@ public class StockController {
     private StockService stockService;
 
     @GetMapping("/page")
-    public Result<PageResult<StockVo>> page(PageQuery pageQuery, Stock stockDto) {
+    public Result<PageResult<StockVo>> page(PageQuery pageQuery, StockQuery query) {
         stockService.checkInitStock();
         Page<Stock> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        IPage<StockVo> pageInfo = stockService.getPage(page, stockDto);
+        IPage<StockVo> pageInfo = stockService.getPage(page, query);
         PageResult<StockVo> pageResult = new PageResult<>(pageInfo.getRecords(), pageInfo.getTotal());
         return Result.ok(pageResult);
     }

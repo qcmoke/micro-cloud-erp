@@ -3,11 +3,10 @@ package com.qcmoke.pms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.pms.dto.MaterialRefundQuery;
 import com.qcmoke.pms.entity.MaterialRefund;
 import com.qcmoke.pms.vo.MaterialRefundVo;
-import org.apache.ibatis.annotations.One;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +21,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MaterialRefundMapper extends BaseMapper<MaterialRefund> {
 
-    @Select("   SELECT" +
+    @Select(" <script>" +
+            "   SELECT" +
             "       *," +
             "       purchase_order_master_id purchaseOrderMasterId," +
             "       CASE refund_channel" +
@@ -49,6 +49,10 @@ public interface MaterialRefundMapper extends BaseMapper<MaterialRefund> {
             "   FROM" +
             "       t_material_refund " +
             "   WHERE" +
-            "       delete_status = 0")
-    IPage<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefund materialDto);
+            "       delete_status = 0" +
+            "       <if test='query.createTimeFrom != null and query.createTimeTo != null'>" +
+            "           AND create_time &gt;= #{query.createTimeFrom} AND create_time &lt;= #{query.createTimeTo} " +
+            "       </if>" +
+            " </script>")
+    IPage<MaterialRefundVo> getPage(Page<MaterialRefund> page, @Param("query") MaterialRefundQuery query);
 }

@@ -16,6 +16,7 @@ import com.qcmoke.oms.constant.*;
 import com.qcmoke.oms.dto.ApplyForDeliveryDto;
 import com.qcmoke.oms.dto.OrderMasterDto;
 import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
+import com.qcmoke.oms.dto.SaleOrderMasterQuery;
 import com.qcmoke.oms.entity.Product;
 import com.qcmoke.oms.entity.SaleOrderDetail;
 import com.qcmoke.oms.entity.SaleOrderMaster;
@@ -132,8 +133,8 @@ public class SaleOrderMasterServiceImpl extends ServiceImpl<SaleOrderMasterMappe
     }
 
     @Override
-    public IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, OrderMasterDto orderMasterDto) {
-        return saleOrderMasterMapper.getPage(page, orderMasterDto);
+    public IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, SaleOrderMasterQuery query) {
+        return saleOrderMasterMapper.getPage(page, query);
     }
 
 

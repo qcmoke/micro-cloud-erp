@@ -19,6 +19,7 @@ import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.OutItemFromStockDto;
 import com.qcmoke.wms.dto.StockItemDetailDto;
 import com.qcmoke.wms.dto.StockItemDto;
+import com.qcmoke.wms.dto.StockItemQuery;
 import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.entity.StockItemDetail;
 import com.qcmoke.wms.service.StockItemDetailService;
@@ -55,9 +56,9 @@ public class StockItemController implements StockItemApi {
 
 
     @GetMapping("/page")
-    public Result<PageResult<StockItemVo>> page(PageQuery pageQuery, StockItem stockItemDto) {
+    public Result<PageResult<StockItemVo>> page(PageQuery pageQuery, StockItemQuery query) {
         Page<StockItem> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        IPage<StockItemVo> pageInfo = stockItemService.getPage(page, stockItemDto);
+        IPage<StockItemVo> pageInfo = stockItemService.getPage(page, query);
         PageResult<StockItemVo> pageResult = new PageResult<>(pageInfo.getRecords(), pageInfo.getTotal());
         return Result.ok(pageResult);
     }

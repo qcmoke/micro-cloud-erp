@@ -7,6 +7,7 @@ import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.pms.dto.MaterialRefundQuery;
 import com.qcmoke.pms.entity.MaterialRefund;
 import com.qcmoke.pms.service.MaterialRefundService;
 import com.qcmoke.pms.vo.MaterialRefundVo;
@@ -33,9 +34,9 @@ public class MaterialRefundController {
     private MaterialRefundService materialRefundService;
 
     @GetMapping
-    public Result<PageResult<MaterialRefundVo>> page(PageQuery pageQuery, MaterialRefund materialDto) {
+    public Result<PageResult<MaterialRefundVo>> page(PageQuery pageQuery, MaterialRefundQuery query) {
         Page<MaterialRefund> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        PageResult<MaterialRefundVo> pageResult = materialRefundService.getPage(page, materialDto);
+        PageResult<MaterialRefundVo> pageResult = materialRefundService.getPage(page, query);
         return Result.ok(pageResult);
     }
 

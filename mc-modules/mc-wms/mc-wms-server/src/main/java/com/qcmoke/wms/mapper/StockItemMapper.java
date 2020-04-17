@@ -3,6 +3,7 @@ package com.qcmoke.wms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.wms.dto.StockItemQuery;
 import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.vo.StockItemVo;
 import org.apache.ibatis.annotations.*;
@@ -23,11 +24,12 @@ public interface StockItemMapper extends BaseMapper<StockItem> {
      *
      出入库类型(1:采购入库；2:销售出库；3:采购退货出库；4:销售退货入库)
      * @param page
-     * @param stockItemDto
+     * @param query
      * @return
      */
 
-    @Select("   SELECT  " +
+    @Select(" <script>" +
+            "   SELECT  " +
             "     it.*,  " +
             "     it.stock_item_id AS stock_item_id2,  " +
             "     u.username AS applyUserName,  " +
@@ -71,9 +73,13 @@ public interface StockItemMapper extends BaseMapper<StockItem> {
             "     LEFT JOIN `mc-ums`.t_user u ON ( it.apply_user_id = u.user_id )  " +
             "     LEFT JOIN `mc-ums`.t_user u2 ON ( it.admin_id = u2.user_id )  " +
             "   WHERE    " +
-            "     it.delete_status = 0")
+            "     it.delete_status = 0" +
+            "    <if test='query.createTimeFrom != null and query.createTimeTo != null'>" +
+            "        AND it.create_time &gt;= #{query.createTimeFrom} AND it.create_time &lt;= #{query.createTimeTo} " +
+            "    </if>" +
+            " </script>")
     @Results({
             @Result(property = "stockItemDetailVos", column = "stock_item_id2", many = @Many(select = "com.qcmoke.wms.mapper.StockItemDetailMapper.getListByStockItemId"))
     })
-    IPage<StockItemVo> getPage(Page<StockItem> page, @Param("stockItemDto") StockItem stockItemDto);
+    IPage<StockItemVo> getPage(Page<StockItem> page, @Param("query") StockItemQuery query);
 }

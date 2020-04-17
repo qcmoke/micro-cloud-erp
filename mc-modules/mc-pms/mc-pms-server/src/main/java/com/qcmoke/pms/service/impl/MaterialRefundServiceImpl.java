@@ -14,6 +14,7 @@ import com.qcmoke.pms.client.BillClient;
 import com.qcmoke.pms.client.MaterialStockClient;
 import com.qcmoke.pms.constant.InStatusEnum;
 import com.qcmoke.pms.constant.PayStatusEnum;
+import com.qcmoke.pms.dto.MaterialRefundQuery;
 import com.qcmoke.pms.entity.MaterialRefund;
 import com.qcmoke.pms.entity.PurchaseOrderDetail;
 import com.qcmoke.pms.entity.PurchaseOrderMaster;
@@ -123,8 +124,8 @@ public class MaterialRefundServiceImpl extends ServiceImpl<MaterialRefundMapper,
     }
 
     @Override
-    public PageResult<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefund materialDto) {
-        IPage<MaterialRefundVo> iPage = materialRefundMapper.getPage(page, null);
+    public PageResult<MaterialRefundVo> getPage(Page<MaterialRefund> page, MaterialRefundQuery query) {
+        IPage<MaterialRefundVo> iPage = materialRefundMapper.getPage(page, query);
         PageResult<MaterialRefundVo> pageResult = new PageResult<>();
         pageResult.setRows(iPage.getRecords());
         pageResult.setTotal(iPage.getTotal());

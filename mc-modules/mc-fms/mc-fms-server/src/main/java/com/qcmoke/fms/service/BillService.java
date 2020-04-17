@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.fms.dto.BillQuery;
 import com.qcmoke.fms.entity.Bill;
 import com.qcmoke.fms.vo.BillVo;
 import com.qcmoke.fms.vo.StatisticsDataVo;
@@ -21,7 +22,7 @@ public interface BillService extends IService<Bill> {
 
     Result<StatisticsDataVo> statistics(Integer year);
 
-    IPage<BillVo> getPage(Page<Bill> billPage, Bill bill);
+    IPage<BillVo> getPage(Page<Bill> billPage, BillQuery bill);
 
     void addBill(BillApiDto billApiDto);
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.qcmoke.oms.dto.ApplyForDeliveryDto;
 import com.qcmoke.oms.dto.OrderMasterDto;
 import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
+import com.qcmoke.oms.dto.SaleOrderMasterQuery;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.vo.SaleOrderMasterVo;
 import com.qcmoke.wms.constant.StockType;
@@ -24,7 +25,7 @@ public interface SaleOrderMasterService extends IService<SaleOrderMaster> {
 
     void createOrUpdateSaleOrder(OrderMasterDto orderMasterDto);
 
-    IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, OrderMasterDto orderMasterDto);
+    IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, SaleOrderMasterQuery saleOrderMasterQuery);
 
 
     void deleteByIdList(List<Long> idList);

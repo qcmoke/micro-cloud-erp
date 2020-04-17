@@ -13,6 +13,7 @@ import com.qcmoke.oms.client.BillClient;
 import com.qcmoke.oms.client.ProductStockClient;
 import com.qcmoke.oms.constant.OutStatusEnum;
 import com.qcmoke.oms.constant.PayStatusEnum;
+import com.qcmoke.oms.dto.SaleRefundQuery;
 import com.qcmoke.oms.entity.SaleOrderDetail;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.entity.SaleRefund;
@@ -59,8 +60,8 @@ public class SaleRefundServiceImpl extends ServiceImpl<SaleRefundMapper, SaleRef
     private SaleRefundMapper saleRefundMapper;
 
     @Override
-    public IPage<SaleRefundVo> getPage(Page<SaleRefund> page, SaleRefund saleRefund) {
-        return saleRefundMapper.getPage(page, saleRefund);
+    public IPage<SaleRefundVo> getPage(Page<SaleRefund> page, SaleRefundQuery query) {
+        return saleRefundMapper.getPage(page, query);
     }
 
     @Transactional(rollbackFor = Exception.class)

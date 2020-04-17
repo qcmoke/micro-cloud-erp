@@ -11,6 +11,7 @@ import com.qcmoke.wms.client.SaleOrderMasterClient;
 import com.qcmoke.wms.constant.CheckStatusEnum;
 import com.qcmoke.wms.constant.FinishStatusEnum;
 import com.qcmoke.wms.constant.StockType;
+import com.qcmoke.wms.dto.StockItemQuery;
 import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.mapper.StockItemMapper;
 import com.qcmoke.wms.service.StockItemService;
@@ -41,8 +42,8 @@ public class StockItemServiceImpl extends ServiceImpl<StockItemMapper, StockItem
     private PurchaseOrderMasterClient purchaseOrderMasterClient;
 
     @Override
-    public IPage<StockItemVo> getPage(Page<StockItem> page, StockItem stockItemDto) {
-        return stockItemMapper.getPage(page, stockItemDto);
+    public IPage<StockItemVo> getPage(Page<StockItem> page, StockItemQuery query) {
+        return stockItemMapper.getPage(page, query);
     }
 
 

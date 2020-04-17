@@ -11,10 +11,7 @@ import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
 import com.qcmoke.oms.api.SaleOrderMasterApi;
-import com.qcmoke.oms.dto.ApplyForDeliveryDto;
-import com.qcmoke.oms.dto.OrderMasterDto;
-import com.qcmoke.oms.dto.SaleOrderMasterApiDto;
-import com.qcmoke.oms.dto.UpdateDeliveryDto;
+import com.qcmoke.oms.dto.*;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.service.SaleOrderMasterService;
 import com.qcmoke.oms.service.SaleRefundService;
@@ -52,9 +49,9 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
      * 订单分页
      */
     @GetMapping("/page")
-    public Result<PageResult<SaleOrderMasterVo>> page(PageQuery pageQuery, OrderMasterDto orderMasterDto) {
+    public Result<PageResult<SaleOrderMasterVo>> page(PageQuery pageQuery, SaleOrderMasterQuery saleOrderMasterQuery) {
         Page<SaleOrderMaster> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        IPage<SaleOrderMasterVo> iPage = saleOrderMasterService.getPage(page, orderMasterDto);
+        IPage<SaleOrderMasterVo> iPage = saleOrderMasterService.getPage(page, saleOrderMasterQuery);
         PageResult<SaleOrderMasterVo> pageResult = new PageResult<>();
         pageResult.setRows(iPage.getRecords());
         pageResult.setTotal(iPage.getTotal());
@@ -177,4 +174,3 @@ public class SaleOrderMasterController implements SaleOrderMasterApi {
     }
 
 }
-

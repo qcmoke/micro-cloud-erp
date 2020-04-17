@@ -9,6 +9,7 @@ import com.qcmoke.common.vo.Result;
 import com.qcmoke.fms.constant.DealType;
 import com.qcmoke.fms.constant.PayType;
 import com.qcmoke.fms.dto.BillApiDto;
+import com.qcmoke.fms.dto.BillQuery;
 import com.qcmoke.fms.entity.Account;
 import com.qcmoke.fms.entity.Bill;
 import com.qcmoke.fms.mapper.BillMapper;
@@ -109,8 +110,8 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
     }
 
     @Override
-    public IPage<BillVo> getPage(Page<Bill> page, Bill bill) {
-        return billMapper.getPage(page, bill);
+    public IPage<BillVo> getPage(Page<Bill> page, BillQuery query) {
+        return billMapper.getPage(page, query);
     }
 
     @Override

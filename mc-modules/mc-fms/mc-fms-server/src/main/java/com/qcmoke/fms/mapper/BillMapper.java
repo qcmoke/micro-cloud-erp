@@ -3,6 +3,7 @@ package com.qcmoke.fms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.fms.dto.BillQuery;
 import com.qcmoke.fms.entity.Bill;
 import com.qcmoke.fms.vo.BillVo;
 import com.qcmoke.fms.vo.StatisticsDataItemVo;
@@ -84,7 +85,8 @@ public interface BillMapper extends BaseMapper<Bill> {
     List<StatisticsDataItemVo> statistics(@Param("year") String year, @Param("isIn") boolean isIn, @Param("isOrderCount") boolean isOrderCount);
 
 
-    @Select("   SELECT" +
+    @Select(" <script>" +
+            "   SELECT" +
             "     b.*," +
             "   CASE" +
             "       b.type " +
@@ -104,6 +106,10 @@ public interface BillMapper extends BaseMapper<Bill> {
             "     t_bill b" +
             "     LEFT OUTER JOIN t_account ta ON b.account_id = ta.account_id " +
             "   WHERE" +
-            "     b.delete_status = 0")
-    IPage<BillVo> getPage(Page<Bill> page, @Param("bill") Bill bill);
+            "     b.delete_status = 0" +
+            "     <if test='query.createTimeFrom != null and query.createTimeTo != null'>" +
+            "         AND b.create_time &gt;= #{query.createTimeFrom} AND b.create_time &lt;= #{query.createTimeTo} " +
+            "     </if>" +
+            " </script>")
+    IPage<BillVo> getPage(Page<Bill> page, @Param("query") BillQuery query);
 }

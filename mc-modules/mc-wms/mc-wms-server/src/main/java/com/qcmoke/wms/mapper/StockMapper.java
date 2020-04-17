@@ -3,6 +3,7 @@ package com.qcmoke.wms.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qcmoke.wms.dto.StockQuery;
 import com.qcmoke.wms.entity.Stock;
 import com.qcmoke.wms.vo.StockVo;
 import org.apache.ibatis.annotations.Param;
@@ -46,21 +47,28 @@ public interface StockMapper extends BaseMapper<Stock> {
     List<Stock> getAllMaterialsAndProductsNotInStock();
 
 
-    @Select("   SELECT" +
-            "     st.*," +
-            "   CASE" +
-            "       st.item_type " +
-            "       WHEN 1 THEN" +
-            "       tm.material_name " +
-            "       WHEN 2 THEN" +
-            "       tp.product_name ELSE NULL " +
-            "     END item_name " +
-            "   FROM" +
-            "     `t_stock` st" +
-            "     LEFT JOIN `mc-pms`.t_material tm ON ( tm.material_id = st.item_id AND st.item_type = 1 )" +
-            "     LEFT JOIN `mc-oms`.t_product tp ON ( tp.product_id = st.item_id AND st.item_type = 2 )" +
-            "   WHERE" +
-            "     st.delete_status = 0" +
-            "")
-    IPage<StockVo> getPage(Page<Stock> page, @Param("stockDto") Stock stockDto);
+    @Select(" <script>" +
+            "   SELECT * FROM (" +
+            "       SELECT" +
+            "         st.*," +
+            "       CASE" +
+            "           st.item_type " +
+            "           WHEN 1 THEN" +
+            "           tm.material_name " +
+            "           WHEN 2 THEN" +
+            "           tp.product_name ELSE NULL " +
+            "         END item_name " +
+            "       FROM" +
+            "         `t_stock` st" +
+            "         LEFT JOIN `mc-pms`.t_material tm ON ( tm.material_id = st.item_id AND st.item_type = 1 )" +
+            "         LEFT JOIN `mc-oms`.t_product tp ON ( tp.product_id = st.item_id AND st.item_type = 2 )" +
+            "       WHERE" +
+            "         st.delete_status = 0" +
+            "   ) tb" +
+            "   WHERE 1 = 1 " +
+            "    <if test=\"query.itemNameKey != null and query.itemNameKey != ''\">" +
+            "       AND tb.item_name like concat('%', #{query.itemNameKey}, '%')" +
+            "    </if>" +
+            " </script>")
+    IPage<StockVo> getPage(Page<Stock> page, @Param("query") StockQuery query);
 }

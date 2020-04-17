@@ -8,6 +8,7 @@ import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.WebUtil;
 import com.qcmoke.common.vo.PageResult;
 import com.qcmoke.common.vo.Result;
+import com.qcmoke.oms.dto.SaleRefundQuery;
 import com.qcmoke.oms.entity.SaleRefund;
 import com.qcmoke.oms.service.SaleRefundService;
 import com.qcmoke.oms.vo.SaleRefundVo;
@@ -37,9 +38,9 @@ public class SaleRefundController {
 
 
     @GetMapping
-    public Result<PageResult<SaleRefundVo>> page(PageQuery pageQuery, SaleRefund saleRefund) {
+    public Result<PageResult<SaleRefundVo>> page(PageQuery pageQuery, SaleRefundQuery query) {
         Page<SaleRefund> page = new Page<>(pageQuery.getPageNum(), pageQuery.getPageSize());
-        IPage<SaleRefundVo> pageInfo = saleRefundService.getPage(page, saleRefund);
+        IPage<SaleRefundVo> pageInfo = saleRefundService.getPage(page, query);
         PageResult<SaleRefundVo> pageResult = new PageResult<>(pageInfo.getRecords(), pageInfo.getTotal());
         return Result.ok(pageResult);
     }

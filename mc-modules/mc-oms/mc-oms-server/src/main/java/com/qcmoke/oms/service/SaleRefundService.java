@@ -3,6 +3,7 @@ package com.qcmoke.oms.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.qcmoke.oms.dto.SaleRefundQuery;
 import com.qcmoke.oms.entity.SaleRefund;
 import com.qcmoke.oms.vo.SaleRefundVo;
 
@@ -22,5 +23,5 @@ public interface SaleRefundService extends IService<SaleRefund> {
 
     void successForInItemToStock(List<Long> orderList);
 
-    IPage<SaleRefundVo> getPage(Page<SaleRefund> page, SaleRefund saleRefund);
+    IPage<SaleRefundVo> getPage(Page<SaleRefund> page, SaleRefundQuery saleRefund);
 }

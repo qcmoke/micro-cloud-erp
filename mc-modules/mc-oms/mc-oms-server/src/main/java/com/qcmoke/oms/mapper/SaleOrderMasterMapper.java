@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qcmoke.oms.dto.OrderMasterDto;
+import com.qcmoke.oms.dto.SaleOrderMasterQuery;
 import com.qcmoke.oms.entity.SaleOrderMaster;
 import com.qcmoke.oms.vo.SaleOrderMasterVo;
 import org.apache.ibatis.annotations.*;
@@ -21,7 +22,8 @@ import org.springframework.stereotype.Repository;
 public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
 
 
-    @Select("   SELECT" +
+    @Select(" <script>" +
+            "   SELECT" +
             "       so.*," +
             "       so.master_id master_id2," +
             "       cus.customer_name," +
@@ -93,10 +95,14 @@ public interface SaleOrderMasterMapper extends BaseMapper<SaleOrderMaster> {
             "       LEFT JOIN t_customer cus ON ( so.customer_id = cus.customer_id ) " +
             "   WHERE" +
             "       so.delete_status = 0" +
-            "       AND NOT EXISTS (  SELECT tr.sale_order_master_id FROM t_sale_refund tr WHERE tr.sale_order_master_id = so.master_id) ")
+            "       <if test='query.createTimeFrom != null and query.createTimeTo != null'>" +
+            "           AND so.create_time &gt;= #{query.createTimeFrom} AND so.create_time &lt;= #{query.createTimeTo} " +
+            "       </if>" +
+            "       AND NOT EXISTS (  SELECT tr.sale_order_master_id FROM t_sale_refund tr WHERE tr.sale_order_master_id = so.master_id) " +
+            " </script>")
     @Results({
             @Result(property = "details", column = "master_id2", many = @Many(select = "com.qcmoke.oms.mapper.SaleOrderDetailMapper.getListByMasterId"))
     })
-    IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, @Param("orderMasterDto") OrderMasterDto orderMasterDto);
+    IPage<SaleOrderMasterVo> getPage(Page<SaleOrderMaster> page, @Param("query") SaleOrderMasterQuery query);
 
 }

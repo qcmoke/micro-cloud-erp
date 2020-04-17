@@ -15,6 +15,7 @@ import com.qcmoke.wms.constant.CheckStatusEnum;
 import com.qcmoke.wms.constant.FinishStatusEnum;
 import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.OutItemFromStockDto;
+import com.qcmoke.wms.dto.StockQuery;
 import com.qcmoke.wms.entity.Stock;
 import com.qcmoke.wms.entity.StockItem;
 import com.qcmoke.wms.entity.StockItemDetail;
@@ -60,8 +61,8 @@ public class StockServiceImpl extends ServiceImpl<StockMapper, Stock> implements
 
 
     @Override
-    public IPage<StockVo> getPage(Page<Stock> page, Stock stockDto) {
-        return stockMapper.getPage(page, stockDto);
+    public IPage<StockVo> getPage(Page<Stock> page, StockQuery query) {
+        return stockMapper.getPage(page, query);
     }
 
 
