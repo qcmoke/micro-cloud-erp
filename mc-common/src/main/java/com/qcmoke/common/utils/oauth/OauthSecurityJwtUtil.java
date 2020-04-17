@@ -70,8 +70,8 @@ public class OauthSecurityJwtUtil extends OauthSecurityUtil {
         return currentUser.getUsername();
     }
 
-    public static Long getCurrentUsername() {
-        return getCurrentUserId(SpringContextUtil.getHttpServletRequest());
+    public static String getCurrentUsername() {
+        return getCurrentUsername(SpringContextUtil.getHttpServletRequest());
     }
 
 
