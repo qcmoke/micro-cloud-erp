@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.toolkit.StringPool;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qcmoke.common.dto.PageQuery;
+import com.qcmoke.common.exception.GlobalCommonException;
 import com.qcmoke.common.utils.BeanCopyUtil;
+import com.qcmoke.common.utils.oauth.OauthSecurityJwtUtil;
 import com.qcmoke.common.vo.CurrentUser;
 import com.qcmoke.ums.dto.UserDto;
 import com.qcmoke.ums.entity.User;
@@ -20,6 +22,8 @@ import com.qcmoke.ums.vo.PageResult;
 import com.qcmoke.ums.vo.UserDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +47,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private MenuMapper menuMapper;
     @Autowired
     private UserRoleService userRoleService;
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updatePassword(String password) {
+        Long currentUserId = OauthSecurityJwtUtil.getCurrentUserId();
+        User user = new User();
+        user.setUserId(currentUserId);
+        user.setModifyTime(new Date());
+        user.setPassword(password);
+        boolean flag = this.updateById(user);
+        if (!flag) {
+            throw new GlobalCommonException("修改用户失败");
+        }
+    }
+
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void resetPassword(String[] usernameArr) {
+        User params = new User();
+        params.setPassword(passwordEncoder.encode("1234qwer"));
+        List<String> list = Arrays.asList(usernameArr);
+        this.baseMapper.update(params, new LambdaQueryWrapper<User>().in(User::getUsername, list));
+    }
 
     @Override
     public UserDetailVo getUserDetailByUsername(String username) {
@@ -95,7 +124,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void createUser(UserDto userDto) {
         // 创建用户
         User user = BeanCopyUtil.copy(userDto, User.class);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setAvatar(DEFAULT_AVATAR);
+        user.setCreateTime(new Date());
         this.save(user);
         // 保存用户角色
         String[] roleNames = userDto.getRoleId().split(StringPool.COMMA);

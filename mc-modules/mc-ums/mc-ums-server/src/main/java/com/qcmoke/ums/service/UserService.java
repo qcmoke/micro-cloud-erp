@@ -37,4 +37,8 @@ public interface UserService extends IService<User> {
     void createUser(UserDto userDto);
 
     void deleteUsers(String[] ids);
+
+    void updatePassword(String password);
+
+    void resetPassword(String[] usernameArr);
 }

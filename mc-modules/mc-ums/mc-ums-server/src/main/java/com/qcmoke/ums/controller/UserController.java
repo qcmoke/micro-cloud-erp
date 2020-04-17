@@ -82,7 +82,7 @@ public class UserController implements UserApi {
         String[] ids = userIds.split(StringPool.COMMA);
         this.userService.deleteUsers(ids);
     }
-    
+
 
     /**
      * 修改个人信息
@@ -119,6 +119,17 @@ public class UserController implements UserApi {
             return Result.error();
         }
         return Result.ok();
+    }
+
+    @PutMapping("/password")
+    public void updatePassword(@NotBlank(message = "{required}") String password) {
+        userService.updatePassword(password);
+    }
+
+    @PutMapping("/password/reset")
+    public void resetPassword(@NotBlank(message = "{required}") String usernames) {
+        String[] usernameArr = usernames.split(StringPool.COMMA);
+        this.userService.resetPassword(usernameArr);
     }
 
 
