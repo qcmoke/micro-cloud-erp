@@ -10,11 +10,23 @@ service {
   ...
 }
 
-(2)修改store的db节点配置数据库
+(2)修改store的mode为db
+store {
+  ## store mode: file、db
+  mode = "db"
+  .....
+  .....
+}
+
+(3)修改store的db节点配置数据库
   db {
+   ...
+   ...
    url = "jdbc:mysql://39.106.195.202:3306/mc-seata"
    user = "root"
    password = "qcmoke)[good](boy"
+   ...
+   ...
   }
 ```
 

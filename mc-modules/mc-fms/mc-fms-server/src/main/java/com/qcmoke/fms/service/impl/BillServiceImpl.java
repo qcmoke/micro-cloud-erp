@@ -17,6 +17,8 @@ import com.qcmoke.fms.service.BillService;
 import com.qcmoke.fms.vo.BillVo;
 import com.qcmoke.fms.vo.StatisticsDataItemVo;
 import com.qcmoke.fms.vo.StatisticsDataVo;
+import io.seata.core.context.RootContext;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,7 @@ import java.util.stream.Collectors;
  * @author qcmoke
  * @since 2020-03-10
  */
+@Slf4j
 @Service
 public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements BillService {
 
@@ -46,6 +49,10 @@ public class BillServiceImpl extends ServiceImpl<BillMapper, Bill> implements Bi
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void addBill(BillApiDto billApiDto) {
+
+        String xid = RootContext.getXID();
+        log.info("xid={}", xid);
+
         Double totalAmount = billApiDto.getTotalAmount();
         Long dealNum = billApiDto.getDealNum();
         PayType payType = billApiDto.getPayType();

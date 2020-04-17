@@ -29,6 +29,7 @@ import com.qcmoke.wms.constant.ItemType;
 import com.qcmoke.wms.constant.StockType;
 import com.qcmoke.wms.dto.StockItemDetailDto;
 import com.qcmoke.wms.dto.StockItemDto;
+import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -98,6 +99,11 @@ public class PurchaseOrderMasterServiceImpl extends ServiceImpl<PurchaseOrderMas
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void createOrUpdatePurchaseOrder(PurchaseOrderMasterDto purchaseOrderMasterDto, Long currentUserId) {
+
+        String xid = RootContext.getXID();
+        log.info("xid={}", xid);
+
+
         Long masterDtoId = purchaseOrderMasterDto.getMasterId();
         Long supplierId = purchaseOrderMasterDto.getSupplierId();
         Integer payType = purchaseOrderMasterDto.getPayType();
