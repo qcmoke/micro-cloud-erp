@@ -38,6 +38,10 @@ services:                     # compose管理的服务
     restart: always
     environment:
       - MODE=standalone
+      - JVM_XMS=512m	#设置JVM初始堆内存 default :2g
+      - JVM_MMS=320m	#XX:MaxMetaspaceSize default :320m
+      - JVM_XMX=512m	#设置JVM最大堆内存 default :2g
+      - JVM_XMN=320m	#设置年轻代大小 default :1g
     ports:
       - 8848:8848
 
