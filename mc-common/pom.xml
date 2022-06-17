@@ -15,7 +15,7 @@
 
     <properties>
         <jjwt.version>0.9.1</jjwt.version>
-        <fastjson.version>1.2.58</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <p6spy.version>3.8.1</p6spy.version>
         <jose4j.version>0.7.0</jose4j.version>
         <spring-boot-admin-starter.version>2.0.6</spring-boot-admin-starter.version>
