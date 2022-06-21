@@ -31,7 +31,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.48</version><!--升级到5.1.48版本以避免seata在mybatisplus中操作date类型报错的问题-->
+            <version>8.0.28</version><!--升级到5.1.48版本以避免seata在mybatisplus中操作date类型报错的问题-->
             <scope>runtime</scope>
         </dependency>
         <!--seata（将默认的0.9.0版本升级到1.0.0,解决一些seata sql更新操作设值为空而报错的bug）-->
